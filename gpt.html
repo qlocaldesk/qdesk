@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>QDESK — локальная доска объявлений</title>
+    <link rel="preconnect" href="https://unpkg.com">
+    <style>body{margin:0;font-family:system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial}</style>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-white">
+    <div id="root"></div>
+
+    <!-- React с CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Транспиляция JSX в браузере (для MVP) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Твой компонент как JSX -->
+    <script type="text/babel">
+      const BRAND = {
+        name: "QDESK",
+        accent: "#007AFF",
+        tagline: "Локальная доска объявлений нового поколения",
+        sub: "Размести объявление онлайн и получи листовку с QR-кодом для оффлайна."
+      };
+
+      function App(){
+        return (
+          <div className="min-h-screen w-full bg-white text-neutral-900">
+            <header className="sticky top-0 z-50 bg-white border-b border-neutral-200">
+              <nav className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg grid place-items-center font-bold text-sm"
+                       style={{backgroundColor: BRAND.accent, color:"#fff"}}>QD</div>
+                  <span className="font-bold tracking-tight">{BRAND.name}</span>
+                </div>
+                <div className="hidden md:flex items-center gap-6 text-sm">
+                  {["Товары","Услуги","Недвижимость","Работа"].map(i => <a key={i} href="#" className="hover:text-neutral-600">{i}</a>)}
+                </div>
+                <a href="#waitlist" className="px-4 py-2 rounded-lg font-semibold text-sm"
+                   style={{backgroundColor: BRAND.accent, color:"#fff"}}>Ранний доступ</a>
+              </nav>
+            </header>
+
+            <section className="max-w-6xl mx-auto px-4 pt-16 pb-12">
+              <div className="grid md:grid-cols-2 gap-10 items-center">
+                <div>
+                  <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
+                    {BRAND.tagline}
+                  </h1>
+                  <p className="mt-4 text-lg text-neutral-600">{BRAND.sub}</p>
+                  <div className="mt-6 flex flex-wrap gap-3">
+                    <a href="#poster" className="px-5 py-3 rounded-lg font-semibold"
+                       style={{backgroundColor: BRAND.accent, color:"#fff"}}>Посмотреть пример</a>
+                    <a href="#features" className="px-5 py-3 rounded-lg font-semibold border border-neutral-300 text-neutral-700 hover:bg-neutral-50">
+                      Что внутри
+                    </a>
+                  </div>
+                </div>
+                <div className="rounded-2xl border border-neutral-200 bg-white shadow p-6">
+                  <div className="aspect-[16/10] rounded-lg bg-neutral-100 grid place-items-center text-neutral-500">
+                    Превью объявлений
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section id="features" className="py-16 bg-neutral-50">
+              <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-3 gap-6">
+                {[{t:"Локальность",d:"Все объявления завязаны на ваш район или город."},
+                  {t:"Честные тарифы",d:"Онлайн бесплатно, оффлайн — понятные пакеты."},
+                  {t:"Безопасность",d:"Верификация и защита от мошенников."}]
+                  .map((f,i)=>(
+                  <div key={i} className="rounded-xl p-6 bg-white border border-neutral-200 shadow-sm">
+                    <div className="w-6 h-6 rounded-full mb-3" style={{backgroundColor: BRAND.accent}}></div>
+                    <h3 className="font-semibold">{f.t}</h3>
+                    <p className="mt-2 text-sm text-neutral-600">{f.d}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <footer className="py-10 border-t border-neutral-200">
+              <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-neutral-500">
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-lg grid place-items-center font-bold text-[10px]"
+                       style={{backgroundColor: BRAND.accent, color:"#fff"}}>QD</div>
+                  <span className="font-semibold text-neutral-700">{BRAND.name}</span>
+                </div>
+                <p>© 2025 QDESK. Бета-версия.</p>
+              </div>
+            </footer>
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+  </body>
+</html>
