@@ -1,0 +1,149 @@
+import React from "react";
+
+/**
+ * QDESK — Promo Landing (MVP)
+ * - Minimalist React + Tailwind landing page
+ * - Simple, clean, straightforward (not too studio-like)
+ * - Sections: Nav, Hero, Features, Poster demo, Pricing, Waitlist, FAQ, Footer
+ */
+
+const BRAND = {
+  name: "QDESK",
+  primary: "#111111",
+  accent: "#007AFF", // clean blue accent
+  bg: "#FFFFFF",
+  textOnPrimary: "#FFFFFF",
+  tagline: "Локальная доска объявлений нового поколения",
+  sub: "Размести объявление онлайн и получи готовую листовку с QR‑кодом для оффлайна.",
+};
+
+function classNames(...c) {
+  return c.filter(Boolean).join(" ");
+}
+
+export default function Landing() {
+  return (
+    <div className="min-h-screen w-full bg-white text-neutral-900">
+      {/* Nav */}
+      <header className="sticky top-0 z-50 bg-white border-b border-neutral-200">
+        <nav className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg grid place-items-center font-bold text-sm" style={{ backgroundColor: BRAND.accent, color: BRAND.textOnPrimary }}>QD</div>
+            <span className="font-bold tracking-tight">{BRAND.name}</span>
+          </div>
+          <div className="hidden md:flex items-center gap-6 text-sm">
+            {["Товары", "Услуги", "Недвижимость", "Работа"].map((i) => (
+              <a key={i} href="#" className="hover:text-neutral-600">{i}</a>
+            ))}
+          </div>
+          <a
+            href="#waitlist"
+            className="px-4 py-2 rounded-lg font-semibold text-sm"
+            style={{ backgroundColor: BRAND.accent, color: BRAND.textOnPrimary }}
+          >
+            Ранний доступ
+          </a>
+        </nav>
+      </header>
+
+      {/* Hero */}
+      <section className="max-w-6xl mx-auto px-4 pt-16 pb-12">
+        <div className="grid md:grid-cols-2 gap-10 items-center">
+          <div>
+            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
+              {BRAND.tagline}
+            </h1>
+            <p className="mt-4 text-lg text-neutral-600">{BRAND.sub}</p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <a href="#poster" className="px-5 py-3 rounded-lg font-semibold" style={{ backgroundColor: BRAND.accent, color: BRAND.textOnPrimary }}>Посмотреть пример</a>
+              <a href="#features" className="px-5 py-3 rounded-lg font-semibold border border-neutral-300 text-neutral-700 hover:bg-neutral-50">Что внутри</a>
+            </div>
+          </div>
+          <div className="rounded-2xl border border-neutral-200 bg-white shadow p-6">
+            <div className="aspect-[16/10] rounded-lg bg-neutral-100 grid place-items-center text-neutral-500">Превью объявлений</div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features */}
+      <section id="features" className="py-16 bg-neutral-50">
+        <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-3 gap-6">
+          {[
+            { t: "Локальность", d: "Все объявления завязаны на ваш район или город." },
+            { t: "Честные тарифы", d: "Онлайн бесплатно, оффлайн — понятные пакеты." },
+            { t: "Безопасность", d: "Верификация и защита от мошенников." },
+          ].map((f, i) => (
+            <div key={i} className="rounded-xl p-6 bg-white border border-neutral-200 shadow-sm">
+              <div className="w-6 h-6 rounded-full mb-3" style={{ backgroundColor: BRAND.accent }} />
+              <h3 className="font-semibold">{f.t}</h3>
+              <p className="mt-2 text-sm text-neutral-600">{f.d}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Poster demo */}
+      <section id="poster" className="py-16">
+        <div className="max-w-4xl mx-auto px-4 grid md:grid-cols-2 gap-8 items-center">
+          <div className="rounded-xl border border-neutral-200 bg-white p-6 shadow">
+            <div className="aspect-[3/4] rounded-lg bg-neutral-100 grid place-items-center text-neutral-500 text-sm">
+              Пример листовки с QR
+            </div>
+          </div>
+          <div>
+            <h3 className="text-2xl font-bold">Автоматическая генерация листовки</h3>
+            <p className="mt-3 text-neutral-600">После публикации объявления создаётся PDF/PNG в фирменном стиле. Можно распечатать или заказать расклейку через партнёров.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing */}
+      <section className="py-16 bg-neutral-50 text-center">
+        <h3 className="text-3xl font-extrabold">Онлайн — бесплатно · Оффлайн — от 199 ₽</h3>
+        <p className="mt-3 text-neutral-600">Прозрачные пакеты и подписка для бизнеса.</p>
+        <a href="#waitlist" className="mt-6 inline-block px-6 py-3 rounded-lg font-semibold" style={{ backgroundColor: BRAND.accent, color: BRAND.textOnPrimary }}>Получить доступ</a>
+      </section>
+
+      {/* Waitlist */}
+      <section id="waitlist" className="py-16">
+        <div className="max-w-2xl mx-auto px-4 rounded-xl border border-neutral-200 p-8 shadow bg-white">
+          <h3 className="text-2xl font-bold">Стань первым</h3>
+          <p className="mt-2 text-neutral-600">Оставь email и город — пригласим в закрытую бету.</p>
+          <form onSubmit={(e) => e.preventDefault()} className="mt-5 grid gap-3 md:grid-cols-[1fr_auto]">
+            <input placeholder="Email" className="px-4 py-3 rounded-lg border border-neutral-300" />
+            <input placeholder="Город" className="px-4 py-3 rounded-lg border border-neutral-300 md:col-span-1" />
+            <button className="px-5 py-3 rounded-lg font-semibold" style={{ backgroundColor: BRAND.accent, color: BRAND.textOnPrimary }}>Записаться</button>
+          </form>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section id="faq" className="py-16 max-w-3xl mx-auto px-4">
+        <h3 className="text-2xl font-bold mb-6">FAQ</h3>
+        <div className="space-y-4">
+          {[
+            { q: "Как работает оффлайн‑пакет?", a: "Мы генерируем постер с QR и PDF/PNG. Можно распечатать самому или заказать расклейку." },
+            { q: "Где доступен сервис?", a: "Начнём с одного города, потом масштабируемся." },
+            { q: "Сколько стоит?", a: "Онлайн бесплатно. Оффлайн — от 199 ₽. Для бизнеса есть подписка." },
+          ].map((item, i) => (
+            <details key={i} className="group border-b border-neutral-200 py-3">
+              <summary className="cursor-pointer list-none flex items-center justify-between gap-2 font-semibold">{item.q}<span className="text-neutral-400 group-open:rotate-45 transition-transform">＋</span></summary>
+              <p className="mt-2 text-sm text-neutral-600">{item.a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-10 border-t border-neutral-200">
+        <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-neutral-500">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded-lg grid place-items-center font-bold text-[10px]" style={{ backgroundColor: BRAND.accent, color: BRAND.textOnPrimary }}>QD</div>
+            <span className="font-semibold text-neutral-700">{BRAND.name}</span>
+          </div>
+          <p>© 2025 {BRAND.name}. Бета‑версия.</p>
+        </div>
+      </footer>
+    </div>
+  );
+}
