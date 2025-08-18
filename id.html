@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QDESK • Объявление</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-neutral-900">
+  <main class="max-w-3xl mx-auto px-4 py-8">
+    <div class="flex items-center gap-2 mb-4">
+      <div class="w-8 h-8 rounded-lg grid place-items-center font-bold text-sm bg-blue-600 text-white">QD</div>
+      <b>QDESK — локальная доска объявлений</b>
+    </div>
+
+    <h1 id="title" class="text-2xl font-extrabold"></h1>
+    <p id="meta" class="text-neutral-600 mt-1"></p>
+
+    <div id="photo" class="mt-4 aspect-[16/10] rounded-xl bg-neutral-100 grid place-items-center text-neutral-500">
+      Фото
+    </div>
+
+    <p id="desc" class="mt-4"></p>
+
+    <div class="mt-6 grid sm:grid-cols-3 gap-3">
+      <a id="btnTG" class="px-4 py-3 text-center rounded-xl border font-semibold" target="_blank">Написать в Telegram</a>
+      <a id="btnCall" class="px-4 py-3 text-center rounded-xl border font-semibold" target="_blank">Позвонить</a>
+      <button id="btnSafe" class="px-4 py-3 text-center rounded-xl border font-semibold">Безопасная сделка</button>
+    </div>
+
+    <p class="text-xs text-neutral-500 mt-4">
+      Размещено продавцом на QDESK. Не переводите предоплату вне QDESK.
+    </p>
+  </main>
+
+<script>
+  // Пример: /l/123.html?title=iPhone%208&price=5000&city=Новокузнецк
+  const p = new URLSearchParams(location.search);
+  const data = {
+    title: p.get('title') || 'iPhone 8, 64 ГБ',
+    price: p.get('price') || '5 000 ₽',
+    city:  p.get('city')  || 'Новокузнецк',
+    desc:  p.get('desc')  || 'Состояние хорошее, комплект: коробка, кабель.',
+    photo: p.get('photo'),                 // URL фото (получено от продавца)
+    tg:    p.get('tg')    || 'https://t.me/your_contact',
+    tel:   p.get('tel')   || 'tel:+70000000000'
+  };
+  document.getElementById('title').textContent = data.title;
+  document.getElementById('meta').textContent  = `${data.price} • ${data.city}`;
+  document.getElementById('desc').textContent  = data.desc;
+  if (data.photo){
+    document.getElementById('photo').innerHTML =
+      `<img src="${data.photo}" alt="" class="w-full h-full object-cover rounded-xl">`;
+  }
+  // CTAs + метки для аналитики
+  const utm = '?utm_source=poster&utm_medium=qr&utm_campaign=offline';
+  document.getElementById('btnTG').href   = data.tg + (data.tg.includes('?') ? '&' : '?') + utm.slice(1);
+  document.getElementById('btnCall').href = data.tel; // для tel: UTM не нужен
+  document.getElementById('btnSafe').onclick = () => alert('Скоро безопасная сделка QDESK');
+</script>
+</body>
+</html>
