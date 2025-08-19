@@ -229,4 +229,3 @@ wss.on('connection', (ws, req)=>{
 
 // ------------------ Health ------------------
 app.get('/', (req,res)=>res.json({ ok:true, service:'qdesk-api', now:Date.now() }));
-
