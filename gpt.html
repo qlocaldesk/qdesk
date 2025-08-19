@@ -4,10 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>QDESK — локальная доска объявлений</title>
+    <link rel="preconnect" href="https://unpkg.com">
+    <style>body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial}</style>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial}
-    </style>
   </head>
   <body class="bg-white">
     <div id="root"></div>
@@ -25,112 +24,293 @@
       };
 
       const MOCK = [
-        { id: 1, title: "iPhone 8, 64 ГБ", price: "5 000 ₽", img:"https://placehold.co/200x150?text=iPhone" },
-        { id: 2, title: "Велосипед Stels", price: "12 000 ₽", img:"https://placehold.co/200x150?text=Bike" },
-        { id: 3, title: "Ремонт стиральных машин", price: "от 1 500 ₽", img:"https://placehold.co/200x150?text=Service" },
-        { id: 4, title: "MacBook Air 2015", price: "25 000 ₽", img:"https://placehold.co/200x150?text=MacBook" },
-        { id: 5, title: "Детская коляска", price: "3 500 ₽", img:"https://placehold.co/200x150?text=Stroller" },
+        { id: 1, title: "iPhone 8, 64 ГБ", price: "5 000 ₽", area: "Центральный", city: "Новокузнецк" },
+        { id: 2, title: "Велосипед Stels", price: "12 000 ₽", area: "Кузнецкий", city: "Новокузнецк" },
+        { id: 3, title: "Ремонт стиральных машин", price: "от 1 500 ₽", area: "Орджоникидзевский", city: "Новокузнецк" },
+        { id: 4, title: "MacBook Air 2015", price: "25 000 ₽", area: "Центральный", city: "Новокузнецк" },
+        { id: 5, title: "Детская коляска", price: "3 500 ₽", area: "Кузнецкий", city: "Новокузнецк" },
       ];
 
+      /* ==== ICONS (inline SVG, stroke 1.5) ==== */
+      const ico = {
+        Shield: (props)=>(<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M12 3l7 3v5c0 5.25-3.5 9-7 10-3.5-1-7-4.75-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>),
+        Handshake: (props)=>(<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M12 12l3-3a2 2 0 1 1 3 3l-5.5 5.5a3 3 0 0 1-4.24 0L5 14"/><path d="M7 12l3-3 2 2M4 10l3-3M20 10l-3-3"/></svg>),
+        CheckBadge: (props)=>(<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M7.5 2.75l2 1 2.5-1 2.5 1 2-1 1 2.25 2 1.75-.75 2.5.75 2.5-2 1.75-1 2.25-2-1-2.5 1-2.5-1-2 1-1-2.25-2-1.75L3.75 9l.75-2.5-2-1.75 1-2.25 2 1z"/><path d="M8 12l2 2 5-5"/></svg>),
+        Pin: (props)=>(<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>),
+        Camera: (props)=>(<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M4 8h3l2-3h6l2 3h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2z"/><circle cx="12" cy="13" r="3.5"/></svg>),
+        Lock: (props)=>(<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V8a4 4 0 1 1 8 0v3"/></svg>),
+        Card: (props)=>(<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}><rect x="2.5" y="5.5" width="19" height="13" rx="2.5"/><path d="M2.5 10.5h19M7 15.5h4"/></svg>),
+      };
+      const { Shield, Handshake, CheckBadge, Pin, Camera, Lock, Card } = ico;
+
+      /* ==== HERO CAROUSEL ==== */
+      function makeThumb({title, accent}) {
+        const bg1 = encodeURIComponent(accent || BRAND.accent);
+        const bg2 = encodeURIComponent("#0ea5e9");
+        const safeText = encodeURIComponent(title.length > 18 ? title.slice(0,18) + "…" : title);
+        const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 480'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='${bg1}'/><stop offset='1' stop-color='${bg2}'/></linearGradient></defs><rect width='100%' height='100%' fill='url(#g)'/><g fill='white' opacity='0.2'><circle cx='520' cy='90' r='80'/><circle cx='80' cy='400' r='60'/></g><rect x='24' y='24' width='160' height='36' rx='10' fill='rgba(255,255,255,0.85)'/><text x='40' y='49' font-size='20' font-family='Inter, Arial' fill='#0f172a'>QDESK • рядом</text><rect x='24' y='380' width='260' height='64' rx='14' fill='rgba(255,255,255,0.9)'/><text x='40' y='420' font-size='26' font-weight='700' font-family='Inter, Arial' fill='#0f172a'>${safeText}</text></svg>`;
+        return `data:image/svg+xml;utf8,${svg}`;
+      }
+
       function HeroCarousel(){
-        const [index, setIndex] = React.useState(0);
-        const next = () => setIndex((index+1) % MOCK.length);
-        const prev = () => setIndex((index-1+MOCK.length) % MOCK.length);
+        const slides = React.useMemo(()=>(
+          MOCK.slice(0,5).map(item=>({ ...item, img: makeThumb({ title: item.title, accent: BRAND.accent }) }))
+        ), []);
+        const [i, setI] = React.useState(0);
+        const n = slides.length;
+
+        React.useEffect(()=>{
+          const t = setInterval(()=> setI(prev => (prev+1)%n), 3500);
+          return ()=> clearInterval(t);
+        }, [n]);
+
+        const go = (dir)=> setI(prev => (prev + dir + n) % n);
 
         return (
-          <div className="relative w-full h-64 overflow-hidden rounded-xl border border-neutral-200 shadow">
-            <img src={MOCK[index].img} alt={MOCK[index].title}
-                 className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-black/30 flex flex-col justify-end p-4 text-white">
-              <h3 className="font-bold">{MOCK[index].title}</h3>
-              <p className="text-sm">{MOCK[index].price}</p>
+          <div className="rounded-2xl border border-neutral-200 bg-white shadow p-0 overflow-hidden">
+            <div className="relative aspect-[16/10]">
+              {slides.map((s,idx)=>(
+                <div key={s.id} className={`absolute inset-0 transition-opacity duration-500 ${idx===i ? 'opacity-100' : 'opacity-0'}`}>
+                  <img src={s.img} alt={s.title} className="w-full h-full object-cover" draggable="false" />
+                  <div className="absolute bottom-3 left-3 right-3">
+                    <div className="backdrop-blur bg-white/70 border border-white/50 rounded-xl px-3 py-2 flex items-center justify-between">
+                      <div className="min-w-0">
+                        <div className="text-sm font-semibold truncate">{s.title}</div>
+                        <div className="text-xs text-neutral-600 truncate">{s.price} • {s.city}</div>
+                      </div>
+                      <a href={`#l-${s.id}`} className="shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold text-white" style={{backgroundColor: BRAND.accent}}>
+                        Смотреть
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              ))}
+
+              <button onClick={()=>go(-1)} aria-label="Предыдущий" className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/80 hover:bg-white border border-neutral-200 w-9 h-9 grid place-items-center">‹</button>
+              <button onClick={()=>go(1)} aria-label="Следующий" className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/80 hover:bg-white border border-neutral-200 w-9 h-9 grid place-items-center">›</button>
+
+              <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-2">
+                {slides.map((_,k)=>(
+                  <button key={k} onClick={()=>setI(k)} aria-label={`Слайд ${k+1}`} className={`h-2 rounded-full transition-all ${k===i?'w-6 bg-neutral-900':'w-2 bg-neutral-300'}`} />
+                ))}
+              </div>
             </div>
-            <button onClick={prev} className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full px-2">‹</button>
-            <button onClick={next} className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full px-2">›</button>
           </div>
         );
       }
 
-      function TrustBadges(){
-        const badges = [
-          {icon:"🛡", text:"Безопасная сделка"},
-          {icon:"🙌", text:"Без посредников"},
-          {icon:"✔️", text:"Проверенные пользователи"},
-        ];
+      /* ===== Поисковик ===== */
+      function SearchInside() {
+        const [q, setQ] = React.useState("");
+        const [results, setResults] = React.useState(MOCK);
+
+        const runSearch = (query) => {
+          const s = (query || q).toLowerCase();
+          if (!s) { setResults(MOCK); return; }
+          setResults(MOCK.filter(item =>
+            item.title.toLowerCase().includes(s) ||
+            item.area.toLowerCase().includes(s) ||
+            item.city.toLowerCase().includes(s) ||
+            item.price.toLowerCase().includes(s)
+          ));
+        };
+
+        const onSubmit = (e) => { e.preventDefault(); runSearch(q); };
+
+        const quick = ["айфон до 20к центр","ремонт стиралки сегодня","велосипед до 15к кузнецкий","ноутбук до 30к"];
+
         return (
-          <section className="py-12 bg-neutral-50">
-            <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-3 gap-6 text-center">
-              {badges.map((b,i)=>(
-                <div key={i} className="p-6 rounded-xl border bg-white shadow-sm">
-                  <div className="text-4xl mb-2">{b.icon}</div>
-                  <p className="font-semibold">{b.text}</p>
+          <section id="inside" className="py-16 bg-neutral-50">
+            <div className="max-w-4xl mx-auto px-4">
+              <h2 className="text-3xl font-bold mb-3">Что внутри QDESK</h2>
+              <p className="text-neutral-600 mb-8">Никаких тысяч фильтров — просто спроси, как в чате. Мы покажем подходящее рядом.</p>
+
+              <form onSubmit={onSubmit} className="mb-3">
+                <div className="mx-auto rounded-2xl border border-neutral-200 bg-white shadow-sm hover:shadow transition focus-within:shadow-md">
+                  <div className="flex items-center gap-3 px-4 py-3">
+                    <div className="w-5 h-5 grid place-items-center text-neutral-400">⌕</div>
+                    <input value={q} onChange={(e)=>setQ(e.target.value)} placeholder='Например: "айфон до 20к в центре" или "мастер по стиралке сегодня"' className="flex-1 outline-none text-[15px] placeholder:text-neutral-400"/>
+                    <button type="submit" className="px-3 py-1.5 rounded-lg font-semibold text-white" style={{backgroundColor: BRAND.accent}} aria-label="Найти">Найти</button>
+                  </div>
                 </div>
-              ))}
+              </form>
+
+              <div className="flex flex-wrap gap-2 mb-8">
+                {quick.map((t,i)=>(
+                  <button key={i} onClick={()=>{ setQ(t); runSearch(t); }} className="text-sm px-3 py-1.5 rounded-full border border-neutral-200 bg-white hover:bg-neutral-100">{t}</button>
+                ))}
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-6">
+                {results.map(item=>(
+                  <a key={item.id} href={`#l-${item.id}`} className="rounded-xl border border-neutral-200 p-4 bg-white shadow-sm hover:shadow transition">
+                    <div className="aspect-[4/3] bg-neutral-100 mb-3 rounded-lg grid place-items-center text-neutral-400 text-sm">Фото</div>
+                    <h3 className="font-semibold line-clamp-2">{item.title}</h3>
+                    <p className="text-sm text-neutral-600">{item.price} • {item.city}, {item.area}</p>
+                  </a>
+                ))}
+                {results.length === 0 && <div className="col-span-full text-neutral-500">Ничего не нашли. Попробуйте изменить запрос.</div>}
+              </div>
+
+              <div className="mt-10 text-center">
+                <a href="#add-ad" className="px-6 py-3 rounded-lg font-semibold text-white" style={{backgroundColor: BRAND.accent}}>Мне нужно →</a>
+              </div>
             </div>
           </section>
         );
       }
 
+      /* ===== ЭЛЕМЕНТЫ ДОВЕРИЯ — DARK ===== */
+      function TrustBadges(){
+        const badges = [
+          { title:"Безопасная сделка", desc:"Оплата и передача на нейтральной территории", Icon: Shield },
+          { title:"Без посредников",   desc:"Только прямой контакт между продавцом и покупателем", Icon: Handshake },
+          { title:"Проверенные пользователи", desc:"Рейтинг и метки активности в профиле", Icon: CheckBadge },
+        ];
+        return (
+          <section className="py-16 bg-neutral-900">
+            <div className="max-w-6xl mx-auto px-4">
+              <h2 className="text-2xl md:text-3xl font-bold mb-2 text-white">Элементы доверия</h2>
+              <p className="text-neutral-400 mb-8">Сделки на QDESK сопровождаются прозрачными метками и понятными правилами.</p>
+              <div className="grid md:grid-cols-3 gap-6">
+                {badges.map(({title, desc, Icon}, i)=>(
+                  <div key={i} className="group rounded-2xl border border-neutral-700 bg-neutral-800 p-5 shadow-sm hover:shadow-md transition relative overflow-hidden">
+                    <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full opacity-20 blur-2xl" style={{backgroundColor: BRAND.accent}} aria-hidden />
+                    <div className="flex items-start gap-3">
+                      <div className="p-2 rounded-xl ring-1 ring-neutral-700 bg-neutral-900 group-hover:scale-110 transition" aria-hidden>
+                        <Icon className="w-6 h-6" style={{color: BRAND.accent}} />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-lg text-white">{title}</h3>
+                        <p className="text-sm text-neutral-400">{desc}</p>
+                      </div>
+                    </div>
+                    <div className="mt-4 inline-flex items-center gap-1 text-[11px] px-2 py-1 rounded-full border border-neutral-700 text-neutral-400 bg-neutral-900 group-hover:-translate-y-0.5 transition">
+                      <span className="w-2 h-2 rounded-full" style={{backgroundColor: BRAND.accent}} aria-hidden />
+                      <span>Метка доверия</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      }
+
+      /* ===== SAFE ZONE — DARK ===== */
+      function SafeZonePreview(){
+        return (
+          <section id="safe-zone" className="py-16 bg-neutral-950">
+            <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
+              <div className="rounded-2xl border border-neutral-800 bg-neutral-900 shadow p-6">
+                <div className="aspect-[16/10] rounded-lg bg-neutral-800 grid place-items-center text-neutral-500 text-sm">Иллюстрация QDESK Safe Zone</div>
+                <div className="mt-4 grid grid-cols-3 gap-3">
+                  {[Pin, Camera, Lock].map((Icon,k)=>(
+                    <div key={k} className="rounded-lg border border-neutral-800 bg-neutral-900 py-4 grid place-items-center">
+                      <Icon className="w-7 h-7" style={{color: BRAND.accent}} aria-hidden />
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <h2 className="text-3xl font-bold mb-3 text-white">QDESK Safe Zone</h2>
+                <p className="text-neutral-400 mb-5">Нейтральные точки встречи с камерой наблюдения и верификацией выдачи. Выберите удобную локацию, подтвердите сделку QR‑кодом — и всё.</p>
+                <ul className="space-y-3 text-neutral-300">
+                  <li className="flex items-start gap-3"><Pin className="w-5 h-5 mt-1" style={{color: BRAND.accent}} aria-hidden /><span><b>Нейтральная территория:</b> кафе, коворкинги и партнёрские точки.</span></li>
+                  <li className="flex items-start gap-3"><Camera className="w-5 h-5 mt-1" style={{color: BRAND.accent}} aria-hidden /><span><b>Камера и журнал визитов:</b> повышают доверие обеих сторон.</span></li>
+                  <li className="flex items-start gap-3"><Lock className="w-5 h-5 mt-1" style={{color: BRAND.accent}} aria-hidden /><span><b>QR/Пин‑код подтверждения:</b> выдача товара фиксируется.</span></li>
+                  <li className="flex items-start gap-3"><Card className="w-5 h-5 mt-1" style={{color: BRAND.accent}} aria-hidden /><span><b>Оплата «на месте»:</b> безопасная оплата через QDESK (опционально).</span></li>
+                </ul>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <a href="#choose-safe-zone" className="px-5 py-3 rounded-lg font-semibold text-white" style={{backgroundColor: BRAND.accent}}>Выбрать QDESK Safe Zone</a>
+                  <a href="#how-it-works" className="px-5 py-3 rounded-lg font-semibold border border-neutral-700 text-neutral-300 hover:bg-neutral-900">Как это работает</a>
+                </div>
+                <div className="mt-4 inline-flex items-center gap-2 text-xs text-neutral-500"><span className="px-2 py-1 rounded bg-neutral-900 border border-neutral-800">BETA</span><span>Запуск в пилоте — подключаем партнёрские точки</span></div>
+              </div>
+            </div>
+          </section>
+        );
+      }
+
+      /* ===== HEADER (вернул шапку) ===== */
+      function Header(){
+        return (
+          <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-neutral-200">
+            <nav className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg grid place-items-center font-bold text-sm" style={{backgroundColor: BRAND.accent, color:"#fff"}}>QD</div>
+                <span className="font-bold tracking-tight">{BRAND.name}</span>
+              </div>
+              <div className="hidden md:flex items-center gap-6 text-sm">
+                {["Товары","Услуги","Недвижимость","Работа"].map(i => <a key={i} href="#" className="hover:text-neutral-600">{i}</a>)}
+              </div>
+              <a href="#add-ad" className="px-4 py-2 rounded-lg font-semibold text-sm" style={{backgroundColor: BRAND.accent, color:"#fff"}}>Разместить объявление</a>
+            </nav>
+          </header>
+        );
+      }
+
       function App(){
         return (
-          <div className="min-h-screen w-full bg-white text-neutral-900 flex flex-col">
-            {/* Шапка */}
-            <header className="sticky top-0 z-50 bg-white border-b border-neutral-200">
-              <nav className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg grid place-items-center font-bold text-sm"
-                       style={{backgroundColor: BRAND.accent, color:"#fff"}}>QD</div>
-                  <span className="font-bold tracking-tight">{BRAND.name}</span>
-                </div>
-                <div className="hidden md:flex items-center gap-6 text-sm">
-                  {["Товары","Услуги","Недвижимость","Работа"].map(i => 
-                    <a key={i} href="#" className="hover:text-neutral-600">{i}</a>
-                  )}
-                </div>
-                <a href="cabinet.html" 
-                   className="px-4 py-2 rounded-lg font-semibold text-sm hover:opacity-90 transition"
-                   style={{backgroundColor: BRAND.accent, color:"#fff"}}>
-                   Разместить объявление
-                </a>
-              </nav>
-            </header>
+          <div className="min-h-screen w-full bg-white text-neutral-900">
+            <Header />
 
             {/* Hero */}
-            <section className="max-w-6xl mx-auto px-4 pt-16 pb-12 grid md:grid-cols-2 gap-10 items-center">
-              <div>
-                <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
-                  {BRAND.tagline}
-                </h1>
-                <p className="mt-4 text-lg text-neutral-600">{BRAND.sub}</p>
-                <div className="mt-6 flex flex-wrap gap-3">
-                  <a href="#preview" className="px-5 py-3 rounded-lg font-semibold"
-                     style={{backgroundColor: BRAND.accent, color:"#fff"}}>Посмотреть пример</a>
-                  <a href="#trust" className="px-5 py-3 rounded-lg font-semibold border border-neutral-300 text-neutral-700 hover:bg-neutral-50">
-                    Что внутри
-                  </a>
+            <section className="max-w-6xl mx-auto px-4 pt-16 pb-12">
+              <div className="grid md:grid-cols-2 gap-10 items-center">
+                <div>
+                  <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">{BRAND.tagline}</h1>
+                  <p className="mt-4 text-lg text-neutral-600">{BRAND.sub}</p>
+                  <div className="mt-6 flex flex-wrap gap-3">
+                    <a href="#poster" className="px-5 py-3 rounded-lg font-semibold" style={{backgroundColor: BRAND.accent, color:"#fff"}}>Посмотреть пример</a>
+                    <a href="#inside" className="px-5 py-3 rounded-lg font-semibold border border-neutral-300 text-neutral-700 hover:bg-neutral-50">Что внутри</a>
+                  </div>
                 </div>
+
+                {/* Карусель превью объявлений */}
+                <HeroCarousel />
               </div>
-              <HeroCarousel />
             </section>
 
-            {/* Trust Badges */}
+            {/* ЭЛЕМЕНТЫ ДОВЕРИЯ — DARK */}
             <TrustBadges />
 
-            {/* Футер */}
-            <footer className="py-10 border-t border-neutral-200 mt-auto">
-              <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-neutral-500">
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-lg grid place-items-center font-bold text-[10px]"
-                       style={{backgroundColor: BRAND.accent, color:"#fff"}}>QD</div>
-                  <span className="font-semibold text-neutral-700">{BRAND.name}</span>
+            {/* SAFE ZONE — DARK */}
+            <SafeZonePreview />
+
+            {/* Поисковик */}
+            <SearchInside />
+
+            {/* Футер — DARK */}
+            <footer className="py-12 border-t border-neutral-800 bg-neutral-900">
+              <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-3 gap-8 text-sm">
+                <div>
+                  <h4 className="font-semibold text-white mb-3">О проекте</h4>
+                  <ul className="space-y-1">
+                    <li><a href="#" className="hover:text-white text-neutral-400">О нас</a></li>
+                    <li><a href="#" className="hover:text-white text-neutral-400">Инвесторам</a></li>
+                    <li><a href="#" className="hover:text-white text-neutral-400">Партнёрам</a></li>
+                    <li><a href="#" className="hover:text-white text-neutral-400">Реклама на QDESK</a></li>
+                  </ul>
                 </div>
-                <div className="flex gap-4">
-                  <a href="#">Политика конфиденциальности</a>
-                  <a href="#">Партнёрам</a>
-                  <a href="#">Инвесторам</a>
+                <div>
+                  <h4 className="font-semibold text-white mb-3">Помощь</h4>
+                  <ul className="space-y-1">
+                    <li><a href="#" className="hover:text-white text-neutral-400">FAQ</a></li>
+                    <li><a href="#" className="hover:text-white text-neutral-400">Поддержка</a></li>
+                    <li><a href="#" className="hover:text-white text-neutral-400">Контакты</a></li>
+                  </ul>
                 </div>
-                <p>© 2025 QDESK</p>
+                <div>
+                  <h4 className="font-semibold text-white mb-3">Правовая информация</h4>
+                  <ul className="space-y-1">
+                    <li><a href="#" className="hover:text-white text-neutral-400">Политика конфиденциальности</a></li>
+                    <li><a href="#" className="hover:text-white text-neutral-400">Пользовательское соглашение</a></li>
+                    <li><a href="#" className="hover:text-white text-neutral-400">Использование cookies</a></li>
+                  </ul>
+                </div>
               </div>
+              <div className="mt-10 text-center text-xs text-neutral-500">© 2025 {BRAND.name}. Все права защищены.</div>
             </footer>
           </div>
         );
