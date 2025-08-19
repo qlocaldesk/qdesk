@@ -126,6 +126,132 @@
         );
       }
 
+      /* ===== ЭЛЕМЕНТЫ ДОВЕРИЯ ===== */
+      function TrustBadges(){
+        const badges = [
+          { title:"Безопасная сделка", desc:"Оплата и передача на нейтральной территории", icon: "🛡️" },
+          { title:"Без посредников",   desc:"Только прямой контакт между продавцом и покупателем", icon: "🤝" },
+          { title:"Проверенные пользователи", desc:"Рейтинг и метки активности в профиле", icon: "✅" },
+        ];
+
+        return (
+          <section className="py-14 bg-white">
+            <div className="max-w-6xl mx-auto px-4">
+              <h2 className="text-2xl md:text-3xl font-bold mb-2">Элементы доверия</h2>
+              <p className="text-neutral-600 mb-8">
+                Сделки на QDESK сопровождаются прозрачными метками и понятными правилами.
+              </p>
+
+              <div className="grid md:grid-cols-3 gap-6">
+                {badges.map((b, i)=>(
+                  <div
+                    key={i}
+                    className="group rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm hover:shadow transition relative overflow-hidden"
+                  >
+                    {/* живой стикер */}
+                    <div
+                      className="absolute -right-6 -top-6 w-24 h-24 rounded-full opacity-10 blur-xl"
+                      style={{backgroundColor: BRAND.accent}}
+                      aria-hidden
+                    />
+                    <div className="flex items-start gap-3">
+                      <div
+                        className="text-2xl leading-none p-2 rounded-xl ring-1 ring-neutral-200 bg-white group-hover:scale-110 transition"
+                        aria-hidden
+                      >
+                        {b.icon}
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-lg">{b.title}</h3>
+                        <p className="text-sm text-neutral-600">{b.desc}</p>
+                      </div>
+                    </div>
+
+                    {/* мини-табличка/стикер */}
+                    <div className="mt-4 inline-flex items-center gap-1 text-[11px] px-2 py-1 rounded-full border border-neutral-200 text-neutral-600 bg-white group-hover:-translate-y-0.5 transition">
+                      <span className="w-2 h-2 rounded-full" style={{backgroundColor: BRAND.accent}} aria-hidden />
+                      <span>Метка доверия</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      }
+
+      /* ===== QDESK SAFE ZONE PREVIEW ===== */
+      function SafeZonePreview(){
+        return (
+          <section id="safe-zone" className="py-16 bg-neutral-50">
+            <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
+              {/* иллюстрация-заглушка */}
+              <div className="rounded-2xl border border-neutral-200 bg-white shadow p-6">
+                <div className="aspect-[16/10] rounded-lg bg-neutral-100 grid place-items-center text-neutral-500 text-sm">
+                  Иллюстрация QDESK Safe Zone
+                </div>
+                <div className="mt-4 grid grid-cols-3 gap-3">
+                  {["📍","🎥","🔁"].map((i,k)=>(
+                    <div key={k} className="rounded-lg border border-neutral-200 bg-white py-4 grid place-items-center text-2xl">
+                      {i}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* описание фичи */}
+              <div>
+                <h2 className="text-3xl font-bold mb-3">QDESK Safe Zone</h2>
+                <p className="text-neutral-600 mb-5">
+                  Нейтральные точки встречи с камерой наблюдения и верификацией выдачи.
+                  Выберите удобную локацию, подтвердите сделку QR‑кодом — и всё.
+                </p>
+
+                <ul className="space-y-3 text-neutral-700">
+                  <li className="flex items-start gap-3">
+                    <span className="mt-1">📍</span>
+                    <span><b>Нейтральная территория:</b> кафе, коворкинги и партнёрские точки.</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="mt-1">🎥</span>
+                    <span><b>Камера и журнал визитов:</b> повышают доверие обеих сторон.</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="mt-1">🔐</span>
+                    <span><b>QR/Пин‑код подтверждения:</b> выдача товара фиксируется.</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="mt-1">💳</span>
+                    <span><b>Оплата «на месте»:</b> безопасная оплата через QDESK (опционально).</span>
+                  </li>
+                </ul>
+
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <a
+                    href="#choose-safe-zone"
+                    className="px-5 py-3 rounded-lg font-semibold text-white"
+                    style={{backgroundColor: BRAND.accent}}
+                  >
+                    Выбрать QDESK Safe Zone
+                  </a>
+                  <a
+                    href="#how-it-works"
+                    className="px-5 py-3 rounded-lg font-semibold border border-neutral-300 text-neutral-700 hover:bg-neutral-50"
+                  >
+                    Как это работает
+                  </a>
+                </div>
+
+                <div className="mt-4 inline-flex items-center gap-2 text-xs text-neutral-600">
+                  <span className="px-2 py-1 rounded bg-white border border-neutral-200">BETA</span>
+                  <span>Запуск в пилоте — подключаем партнёрские точки</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        );
+      }
+
       function App(){
         return (
           <div className="min-h-screen w-full bg-white text-neutral-900">
@@ -168,6 +294,12 @@
                 </div>
               </div>
             </section>
+
+            {/* ЭЛЕМЕНТЫ ДОВЕРИЯ */}
+            <TrustBadges />
+
+            {/* SAFE ZONE PREVIEW */}
+            <SafeZonePreview />
 
             {/* Поисковик */}
             <SearchInside />
