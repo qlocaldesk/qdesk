@@ -158,7 +158,7 @@
         );
       }
 
-      /* ===== ЭЛЕМЕНТЫ ДОВЕРИЯ (SVG) ===== */
+      /* ===== ЭЛЕМЕНТЫ ДОВЕРИЯ — ТЁМНАЯ ВЕРСИЯ ===== */
       function TrustBadges(){
         const badges = [
           { title:"Безопасная сделка", desc:"Оплата и передача на нейтральной территории", Icon: ico.Shield },
@@ -167,10 +167,10 @@
         ];
 
         return (
-          <section className="py-14 bg-white">
+          <section className="py-16 bg-neutral-900">
             <div className="max-w-6xl mx-auto px-4">
-              <h2 className="text-2xl md:text-3xl font-bold mb-2">Элементы доверия</h2>
-              <p className="text-neutral-600 mb-8">
+              <h2 className="text-2xl md:text-3xl font-bold mb-2 text-white">Элементы доверия</h2>
+              <p className="text-neutral-400 mb-8">
                 Сделки на QDESK сопровождаются прозрачными метками и понятными правилами.
               </p>
 
@@ -178,26 +178,25 @@
                 {badges.map(({title, desc, Icon}, i)=>(
                   <div
                     key={i}
-                    className="group rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm hover:shadow transition relative overflow-hidden"
+                    className="group rounded-2xl border border-neutral-700 bg-neutral-800 p-5 shadow-sm hover:shadow-md transition relative overflow-hidden"
                   >
-                    {/* фоновый «свет» */}
+                    {/* подсветка */}
                     <div
-                      className="absolute -right-6 -top-6 w-24 h-24 rounded-full opacity-10 blur-xl"
+                      className="absolute -right-6 -top-6 w-24 h-24 rounded-full opacity-20 blur-2xl"
                       style={{backgroundColor: BRAND.accent}}
                       aria-hidden
                     />
                     <div className="flex items-start gap-3">
-                      <div className="p-2 rounded-xl ring-1 ring-neutral-200 bg-white group-hover:scale-110 transition" aria-hidden>
+                      <div className="p-2 rounded-xl ring-1 ring-neutral-700 bg-neutral-900 group-hover:scale-110 transition" aria-hidden>
                         <Icon className="w-6 h-6" style={{color: BRAND.accent}} />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-lg">{title}</h3>
-                        <p className="text-sm text-neutral-600">{desc}</p>
+                        <h3 className="font-semibold text-lg text-white">{title}</h3>
+                        <p className="text-sm text-neutral-400">{desc}</p>
                       </div>
                     </div>
 
-                    {/* мини-табличка */}
-                    <div className="mt-4 inline-flex items-center gap-1 text-[11px] px-2 py-1 rounded-full border border-neutral-200 text-neutral-600 bg-white group-hover:-translate-y-0.5 transition">
+                    <div className="mt-4 inline-flex items-center gap-1 text-[11px] px-2 py-1 rounded-full border border-neutral-700 text-neutral-400 bg-neutral-900 group-hover:-translate-y-0.5 transition">
                       <span className="w-2 h-2 rounded-full" style={{backgroundColor: BRAND.accent}} aria-hidden />
                       <span>Метка доверия</span>
                     </div>
@@ -209,34 +208,34 @@
         );
       }
 
-      /* ===== QDESK SAFE ZONE PREVIEW (SVG) ===== */
+      /* ===== QDESK SAFE ZONE PREVIEW — ТЁМНАЯ ВЕРСИЯ ===== */
       function SafeZonePreview(){
         return (
-          <section id="safe-zone" className="py-16 bg-neutral-50">
+          <section id="safe-zone" className="py-16 bg-neutral-950">
             <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
-              {/* иллюстрация-заглушка */}
-              <div className="rounded-2xl border border-neutral-200 bg-white shadow p-6">
-                <div className="aspect-[16/10] rounded-lg bg-neutral-100 grid place-items-center text-neutral-500 text-sm">
+              {/* картинка-заглушка */}
+              <div className="rounded-2xl border border-neutral-800 bg-neutral-900 shadow p-6">
+                <div className="aspect-[16/10] rounded-lg bg-neutral-800 grid place-items-center text-neutral-500 text-sm">
                   Иллюстрация QDESK Safe Zone
                 </div>
                 <div className="mt-4 grid grid-cols-3 gap-3">
                   {[ico.Pin, ico.Camera, ico.Lock].map((Icon,k)=>(
-                    <div key={k} className="rounded-lg border border-neutral-200 bg-white py-4 grid place-items-center">
+                    <div key={k} className="rounded-lg border border-neutral-800 bg-neutral-900 py-4 grid place-items-center">
                       <Icon className="w-7 h-7" style={{color: BRAND.accent}} aria-hidden />
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* описание фичи */}
+              {/* описание */}
               <div>
-                <h2 className="text-3xl font-bold mb-3">QDESK Safe Zone</h2>
-                <p className="text-neutral-600 mb-5">
+                <h2 className="text-3xl font-bold mb-3 text-white">QDESK Safe Zone</h2>
+                <p className="text-neutral-400 mb-5">
                   Нейтральные точки встречи с камерой наблюдения и верификацией выдачи.
-                  Выберите удобную локацию, подтвердите сделку QR‑кодом — и всё.
+                  Выберите удобную локацию, подтвердите сделку QR-кодом — и всё.
                 </p>
 
-                <ul className="space-y-3 text-neutral-700">
+                <ul className="space-y-3 text-neutral-300">
                   <li className="flex items-start gap-3">
                     <ico.Pin className="w-5 h-5 mt-1" style={{color: BRAND.accent}} aria-hidden />
                     <span><b>Нейтральная территория:</b> кафе, коворкинги и партнёрские точки.</span>
@@ -247,7 +246,7 @@
                   </li>
                   <li className="flex items-start gap-3">
                     <ico.Lock className="w-5 h-5 mt-1" style={{color: BRAND.accent}} aria-hidden />
-                    <span><b>QR/Пин‑код подтверждения:</b> выдача товара фиксируется.</span>
+                    <span><b>QR/Пин-код подтверждения:</b> выдача товара фиксируется.</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <ico.Card className="w-5 h-5 mt-1" style={{color: BRAND.accent}} aria-hidden />
@@ -256,23 +255,16 @@
                 </ul>
 
                 <div className="mt-6 flex flex-wrap gap-3">
-                  <a
-                    href="#choose-safe-zone"
-                    className="px-5 py-3 rounded-lg font-semibold text-white"
-                    style={{backgroundColor: BRAND.accent}}
-                  >
+                  <a href="#choose-safe-zone" className="px-5 py-3 rounded-lg font-semibold text-white" style={{backgroundColor: BRAND.accent}}>
                     Выбрать QDESK Safe Zone
                   </a>
-                  <a
-                    href="#how-it-works"
-                    className="px-5 py-3 rounded-lg font-semibold border border-neutral-300 text-neutral-700 hover:bg-neutral-50"
-                  >
+                  <a href="#how-it-works" className="px-5 py-3 rounded-lg font-semibold border border-neutral-700 text-neutral-300 hover:bg-neutral-900">
                     Как это работает
                   </a>
                 </div>
 
-                <div className="mt-4 inline-flex items-center gap-2 text-xs text-neutral-600">
-                  <span className="px-2 py-1 rounded bg-white border border-neutral-200">BETA</span>
+                <div className="mt-4 inline-flex items-center gap-2 text-xs text-neutral-500">
+                  <span className="px-2 py-1 rounded bg-neutral-900 border border-neutral-800">BETA</span>
                   <span>Запуск в пилоте — подключаем партнёрские точки</span>
                 </div>
               </div>
@@ -324,16 +316,16 @@
               </div>
             </section>
 
-            {/* ЭЛЕМЕНТЫ ДОВЕРИЯ (SVG) */}
+            {/* ЭЛЕМЕНТЫ ДОВЕРИЯ — DARK */}
             <TrustBadges />
 
-            {/* SAFE ZONE PREVIEW (SVG) */}
+            {/* SAFE ZONE PREVIEW — DARK */}
             <SafeZonePreview />
 
             {/* Поисковик */}
             <SearchInside />
 
-            {/* Футер */}
+            {/* Футер (светлый) */}
             <footer className="py-12 border-t border-neutral-200 bg-neutral-50">
               <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-3 gap-8 text-sm">
                 <div>
