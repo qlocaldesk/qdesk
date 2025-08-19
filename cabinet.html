@@ -265,138 +265,104 @@
   </div>
 
 <script>
-// ====== QDESK Online Mode (не меняет UI, только «подменяет» логику) ======
-const USE_API = true; // можно выключить, если захочешь вернуться к локальному режиму
-const API_BASE = "https://qdesk-api.onrender.com";
+// ===== QDESK Online Mode (safe) =====
+(function(){
+  // 1) Без повторного объявления: используем глобал с подстановкой по умолчанию
+  window.API_BASE = window.API_BASE || "https://qdesk-api.onrender.com";
 
-async function api(path, {method='GET', body, token} = {}) {
-  const res = await fetch(API_BASE + path, {
-    method,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {})
-    },
-    body: body ? JSON.stringify(body) : undefined
+  // 2) Если базовые объекты еще не готовы — подождём tick
+  function ready(fn){ (document.readyState==='complete' ? fn() : window.addEventListener('load', fn)); }
+
+  ready(function(){
+    try{
+      if(!window.App || !window.Listings || !window.store){ 
+        console.warn('QDESK: base app not ready, skip online mode'); 
+        return; 
+      }
+
+      async function api(path, {method='GET', body, token} = {}) {
+        const res = await fetch(window.API_BASE + path, {
+          method,
+          headers: {
+            'Content-Type':'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {})
+          },
+          body: body ? JSON.stringify(body) : undefined
+        });
+        if (!res.ok) throw new Error(`${res.status} ${await res.text()}`);
+        const ct = res.headers.get('content-type')||'';
+        return ct.includes('application/json') ? res.json() : res.text();
+      }
+
+      const Auth = {
+        get token(){ return store.get('qdesk_token', null) },
+        set token(v){ store.set('qdesk_token', v) }
+      };
+
+      // ---- Перепрошиваем только login, UI не трогаем
+      const originalLogin = App.login;
+      App.login = async function(){
+        try{
+          const raw = (document.getElementById('email')?.value || '').trim();
+          const name = (document.getElementById('name')?.value || '').trim() || undefined;
+          if(!raw) return alert('Введите e‑mail или телефон');
+
+          const isEmail = /@/.test(raw);
+          if(isEmail){
+            await api('/auth/email/start', {method:'POST', body:{ email: raw }});
+            const code = (prompt('Код из письма (сейчас в логах Render):')||'').trim(); if(!code) return;
+            const { token, user } = await api('/auth/email/verify', {method:'POST', body:{ email: raw, code, name }});
+            Auth.token = token; state.user = user;
+          }else{
+            await api('/auth/phone/start', {method:'POST', body:{ phone: raw }});
+            const code = (prompt('Код из SMS (сейчас в логах Render):')||'').trim(); if(!code) return;
+            const { token, user } = await api('/auth/phone/verify', {method:'POST', body:{ phone: raw, code, name }});
+            Auth.token = token; state.user = user;
+          }
+
+          store.set('qdesk_user', state.user);
+          App.renderUser();
+          await Listings.syncFromAPI?.();
+        }catch(e){
+          console.warn('Online login failed, fallback local:', e);
+          return originalLogin(); // безопасный откат
+        }
+      };
+
+      // ---- API‑синхронизация объявлений
+      Listings.syncFromAPI = async function(){
+        try{
+          const data = await api('/listings', { token: Auth.token });
+          state.listings = data.items || [];
+          store.set('qdesk_listings', state.listings);
+          Listings.render();
+        }catch(e){
+          console.warn('Listings API not available, stay local:', e);
+        }
+      };
+
+      // ---- Автовосстановление сессии
+      (async function restore(){
+        const t = Auth.token; if(!t) return;
+        try{
+          const me = await api('/me', { token: t });
+          state.user = me; store.set('qdesk_user', me);
+          App.renderUser();
+          await Listings.syncFromAPI?.();
+        }catch{
+          store.del('qdesk_token');
+        }
+      })();
+
+    }catch(err){
+      console.error('QDESK online mode crashed, keeping local mode:', err);
+    }
   });
-  if (!res.ok) throw new Error(`${res.status} ${await res.text()}`);
-  const ct = res.headers.get('content-type') || '';
-  return ct.includes('application/json') ? res.json() : res.text();
-}
-
-// ——— Токен подхватываем/сохраняем в тот же storage, чтобы ничего не ломать
-const Auth = {
-  get token(){ return store.get('qdesk_token', null) },
-  set token(v){ store.set('qdesk_token', v) }
-};
-
-// ——— Мягкая «перепрошивка» login, Listings.* без изменения твоего UI
-(function enableOnlineMode(){
-  if(!USE_API) return;
-
-  // Переопределяем App.login на email-код (через prompt, без правок HTML)
-  const originalLogin = App.login;
-  App.login = async function(){
-    try {
-      const email = (document.getElementById('email')?.value || prompt('Ваш email для входа:') || '').trim();
-      if(!email) return alert('Нужен email');
-      await api('/auth/email/start', {method:'POST', body:{email}});
-      const code = (prompt('Код из письма (для демо см. логи Render):') || '').trim();
-      if(!code) return alert('Нужен код');
-      const res = await api('/auth/email/verify', {method:'POST', body:{email, code}});
-      Auth.token = res.token;
-      state.user = res.user;
-      store.set('qdesk_user', state.user);
-      App.renderUser();
-      // подтянем объявления после входа
-      await Listings.syncFromAPI();
-    } catch (e) {
-      console.warn(e);
-      alert('Онлайн-вход не удался. Работаем в локальном режиме.');
-      originalLogin(); // fallback на старый локальный вход
-    }
-  };
-
-  // Добавляем API-варианты методов объявлений и мягко подменяем существующие
-  Listings.syncFromAPI = async function(){
-    try{
-      const data = await api('/listings', { token: Auth.token });
-      state.listings = data.items || [];
-      store.set('qdesk_listings', state.listings);
-      Listings.render();
-    }catch(e){
-      console.warn('Listings sync failed, stay local:', e);
-    }
-  };
-
-  const originalCreate = Listings.create;
-  Listings.create = async function(){
-    // собираем из твоих полей (как раньше)
-    const t = document.getElementById('newTitle')?.value?.trim();
-    const p = +document.getElementById('newPrice')?.value || 0;
-    if(!t){ return alert('Название?'); }
-    try{
-      const created = await api('/listings', {method:'POST', token:Auth.token, body:{title:t, price:p}});
-      state.listings.unshift(created);
-      store.set('qdesk_listings', state.listings);
-      Listings.render();
-    }catch(e){
-      console.warn('API create failed, fallback local:', e);
-      originalCreate();
-    }
-  };
-
-  const originalCreateForm = Listings.createFromForm;
-  Listings.createFromForm = async function(){
-    const f = document.getElementById('listingForm');
-    const data = Object.fromEntries(new FormData(f).entries());
-    try{
-      const created = await api('/listings', {
-        method:'POST', token:Auth.token,
-        body:{ title:data.title, price:+data.price||0, desc:data.desc||'', city:data.city||'', cat:data.cat||'' }
-      });
-      state.listings.unshift(created);
-      store.set('qdesk_listings', state.listings);
-      f.reset(); Listings.render();
-    }catch(e){
-      console.warn('API createFromForm failed, fallback local:', e);
-      originalCreateForm();
-    }
-  };
-
-  const originalEdit = Listings.edit;
-  Listings.edit = async function(id){
-    const it = state.listings.find(x=>x.id===id); if(!it) return;
-    const title = prompt('Название', it.title); if(title===null) return;
-    const price = +prompt('Цена', it.price); if(Number.isNaN(price)) return;
-    try{
-      const updated = await api(`/listings/${id}`, {method:'PUT', token:Auth.token, body:{title, price}});
-      Object.assign(it, updated);
-      store.set('qdesk_listings', state.listings);
-      Listings.render();
-    }catch(e){
-      console.warn('API edit failed, fallback local:', e);
-      originalEdit(id);
-    }
-  };
-
-  const originalRemove = Listings.remove;
-  Listings.remove = async function(id){
-    try{
-      await api(`/listings/${id}`, {method:'DELETE', token:Auth.token});
-      state.listings = state.listings.filter(x=>x.id!==id);
-      store.set('qdesk_listings', state.listings);
-      Listings.render();
-    }catch(e){
-      console.warn('API remove failed, fallback local:', e);
-      originalRemove(id);
-    }
-  };
-
-  // При загрузке страницы попробуем подтянуть онлайн-объявления
-  Listings.syncFromAPI();
 })();
 </script>
 
+
 </body>
 </html>
+
 
