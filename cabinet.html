@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QDESK — Личный кабинет</title>
+  <style>
+    :root{
+      --bg:#0b0b0c; --panel:#111214; --muted:#1a1b1e; --text:#e9eaec; --soft:#b7bcc5; --brand:#6ee7ff; --accent:#8b5cf6; --ok:#22c55e; --warn:#f59e0b; --danger:#ef4444;
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:linear-gradient(180deg,#0a0b0c, #0e0f12);color:var(--text);font:14px/1.5 Inter,system-ui,Segoe UI,Roboto,Arial}
+    a{color:inherit;text-decoration:none}
+    button{cursor:pointer}
+    .container{max-width:1200px;margin:0 auto;padding:24px}
+    .nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+    .brand{display:flex;gap:10px;align-items:center}
+    .brand-badge{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--brand),var(--accent));box-shadow:0 2px 20px rgba(110,231,255,.35)}
+    .brand-title{font-weight:700;letter-spacing:.3px}
+
+    .shell{display:grid;grid-template-columns: 260px 1fr; gap:16px}
+    .sidebar{background:var(--panel);border:1px solid #1b1c20;border-radius:var(--radius);padding:12px;position:sticky;top:16px;height:calc(100dvh - 72px)}
+    .main{min-height:70vh;background:var(--panel);border:1px solid #1b1c20;border-radius:var(--radius);padding:20px}
+
+    .user-card{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;background:linear-gradient(180deg,#121316,#0f1013);border:1px solid #1b1c20;margin-bottom:10px}
+    .avatar{width:44px;height:44px;border-radius:12px;background:radial-gradient(circle at 30% 30%,#293241,#111827);display:grid;place-items:center;font-weight:600}
+    .muted{color:#a7acb6}
+
+    .menu{display:grid;gap:6px;margin-top:12px}
+    .menu button{width:100%;text-align:left;background:#13141a;border:1px solid #1b1c20;color:var(--text);padding:10px 12px;border-radius:12px}
+    .menu button.active{outline:0;border-color:#2e3140;background:linear-gradient(180deg,#141622,#10121a)}
+
+    .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .stat{background:#12131a;border:1px solid #1b1c20;border-radius:14px;padding:14px}
+    .stat .kpi{font-size:20px;font-weight:700}
+    .chip{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border-radius:999px;border:1px solid #2a2d3a;background:#12131a;color:#c9ced8}
+
+    .toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
+    .toolbar input, .toolbar select{background:#13141a;border:1px solid #1b1c20;color:var(--text);padding:10px;border-radius:12px}
+    .btn{background:linear-gradient(135deg,var(--brand),var(--accent));color:#0b0b0c;border:none;border-radius:12px;padding:10px 14px;font-weight:600}
+    .btn.ghost{background:#14151a;border:1px solid #232533;color:#cbd2dc}
+
+    .table{width:100%;border-collapse:collapse;border-radius:12px;overflow:hidden}
+    .table th,.table td{padding:12px 10px;border-bottom:1px solid #1b1c20}
+    .table th{font-weight:600;text-align:left;background:#12131a}
+    .table tr:hover{background:#141620}
+
+    .grid{display:grid;gap:12px}
+    .grid.cols-2{grid-template-columns:repeat(2,1fr)}
+    .grid.cols-3{grid-template-columns:repeat(3,1fr)}
+
+    .card{background:#12131a;border:1px solid #1b1c20;border-radius:14px;padding:14px}
+
+    .form{display:grid;gap:10px;max-width:680px}
+    .form label{font-size:12px;color:#aeb3bd}
+    .form input,.form textarea{width:100%;background:#0f1116;border:1px solid #1b1c20;border-radius:12px;padding:10px;color:#e9eaec}
+    .form .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+    .notice{padding:12px;border-radius:12px;background:#0f1512;border:1px solid #173b24;color:#d1f3da}
+    .warn{background:#19150f;border-color:#3d2a16;color:#ffe9c6}
+    .danger{background:#1a1010;border-color:#3e1b1b;color:#ffd1d1}
+
+    .login{display:flex;gap:10px}
+    .login input{flex:1}
+
+    @media (max-width: 980px){
+      .shell{grid-template-columns:1fr}
+      .sidebar{position:relative;height:auto}
+      .stat-grid{grid-template-columns:repeat(2,1fr)}
+      .grid.cols-2{grid-template-columns:1fr}
+      .grid.cols-3{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="nav">
+      <div class="brand">
+        <div class="brand-badge"></div>
+        <div class="brand-title">QDESK — Личный кабинет</div>
+      </div>
+      <div class="login" id="loginBar">
+        <input id="email" placeholder="email" />
+        <input id="name" placeholder="имя" />
+        <button class="btn" onclick="App.login()">Войти / Зарегистрироваться</button>
+      </div>
+      <div class="login" id="userBar" style="display:none">
+        <span id="hello" class="chip"></span>
+        <button class="btn ghost" onclick="App.logout()">Выйти</button>
+      </div>
+    </div>
+
+    <div class="shell">
+      <aside class="sidebar">
+        <div class="user-card">
+          <div class="avatar" id="avatar">U</div>
+          <div>
+            <div id="userName">Гость</div>
+            <div class="muted" id="userEmail">—</div>
+          </div>
+        </div>
+        <div class="menu">
+          <button data-tab="dashboard" class="active">Панель</button>
+          <button data-tab="listings">Мои объявления</button>
+          <button data-tab="messages">Сообщения</button>
+          <button data-tab="favorites">Избранное</button>
+          <button data-tab="profile">Профиль</button>
+          <button data-tab="safe">QDESK Spot</button>
+          <button data-tab="settings">Настройки</button>
+        </div>
+      </aside>
+
+      <main class="main">
+        <!-- DASHBOARD -->
+        <section id="dashboard" class="tab">
+          <div class="stat-grid">
+            <div class="stat"><div class="muted">Активных объявлений</div><div class="kpi" id="kpiActive">0</div></div>
+            <div class="stat"><div class="muted">Просмотры (7д)</div><div class="kpi" id="kpiViews">0</div></div>
+            <div class="stat"><div class="muted">Сообщения</div><div class="kpi" id="kpiMsgs">0</div></div>
+            <div class="stat"><div class="muted">Сделки через Spot</div><div class="kpi" id="kpiSpot">0</div></div>
+          </div>
+          <div class="grid cols-2" style="margin-top:12px">
+            <div class="card">
+              <div class="toolbar">
+                <input id="newTitle" placeholder="Название объявления" />
+                <input id="newPrice" type="number" placeholder="Цена" style="max-width:140px"/>
+                <button class="btn" onclick="Listings.create()">Добавить</button>
+              </div>
+              <table class="table" id="listingsTable"></table>
+            </div>
+            <div class="card">
+              <div class="muted" style="margin-bottom:6px">Быстрый доступ</div>
+              <div class="grid cols-2">
+                <button class="btn ghost" onclick="Nav.to('listings')">Создать объявление</button>
+                <button class="btn ghost" onclick="Nav.to('safe')">Забронировать Spot</button>
+                <button class="btn ghost" onclick="Nav.to('profile')">Заполнить профиль</button>
+                <button class="btn ghost" onclick="Nav.to('messages')">Открыть сообщения</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- LISTINGS -->
+        <section id="listings" class="tab" style="display:none">
+          <div class="toolbar">
+            <input id="filter" placeholder="Поиск по названию" oninput="Listings.render()" />
+            <select id="sort" onchange="Listings.render()">
+              <option value="new">Сначала новые</option>
+              <option value="priceUp">Цена ↑</option>
+              <option value="priceDown">Цена ↓</option>
+            </select>
+            <button class="btn" onclick="Listings.createFromForm()">Новое объявление</button>
+          </div>
+          <div class="card">
+            <form class="form" id="listingForm">
+              <div class="row">
+                <div>
+                  <label>Название</label>
+                  <input name="title" placeholder="Например: iPhone 13, 128GB" required />
+                </div>
+                <div>
+                  <label>Цена, ₽</label>
+                  <input name="price" type="number" min="0" required />
+                </div>
+              </div>
+              <label>Описание</label>
+              <textarea name="desc" rows="3" placeholder="Коротко опишите товар"></textarea>
+              <div class="row">
+                <div>
+                  <label>Город</label>
+                  <input name="city" placeholder="Город" />
+                </div>
+                <div>
+                  <label>Категория</label>
+                  <input name="cat" placeholder="Категория" />
+                </div>
+              </div>
+              <div class="row">
+                <button type="button" class="btn" onclick="Listings.createFromForm()">Сохранить</button>
+                <button type="reset" class="btn ghost">Очистить</button>
+              </div>
+            </form>
+          </div>
+          <table class="table" id="listingsTable2" style="margin-top:12px"></table>
+        </section>
+
+        <!-- MESSAGES -->
+        <section id="messages" class="tab" style="display:none">
+          <div class="notice warn">Это MVP: сообщения локальные и не выходят в интернет. Интеграция с реальным чатом — на бэкенде (WebSocket).</div>
+          <div class="grid cols-2" style="margin-top:12px">
+            <div class="card">
+              <div class="muted" style="margin-bottom:6px">Диалоги</div>
+              <div id="threads"></div>
+            </div>
+            <div class="card">
+              <div id="chat" class="grid" style="gap:8px"></div>
+              <div class="toolbar">
+                <input id="msgText" placeholder="Напишите сообщение" onkeydown="if(event.key==='Enter'){Messages.send()}" />
+                <button class="btn" onclick="Messages.send()">Отправить</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- FAVORITES -->
+        <section id="favorites" class="tab" style="display:none">
+          <table class="table" id="favTable"></table>
+        </section>
+
+        <!-- PROFILE -->
+        <section id="profile" class="tab" style="display:none">
+          <form class="form" id="profileForm">
+            <div class="row">
+              <div>
+                <label>Имя</label>
+                <input name="name" />
+              </div>
+              <div>
+                <label>Телефон</label>
+                <input name="phone" />
+              </div>
+            </div>
+            <label>О себе</label>
+            <textarea name="bio" rows="3" placeholder="Короткое описание"></textarea>
+            <div class="row">
+              <button type="button" class="btn" onclick="Profile.save()">Сохранить</button>
+              <button type="reset" class="btn ghost">Сброс</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- SAFE SPOT -->
+        <section id="safe" class="tab" style="display:none">
+          <div class="notice">QDESK Spot — безопасные точки встреч. Забронируйте слот и получите QR для подтверждения.</div>
+          <div class="toolbar">
+            <input id="spotCity" placeholder="Город" />
+            <input id="spotDate" type="datetime-local" />
+            <button class="btn" onclick="Spot.book()">Забронировать</button>
+          </div>
+          <div id="spotList" class="grid"></div>
+        </section>
+
+        <!-- SETTINGS -->
+        <section id="settings" class="tab" style="display:none">
+          <div class="grid cols-2">
+            <div class="card">
+              <div class="muted" style="margin-bottom:6px">Экспорт / Импорт данных (локально)</div>
+              <div class="toolbar">
+                <button class="btn" onclick="App.export()">Экспорт JSON</button>
+                <label class="btn ghost" style="display:inline-block">
+                  Импорт JSON<input type="file" accept="application/json" style="display:none" onchange="App.import(event)" />
+                </label>
+              </div>
+            </div>
+            <div class="card danger">
+              <div class="muted" style="margin-bottom:6px;color:#ffb3b3">Опасная зона</div>
+              <button class="btn" style="background:linear-gradient(135deg,#ff7b7b,#ef4444)" onclick="App.resetAll()">Сбросить всё (локально)</button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // --- Storage helpers
+    const store = {
+      get:(k,fall)=>{try{return JSON.parse(localStorage.getItem(k)) ?? fall}catch{return fall}},
+      set:(k,v)=>localStorage.setItem(k,JSON.stringify(v)),
+      del:(k)=>localStorage.removeItem(k)
+    }
+
+    // --- State
+    const state = {
+      user: store.get('qdesk_user', null),
+      listings: store.get('qdesk_listings', []),
+      favorites: store.get('qdesk_favs', []),
+      messages: store.get('qdesk_msgs', {}), // {threadId:[{from,text,ts}]}
+      spot: store.get('qdesk_spot', [])
+    }
+
+    // --- Navigation
+    const Nav = {
+      init(){
+        document.querySelectorAll('.menu button').forEach(btn=>{
+          btn.addEventListener('click',()=>{
+            document.querySelectorAll('.menu button').forEach(b=>b.classList.remove('active'))
+            btn.classList.add('active');
+            document.querySelectorAll('.tab').forEach(t=>t.style.display='none')
+            document.getElementById(btn.dataset.tab).style.display='block'
+          })
+        })
+      },
+      to(id){
+        const btn=[...document.querySelectorAll('.menu button')].find(b=>b.dataset.tab===id);
+        btn?.click();
+      }
+    }
+
+    // --- App auth & shell
+    const App = {
+      login(){
+        const name = document.getElementById('name').value.trim() || 'Пользователь';
+        const email = document.getElementById('email').value.trim() || 'user@example.com';
+        state.user = { id: 'u_'+Date.now(), name, email };
+        store.set('qdesk_user', state.user);
+        App.renderUser();
+      },
+      logout(){
+        store.del('qdesk_user');
+        state.user=null; App.renderUser();
+      },
+      renderUser(){
+        const logged=!!state.user;
+        document.getElementById('loginBar').style.display = logged? 'none':'flex';
+        document.getElementById('userBar').style.display = logged? 'flex':'none';
+        document.getElementById('userName').textContent = logged? state.user.name : 'Гость';
+        document.getElementById('userEmail').textContent = logged? state.user.email : '—';
+        document.getElementById('hello').textContent = logged? `Привет, ${state.user.name}`:'';
+        document.getElementById('avatar').textContent = logged? (state.user.name[0]||'U').toUpperCase() : 'U';
+      },
+      export(){
+        const blob = new Blob([JSON.stringify(state,null,2)], {type:'application/json'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'qdesk-data.json';
+        a.click();
+      },
+      import(e){
+        const file = e.target.files[0]; if(!file) return;
+        const fr = new FileReader();
+        fr.onload = ()=>{
+          try{
+            const data=JSON.parse(fr.result);
+            Object.assign(state,data);
+            store.set('qdesk_user', state.user);
+            store.set('qdesk_listings', state.listings);
+            store.set('qdesk_favs', state.favorites);
+            store.set('qdesk_msgs', state.messages);
+            store.set('qdesk_spot', state.spot);
+            renderAll();
+          }catch(err){alert('Ошибка импорта: '+err.message)}
+        };
+        fr.readAsText(file);
+      },
+      resetAll(){
+        if(!confirm('Сбросить локальные данные?')) return;
+        ['qdesk_user','qdesk_listings','qdesk_favs','qdesk_msgs','qdesk_spot'].forEach(store.del);
+        state.user=null; state.listings=[]; state.favorites=[]; state.messages={}; state.spot=[];
+        renderAll();
+      }
+    }
+
+    // --- Listings
+    const Listings = {
+      create(){
+        const t=document.getElementById('newTitle').value.trim();
+        const p=+document.getElementById('newPrice').value||0;
+        if(!t){alert('Название?');return}
+        const item={id:'l_'+Date.now(), title:t, price:p, desc:'', city:'', cat:'', views:0, ts:Date.now()}
+        state.listings.unshift(item); store.set('qdesk_listings', state.listings); Listings.render();
+      },
+      createFromForm(){
+        const f=document.getElementById('listingForm');
+        const data=Object.fromEntries(new FormData(f).entries());
+        const item={id:'l_'+Date.now(), title:data.title||'Без названия', price:+data.price||0, desc:data.desc||'', city:data.city||'', cat:data.cat||'', views:0, ts:Date.now()}
+        state.listings.unshift(item); store.set('qdesk_listings', state.listings); f.reset(); Listings.render();
+      },
+      remove(id){ state.listings=state.listings.filter(x=>x.id!==id); store.set('qdesk_listings', state.listings); Listings.render(); },
+      fav(id){ if(!state.favorites.includes(id)) state.favorites.push(id); store.set('qdesk_favs', state.favorites); Favorites.render(); },
+      edit(id){
+        const it=state.listings.find(x=>x.id===id); if(!it) return;
+        const title=prompt('Название', it.title); if(title===null) return;
+        const price=+prompt('Цена', it.price); if(Number.isNaN(price)) return;
+        it.title=title; it.price=price; store.set('qdesk_listings', state.listings); Listings.render();
+      },
+      render(){
+        const filter=document.getElementById('filter')?.value?.toLowerCase()||'';
+        const sort=document.getElementById('sort')?.value||'new';
+        let arr=[...state.listings].filter(x=>x.title.toLowerCase().includes(filter));
+        if(sort==='priceUp') arr.sort((a,b)=>a.price-b.price);
+        else if(sort==='priceDown') arr.sort((a,b)=>b.price-a.price);
+        else arr.sort((a,b)=>b.ts-a.ts);
+        const head = `<tr><th>Название</th><th>Цена</th><th>Город</th><th>Категория</th><th>Просмотры</th><th></th></tr>`;
+        const rows = arr.map(x=>`<tr>
+          <td>${x.title}</td>
+          <td>${x.price.toLocaleString('ru-RU')}</td>
+          <td>${x.city||'—'}</td>
+          <td>${x.cat||'—'}</td>
+          <td>${x.views}</td>
+          <td style="display:flex;gap:6px">
+            <button class="btn ghost" onclick="Listings.edit('${x.id}')">Ред.</button>
+            <button class="btn ghost" onclick="Listings.fav('${x.id}')">★</button>
+            <button class="btn" onclick="Listings.remove('${x.id}')">Удалить</button>
+          </td>
+        </tr>`).join('');
+        const html = head + rows;
+        document.getElementById('listingsTable').innerHTML = html;
+        const t2=document.getElementById('listingsTable2'); if(t2) t2.innerHTML=html;
+        document.getElementById('kpiActive').textContent = state.listings.length;
+      }
+    }
+
+    // --- Favorites
+    const Favorites = {
+      render(){
+        const head = `<tr><th>Объявление</th><th>Цена</th><th></th></tr>`;
+        const rows = state.favorites.map(id=>state.listings.find(x=>x.id===id)).filter(Boolean).map(x=>`<tr>
+          <td>${x.title}</td>
+          <td>${x.price.toLocaleString('ru-RU')}</td>
+          <td><button class="btn" onclick="Favorites.remove('${x.id}')">Убрать</button></td>
+        </tr>`).join('');
+        document.getElementById('favTable').innerHTML = head + rows;
+      },
+      remove(id){ state.favorites=state.favorites.filter(x=>x!==id); store.set('qdesk_favs', state.favorites); Favorites.render(); }
+    }
+
+    // --- Messages (demo local)
+    const Messages = {
+      ensureThread(id){ if(!state.messages[id]) state.messages[id]=[] },
+      open(id){
+        Messages.ensureThread(id);
+        const list = state.messages[id].map(m=>`<div class="chip" style="justify-content:${m.from==='me'?'flex-end':'flex-start'}">${m.text} · <span class="muted">${new Date(m.ts).toLocaleTimeString()}</span></div>`).join('');
+        document.getElementById('chat').innerHTML = `<div class="muted">Диалог: ${id}</div>` + list;
+        document.getElementById('msgText').dataset.thread=id;
+      },
+      send(){
+        const id=document.getElementById('msgText').dataset.thread||'demo';
+        Messages.ensureThread(id);
+        const text=document.getElementById('msgText').value.trim(); if(!text) return;
+        state.messages[id].push({from:'me', text, ts:Date.now()});
+        store.set('qdesk_msgs', state.messages);
+        document.getElementById('msgText').value='';
+        Messages.open(id);
+      },
+      render(){
+        const el=document.getElementById('threads');
+        if(!el) return;
+        const ids=Object.keys(state.messages); if(ids.length===0){ state.messages.demo=[{from:'user','text':'Привет! Это демо-чат.', ts:Date.now()}]; }
+        el.innerHTML = Object.keys(state.messages).map(id=>`<button class="btn ghost" style="width:100%" onclick="Messages.open('${id}')">${id}</button>`).join('');
+        Messages.open(Object.keys(state.messages)[0]);
+        document.getElementById('kpiMsgs').textContent = Object.keys(state.messages).length;
+      }
+    }
+
+    // --- Spot booking
+    const Spot = {
+      book(){
+        const city=document.getElementById('spotCity').value.trim()||'Город';
+        const dt=document.getElementById('spotDate').value||new Date(Date.now()+3600e3).toISOString().slice(0,16);
+        const id='S'+Math.random().toString(36).slice(2,8).toUpperCase();
+        const item={id, city, dt, status:'Забронировано', qr: 'QR-'+id}
+        state.spot.unshift(item); store.set('qdesk_spot', state.spot); Spot.render();
+      },
+      render(){
+        const el=document.getElementById('spotList'); if(!el) return;
+        el.innerHTML = state.spot.map(s=>`<div class="card">
+          <div class="grid cols-2">
+            <div>
+              <div class="muted">Точка</div>
+              <div style="font-weight:600">${s.city} · ${new Date(s.dt).toLocaleString()}</div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end">
+              <span class="chip">${s.status}</span>
+              <button class="btn ghost" onclick="alert('QR: ${s.qr}')">Показать QR</button>
+            </div>
+          </div>
+        </div>`).join('');
+        document.getElementById('kpiSpot').textContent = state.spot.length;
+      }
+    }
+
+    // --- Profile
+    const Profile = {
+      save(){
+        const f=document.getElementById('profileForm');
+        const data=Object.fromEntries(new FormData(f).entries());
+        if(!state.user) state.user={id:'u_'+Date.now(), name:'Пользователь', email:'user@example.com'};
+        state.user.name=data.name||state.user.name; state.user.phone=data.phone||''; state.user.bio=data.bio||'';
+        store.set('qdesk_user', state.user); App.renderUser(); alert('Сохранено');
+      }
+    }
+
+    function renderAll(){
+      App.renderUser(); Listings.render(); Favorites.render(); Messages.render(); Spot.render();
+    }
+
+    // init
+    Nav.init(); renderAll();
+  </script>
+</body>
+</html>
