@@ -255,82 +255,6 @@ function SearchInside() {
         );
       }
 	  
-	  /* ===== OFFLINE ADS (ПОСЛЕ ПОИСКА) ===== */
-function OfflineAds(){
-  return (
-    <section id="offline-ads" className="py-16 bg-neutral-50">
-      <div className="max-w-6xl mx-auto px-4">
-        <h2 className="text-3xl font-bold mb-3">Объявления выходят в оффлайн</h2>
-        <p className="text-neutral-600 mb-10">
-          Ваше онлайн‑объявление превращается в бумажную листовку с QR‑кодом и расклеивается в вашем районе.
-        </p>
-
-        {/* 3 шага */}
-        <ol className="grid md:grid-cols-3 gap-6 mb-12 list-none counter-reset-step">
-          {[
-            {t:"Вы размещаете объявление", d:"Обычная форма — заголовок, описание, фото, контакты."},
-            {t:"Мы печатаем и добавляем QR‑код", d:"Фирменный макет со сжатым текстом и быстрым переходом на страницу объявления."},
-            {t:"Курьер расклеивает в вашем районе", d:"По согласованным адресам, с фото‑отчётом в кабинете."},
-          ].map((s, i)=>(
-            <li key={i} className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
-              <div className="w-8 h-8 rounded-full grid place-items-center font-semibold text-white mb-3"
-                   style={{backgroundColor: BRAND.accent}}>{i+1}</div>
-              <h3 className="font-semibold mb-1">{s.t}</h3>
-              <p className="text-sm text-neutral-600">{s.d}</p>
-            </li>
-          ))}
-        </ol>
-
-        {/* Мокап листовки */}
-        <div className="grid md:grid-cols-2 gap-10 items-center">
-          <div className="rounded-2xl border border-neutral-200 bg-white p-4 shadow overflow-hidden">
-            {/* Если уже есть готовое фото мокапа — положи его в assets/offline-poster.jpg */}
-            <div className="aspect-[4/3] rounded-xl overflow-hidden bg-neutral-100">
-              <img
-                src="assets/offline-poster.jpg"
-                alt="Пример оффлайн‑листовки QDESK"
-                className="w-full h-full object-cover"
-                onError={(e)=>{ // fallback: стилизованный макет, если изображения ещё нет
-                  e.currentTarget.outerHTML = `
-                    <div class='w-full h-full grid place-items-center bg-gradient-to-br from-sky-500 to-blue-600'>
-                      <div class='bg-white/90 rounded-xl p-6 w-[82%] aspect-[3/4] shadow-lg'>
-                        <div class='text-xs text-neutral-500 mb-1'>QDESK • листовка</div>
-                        <div class='font-bold text-xl leading-tight'>iPhone 8, 64 ГБ</div>
-                        <div class='text-neutral-600 text-sm mb-3'>5 000 ₽ • Новокузнецк</div>
-                        <div class='h-24 bg-neutral-200 rounded mb-3'></div>
-                        <div class='text-xs text-neutral-600 mb-4 line-clamp-3'>Состояние хорошее, батарея 86%…</div>
-                        <div class='flex items-center justify-between'>
-                          <div class='h-16 w-16 bg-neutral-200 rounded'></div>
-                          <div class='text-xs text-neutral-500'>QR-код ведёт на страницу<br/>объявления</div>
-                        </div>
-                      </div>
-                    </div>
-                  `;
-                }}
-              />
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-xl font-semibold mb-2">Как выглядит оффлайн‑листовка</h3>
-            <ul className="space-y-3 text-neutral-700">
-              <li>• Сжатый заголовок и цена в фирменном стиле QDESK.</li>
-              <li>• QR‑код на страницу объявления — быстрый переход с телефона.</li>
-              <li>• Внизу контакты и отрывные теги (опционально).</li>
-            </ul>
-            <div className="mt-6 flex gap-3">
-              <a href="#add-ad" className="px-5 py-3 rounded-lg font-semibold text-white"
-                 style={{backgroundColor: BRAND.accent}}>Разместить объявление</a>
-              <a href="#how-it-prints" className="px-5 py-3 rounded-lg font-semibold border border-neutral-300 hover:bg-neutral-100">
-                Подробнее о печати
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 
     /* ===== SAFE SPOT — DARK ===== */
@@ -413,10 +337,6 @@ function SafeZonePreview(){
                 <HeroCarousel />
               </div>
             </section>
-			
-			<SearchInside />
-			<OfflineAds />
-			<SafeSpot />
 
             {/* ЭЛЕМЕНТЫ ДОВЕРИЯ — DARK */}
             <TrustBadges />
