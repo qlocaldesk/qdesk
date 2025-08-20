@@ -53,9 +53,12 @@
       }
 
       function HeroCarousel(){
-        const slides = React.useMemo(()=>([
-          { ...MOCK[0], img: "assets/iphone8-cover.jpg" }, // реальное фото для первого объявления
-          ...MOCK.slice(1).map(item=>({ ...item, img: makeThumb({ title: item.title, accent: BRAND.accent }) }))
+        const slides = React.useMemo(() => ([
+          { ...MOCK[0], img: "assets/iphone8-cover.jpg" },
+          { ...MOCK[1], img: "assets/stels-cover.jpg" },
+          { ...MOCK[2], img: "assets/washmachine-cover.jpg" },
+          { ...MOCK[3], img: "assets/macbook-cover.jpg" },
+          { ...MOCK[4], img: "assets/stroller-cover.jpg" },
         ]), []);
         const [i, setI] = React.useState(0);
         const n = slides.length;
@@ -101,8 +104,6 @@
       }
 
       /* ===== Поисковик ===== */
-      // остальной код без изменений...
-
       function SearchInside() {
         const [q, setQ] = React.useState("");
         const [results, setResults] = React.useState(MOCK);
@@ -124,12 +125,200 @@
 
         return (
           <section id="inside" className="py-16 bg-neutral-50">
-            {/* остальное без изменений */}
+            <div className="max-w-4xl mx-auto px-4">
+              <h2 className="text-3xl font-bold mb-3">Что внутри QDESK</h2>
+              <p className="text-neutral-600 mb-8">Никаких тысяч фильтров — просто спроси, как в чате. Мы покажем подходящее рядом.</p>
+
+              <form onSubmit={onSubmit} className="mb-3">
+                <div className="mx-auto rounded-2xl border border-neutral-200 bg-white shadow-sm hover:shadow transition focus-within:shadow-md">
+                  <div className="flex items-center gap-3 px-4 py-3">
+                    <div className="w-5 h-5 grid place-items-center text-neutral-400">⌕</div>
+                    <input value={q} onChange={(e)=>setQ(e.target.value)} placeholder='Например: "айфон до 20к в центре" или "мастер по стиралке сегодня"' className="flex-1 outline-none text-[15px] placeholder:text-neutral-400"/>
+                    <button type="submit" className="px-3 py-1.5 rounded-lg font-semibold text-white" style={{backgroundColor: BRAND.accent}} aria-label="Найти">Найти</button>
+                  </div>
+                </div>
+              </form>
+
+              <div className="flex flex-wrap gap-2 mb-8">
+                {quick.map((t,i)=>(
+                  <button key={i} onClick={()=>{ setQ(t); runSearch(t); }} className="text-sm px-3 py-1.5 rounded-full border border-neutral-200 bg-white hover:bg-neutral-100">{t}</button>
+                ))}
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-6">
+                {results.map(item=>(
+                  <a key={item.id} href={`#l-${item.id}`} className="rounded-xl border border-neutral-200 p-4 bg-white shadow-sm hover:shadow transition">
+                    <div className="aspect-[4/3] bg-neutral-100 mb-3 rounded-lg grid place-items-center text-neutral-400 text-sm">Фото</div>
+                    <h3 className="font-semibold line-clamp-2">{item.title}</h3>
+                    <p className="text-sm text-neutral-600">{item.price} • {item.city}, {item.area}</p>
+                  </a>
+                ))}
+                {results.length === 0 && <div className="col-span-full text-neutral-500">Ничего не нашли. Попробуйте изменить запрос.</div>}
+              </div>
+
+              <div className="mt-10 text-center">
+                <a href="#add-ad" className="px-6 py-3 rounded-lg font-semibold text-white" style={{backgroundColor: BRAND.accent}}>Мне нужно →</a>
+              </div>
+            </div>
           </section>
         );
       }
 
-      // остальной код полностью без изменений...
+      /* ===== ЭЛЕМЕНТЫ ДОВЕРИЯ — DARK ===== */
+      function TrustBadges(){
+        const badges = [
+          { title:"Безопасная сделка", desc:"Оплата и передача на нейтральной территории", Icon: Shield },
+          { title:"Без посредников",   desc:"Только прямой контакт между продавцом и покупателем", Icon: Handshake },
+          { title:"Проверенные пользователи", desc:"Рейтинг и метки активности в профиле", Icon: CheckBadge },
+        ];
+        return (
+          <section className="py-16 bg-neutral-900">
+            <div className="max-w-6xl mx-auto px-4">
+              <h2 className="text-2xl md:text-3xl font-bold mb-2 text:white text-white">Элементы доверия</h2>
+              <p className="text-neutral-400 mb-8">Сделки на QDESK сопровождаются прозрачными метками и понятными правилами.</p>
+              <div className="grid md:grid-cols-3 gap-6">
+                {badges.map(({title, desc, Icon}, i)=>(
+                  <div key={i} className="group rounded-2xl border border-neutral-700 bg-neutral-800 p-5 shadow-sm hover:shadow-md transition relative overflow-hidden">
+                    <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full opacity-20 blur-2xl" style={{backgroundColor: BRAND.accent}} aria-hidden />
+                    <div className="flex items-start gap-3">
+                      <div className="p-2 rounded-xl ring-1 ring-neutral-700 bg-neutral-900 group-hover:scale-110 transition" aria-hidden>
+                        <Icon className="w-6 h-6" style={{color: BRAND.accent}} />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-lg text-white">{title}</h3>
+                        <p className="text-sm text-neutral-400">{desc}</p>
+                      </div>
+                    </div>
+                    <div className="mt-4 inline-flex items: center items-center gap-1 text-[11px] px-2 py-1 rounded-full border border-neutral-700 text-neutral-400 bg-neutral-900 group-hover:-translate-y-0.5 transition">
+                      <span className="w-2 h-2 rounded-full" style={{backgroundColor: BRAND.accent}} aria-hidden />
+                      <span>Метка доверия</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      }
+
+      /* ===== SAFE ZONE — DARK ===== */
+      function SafeZonePreview(){
+        return (
+          <section id="safe-zone" className="py-16 bg-neutral-950">
+            <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
+              <div className="rounded-2xl border border-neutral-800 bg-neutral-900 shadow p-6">
+                <div className="aspect-[16/10] rounded-lg bg-neutral-800 grid place-items-center text-neutral-500 text-sm">Иллюстрация QDESK Safe Zone</div>
+                <div className="mt-4 grid grid-cols-3 gap-3">
+                  {[Pin, Camera, Lock].map((Icon,k)=>(
+                    <div key={k} className="rounded-lg border border-neutral-800 bg-neutral-900 py-4 grid place-items-center">
+                      <Icon className="w-7 h-7" style={{color: BRAND.accent}} aria-hidden />
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <h2 className="text-3xl font-bold mb-3 text-white">QDESK Safe Zone</h2>
+                <p className="text-neutral-400 mb-5">Нейтральные точки встречи с камерой наблюдения и верификацией выдачи. Выберите удобную локацию, подтвердите сделку QR‑кодом — и всё.</p>
+                <ul className="space-y-3 text-neutral-300">
+                  <li className="flex items-start gap-3"><Pin className="w-5 h-5 mt-1" style={{color: BRAND.accent}} aria-hidden /><span><b>Нейтральная территория:</b> кафе, коворкинги и партнёрские точки.</span></li>
+                  <li className="flex items-start gap-3"><Camera className="w-5 h-5 mt-1" style={{color: BRAND.accent}} aria-hidden /><span><b>Камера и журнал визитов:</b> повышают доверие обеих сторон.</span></li>
+                  <li className="flex items-start gap-3"><Lock className="w-5 h-5 mt-1" style={{color: BRAND.accent}} aria-hidden /><span><b>QR/Пин‑код подтверждения:</b> выдача товара фиксируется.</span></li>
+                  <li className="flex items-start gap-3"><Card className="w-5 h-5 mt-1" style={{color: BRAND.accent}} aria-hidden /><span><b>Оплата «на месте»:</b> безопасная оплата через QDESK (опционально).</span></li>
+                </ul>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <a href="#choose-safe-zone" className="px-5 py-3 rounded-lg font-semibold text-white" style={{backgroundColor: BRAND.accent}}>Выбрать QDESK Safe Zone</a>
+                  <a href="#how-it-works" className="px-5 py-3 rounded-lg font-semibold border border-neutral-700 text-neutral-300 hover:bg-neutral-900">Как это работает</a>
+                </div>
+                <div className="mt-4 inline-flex items-center gap-2 text-xs text-neutral-500"><span className="px-2 py-1 rounded bg-neutral-900 border border-neutral-800">BETA</span><span>Запуск в пилоте — подключаем партнёрские точки</span></div>
+              </div>
+            </div>
+          </section>
+        );
+      }
+
+      /* ===== HEADER ===== */
+      function Header(){
+        return (
+          <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-neutral-200">
+            <nav className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg grid place-items-center font-bold text-sm" style={{backgroundColor: BRAND.accent, color:"#fff"}}>QD</div>
+                <span className="font-bold tracking-tight">{BRAND.name}</span>
+              </div>
+              <div className="hidden md:flex items-center gap-6 text-sm">
+                {["Товары","Услуги","Недвижимость","Работа"].map(i => <a key={i} href="#" className="hover:text-neutral-600">{i}</a>)}
+              </div>
+              <a href="cabinet.html" className="px-4 py-2 rounded-lg font-semibold text-sm" style={{backgroundColor: BRAND.accent, color:"#fff"}}>Разместить объявление</a>
+            </nav>
+          </header>
+        );
+      }
+
+      function App(){
+        return (
+          <div className="min-h-screen w-full bg-white text-neutral-900">
+            <Header />
+
+            {/* Hero */}
+            <section className="max-w-6xl mx-auto px-4 pt-16 pb-12">
+              <div className="grid md:grid-cols-2 gap-10 items-center">
+                <div>
+                  <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">{BRAND.tagline}</h1>
+                  <p className="mt-4 text-lg text-neutral-600">{BRAND.sub}</p>
+                  <div className="mt-6 flex flex-wrap gap-3">
+                    <a href="#poster" className="px-5 py-3 rounded-lg font-semibold" style={{backgroundColor: BRAND.accent, color:"#fff"}}>Посмотреть пример</a>
+                    <a href="#inside" className="px-5 py-3 rounded-lg font-semibold border border-neutral-300 text-neutral-700 hover:bg-neutral-50">Что внутри</a>
+                  </div>
+                </div>
+
+                {/* Карусель превью объявлений */}
+                <HeroCarousel />
+              </div>
+            </section>
+
+            {/* ЭЛЕМЕНТЫ ДОВЕРИЯ — DARK */}
+            <TrustBadges />
+
+            {/* SAFE ZONE — DARK */}
+            <SafeZonePreview />
+
+            {/* Поисковик */}
+            <SearchInside />
+
+            {/* Футер — DARK */}
+            <footer className="py-12 border-t border-neutral-800 bg-neutral-900">
+              <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-3 gap-8 text-sm">
+                <div>
+                  <h4 className="font-semibold text-white mb-3">О проекте</h4>
+                  <ul className="space-y-1">
+                    <li><a href="#" className="hover:text-white text-neutral-400">О нас</a></li>
+                    <li><a href="#" className="hover:text-white text-neutral-400">Инвесторам</a></li>
+                    <li><a href="#" className="hover:text-white text-neutral-400">Партнёрам</a></li>
+                    <li><a href="#" className="hover:text-white text-neutral-400">Реклама на QDESK</a></li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-white mb-3">Помощь</h4>
+                  <ul className="space-y-1">
+                    <li><a href="#" className="hover:text-white text-neutral-400">FAQ</a></li>
+                    <li><a href="#" className="hover:text-white text-neutral-400">Поддержка</a></li>
+                    <li><a href="#" className="hover:text-white text-neutral-400">Контакты</a></li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-white mb-3">Правовая информация</h4>
+                  <ul className="space-y-1">
+                    <li><a href="#" className="hover:text-white text-neutral-400">Политика конфиденциальности</a></li>
+                    <li><a href="#" className="hover:text-white text-neutral-400">Пользовательское соглашение</a></li>
+                    <li><a href="#" className="hover:text-white text-neutral-400">Использование cookies</a></li>
+                  </ul>
+                </div>
+              </div>
+              <div className="mt-10 text-center text-xs text-neutral-500">© 2025 {BRAND.name}. Все права защищены.</div>
+            </footer>
+          </div>
+        );
+      }
 
       ReactDOM.createRoot(document.getElementById('root')).render(<App />);
     </script>
