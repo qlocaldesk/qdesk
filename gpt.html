@@ -104,65 +104,119 @@
       }
 
       /* ===== Поисковик ===== */
-      function SearchInside() {
-        const [q, setQ] = React.useState("");
-        const [results, setResults] = React.useState(MOCK);
+function SearchInside() {
+  const [q, setQ] = React.useState("");
+  const [results, setResults] = React.useState(MOCK);
 
-        const runSearch = (query) => {
-          const s = (query || q).toLowerCase();
-          if (!s) { setResults(MOCK); return; }
-          setResults(MOCK.filter(item =>
-            item.title.toLowerCase().includes(s) ||
-            item.area.toLowerCase().includes(s) ||
-            item.city.toLowerCase().includes(s) ||
-            item.price.toLowerCase().includes(s)
-          ));
-        };
+  // Карты обложек для карточек ниже
+  const COVERS = {
+    1: "assets/iphone8-cover.jpg",
+    2: "assets/stels-cover.jpg",
+    3: "assets/washmachine-cover.jpg",
+    4: "assets/macbook-cover.jpg",
+    5: "assets/stroller-cover.jpg",
+  };
+  const cover = (id) => (COVERS[id] ? COVERS[id] + "?v=1" : "");
 
-        const onSubmit = (e) => { e.preventDefault(); runSearch(q); };
+  const runSearch = (query) => {
+    const s = (query || q).toLowerCase();
+    if (!s) { setResults(MOCK); return; }
+    setResults(MOCK.filter(item =>
+      item.title.toLowerCase().includes(s) ||
+      item.area.toLowerCase().includes(s) ||
+      item.city.toLowerCase().includes(s) ||
+      item.price.toLowerCase().includes(s)
+    ));
+  };
 
-        const quick = ["айфон до 20к центр","ремонт стиралки сегодня","велосипед до 15к кузнецкий","ноутбук до 30к"];
+  const onSubmit = (e) => { e.preventDefault(); runSearch(q); };
 
-        return (
-          <section id="inside" className="py-16 bg-neutral-50">
-            <div className="max-w-4xl mx-auto px-4">
-              <h2 className="text-3xl font-bold mb-3">Что внутри QDESK</h2>
-              <p className="text-neutral-600 mb-8">Никаких тысяч фильтров — просто спроси, как в чате. Мы покажем подходящее рядом.</p>
+  const quick = ["айфон до 20к центр","ремонт стиралки сегодня","велосипед до 15к кузнецкий","ноутбук до 30к"];
 
-              <form onSubmit={onSubmit} className="mb-3">
-                <div className="mx-auto rounded-2xl border border-neutral-200 bg-white shadow-sm hover:shadow transition focus-within:shadow-md">
-                  <div className="flex items-center gap-3 px-4 py-3">
-                    <div className="w-5 h-5 grid place-items-center text-neutral-400">⌕</div>
-                    <input value={q} onChange={(e)=>setQ(e.target.value)} placeholder='Например: "айфон до 20к в центре" или "мастер по стиралке сегодня"' className="flex-1 outline-none text-[15px] placeholder:text-neutral-400"/>
-                    <button type="submit" className="px-3 py-1.5 rounded-lg font-semibold text-white" style={{backgroundColor: BRAND.accent}} aria-label="Найти">Найти</button>
-                  </div>
-                </div>
-              </form>
+  return (
+    <section id="inside" className="py-16 bg-neutral-50">
+      <div className="max-w-6xl mx-auto px-4">
+        <h2 className="text-3xl font-bold mb-3">Что внутри QDESK</h2>
+        <p className="text-neutral-600 mb-8">
+          Никаких тысяч фильтров — просто спроси, как в чате. Мы покажем подходящее рядом.
+        </p>
 
-              <div className="flex flex-wrap gap-2 mb-8">
-                {quick.map((t,i)=>(
-                  <button key={i} onClick={()=>{ setQ(t); runSearch(t); }} className="text-sm px-3 py-1.5 rounded-full border border-neutral-200 bg-white hover:bg-neutral-100">{t}</button>
-                ))}
-              </div>
-
-              <div className="grid md:grid-cols-3 gap-6">
-                {results.map(item=>(
-                  <a key={item.id} href={`#l-${item.id}`} className="rounded-xl border border-neutral-200 p-4 bg-white shadow-sm hover:shadow transition">
-                    <div className="aspect-[4/3] bg-neutral-100 mb-3 rounded-lg grid place-items-center text-neutral-400 text-sm">Фото</div>
-                    <h3 className="font-semibold line-clamp-2">{item.title}</h3>
-                    <p className="text-sm text-neutral-600">{item.price} • {item.city}, {item.area}</p>
-                  </a>
-                ))}
-                {results.length === 0 && <div className="col-span-full text-neutral-500">Ничего не нашли. Попробуйте изменить запрос.</div>}
-              </div>
-
-              <div className="mt-10 text-center">
-                <a href="#add-ad" className="px-6 py-3 rounded-lg font-semibold text-white" style={{backgroundColor: BRAND.accent}}>Мне нужно →</a>
-              </div>
+        {/* Поисковая строка */}
+        <form onSubmit={onSubmit} className="mb-3">
+          <div className="mx-auto rounded-2xl border border-neutral-200 bg-white shadow-sm hover:shadow transition focus-within:shadow-md">
+            <div className="flex items-center gap-3 px-4 py-3">
+              <div className="w-5 h-5 grid place-items-center text-neutral-400">⌕</div>
+              <input
+                value={q}
+                onChange={(e)=>setQ(e.target.value)}
+                placeholder='Например: "айфон до 20к в центре" или "мастер по стиралке сегодня"'
+                className="flex-1 outline-none text-[15px] placeholder:text-neutral-400"
+              />
+              <button
+                type="submit"
+                className="px-3 py-1.5 rounded-lg font-semibold text-white"
+                style={{backgroundColor: BRAND.accent}}
+                aria-label="Найти"
+              >Найти</button>
             </div>
-          </section>
-        );
-      }
+          </div>
+        </form>
+
+        {/* Быстрые запросы */}
+        <div className="flex flex-wrap gap-2 mb-8">
+          {quick.map((t,i)=>(
+            <button
+              key={i}
+              onClick={()=>{ setQ(t); runSearch(t); }}
+              className="text-sm px-3 py-1.5 rounded-full border border-neutral-200 bg-white hover:bg-neutral-100"
+            >{t}</button>
+          ))}
+        </div>
+
+        {/* Сетка с реальными фото обложек (дубликат наших слайдов) */}
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {results.map(item=>(
+            <a
+              key={item.id}
+              href={`#l-${item.id}`}
+              className="rounded-xl border border-neutral-200 bg-white shadow-sm hover:shadow transition overflow-hidden"
+            >
+              <div className="aspect-[4/3] bg-neutral-100">
+                <img
+                  src={cover(item.id)}
+                  alt={item.title}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+              <div className="p-4">
+                <h3 className="font-semibold line-clamp-2">{item.title}</h3>
+                <p className="text-sm text-neutral-600">
+                  {item.price} • {item.city}, {item.area}
+                </p>
+              </div>
+            </a>
+          ))}
+          {results.length === 0 && (
+            <div className="col-span-full text-neutral-500">
+              Ничего не нашли. Попробуйте изменить запрос.
+            </div>
+          )}
+        </div>
+
+        <div className="mt-10 text-center">
+          <a
+            href="#add-ad"
+            className="px-6 py-3 rounded-lg font-semibold text-white"
+            style={{backgroundColor: BRAND.accent}}
+          >
+            Мне нужно →
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
 
       /* ===== ЭЛЕМЕНТЫ ДОВЕРИЯ — DARK ===== */
       function TrustBadges(){
