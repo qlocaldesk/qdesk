@@ -5,19 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>QDESK — локальная доска объявлений</title>
     <link rel="preconnect" href="https://unpkg.com">
-    <style>body{margin:0;font-family:system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial}</style>
+    <style>body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial}</style>
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body class="bg-white">
     <div id="root"></div>
 
-    <!-- React с CDN -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <!-- Транспиляция JSX в браузере (для MVP) -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <!-- Твой компонент как JSX -->
     <script type="text/babel">
       const BRAND = {
         name: "QDESK",
@@ -26,72 +23,240 @@
         sub: "Размести объявление онлайн и получи листовку с QR-кодом для оффлайна."
       };
 
-      function App(){
+      // 🔗 укажи свой хост n8n
+      const N8N_WEBHOOK = "https://YOUR_N8N_HOST/webhook/15dc3b47-b8a0-409b-a2e3-b2cfb5606280";
+
+      const MOCK = [
+        { id: 1, title: "iPhone 8, 64 ГБ", price: "5 000 ₽", area: "Центральный", city: "Новокузнецк" },
+        { id: 2, title: "Велосипед Stels", price: "12 000 ₽", area: "Кузнецкий", city: "Новокузнецк" },
+        { id: 3, title: "Ремонт стиральных машин", price: "от 1 500 ₽", area: "Орджоникидзевский", city: "Новокузнецк" },
+        { id: 4, title: "MacBook Air 2015", price: "25 000 ₽", area: "Центральный", city: "Новокузнецк" },
+        { id: 5, title: "Детская коляска", price: "3 500 ₽", area: "Кузнецкий", city: "Новокузнецк" },
+      ];
+
+      /* ==== HERO CAROUSEL ==== */
+      function HeroCarousel(){
+        const slides = React.useMemo(() => ([
+          { ...MOCK[0], img: "assets/iphone8-cover.jpg" },
+          { ...MOCK[1], img: "assets/stels-cover.jpg" },
+          { ...MOCK[2], img: "assets/washmachine-cover.jpg" },
+          { ...MOCK[3], img: "assets/macbook-cover.jpg" },
+          { ...MOCK[4], img: "assets/stroller-cover.jpg" },
+        ]), []);
+        const [i, setI] = React.useState(0);
+        const n = slides.length;
+
+        React.useEffect(()=>{
+          const t = setInterval(()=> setI(prev => (prev+1)%n), 3500);
+          return ()=> clearInterval(t);
+        }, [n]);
+
+        const go = (dir)=> setI(prev => (prev + dir + n) % n);
+
         return (
-          <div className="min-h-screen w-full bg-white text-neutral-900">
-            <header className="sticky top-0 z-50 bg-white border-b border-neutral-200">
-              <nav className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg grid place-items-center font-bold text-sm"
-                       style={{backgroundColor: BRAND.accent, color:"#fff"}}>QD</div>
-                  <span className="font-bold tracking-tight">{BRAND.name}</span>
+          <div className="rounded-2xl border border-neutral-200 bg-white shadow p-0 overflow-hidden">
+            <div className="relative aspect-[16/10]">
+              {slides.map((s,idx)=>(
+                <div key={s.id} className={`absolute inset-0 transition-opacity duration-500 ${idx===i ? 'opacity-100' : 'opacity-0'}`}>
+                  <img src={s.img} alt={s.title} className="w-full h-full object-cover" draggable="false" />
+                  <div className="absolute bottom-3 left-3 right-3">
+                    <div className="backdrop-blur bg-white/70 border border-white/50 rounded-xl px-3 py-2 flex items-center justify-between">
+                      <div className="min-w-0">
+                        <div className="text-sm font-semibold truncate">{s.title}</div>
+                        <div className="text-xs text-neutral-600 truncate">{s.price} • {s.city}</div>
+                      </div>
+                      <a href={`#l-${s.id}`} className="shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold text-white" style={{backgroundColor: BRAND.accent}}>
+                        Смотреть
+                      </a>
+                    </div>
+                  </div>
                 </div>
-                <div className="hidden md:flex items-center gap-6 text-sm">
-                  {["Товары","Услуги","Недвижимость","Работа"].map(i => <a key={i} href="#" className="hover:text-neutral-600">{i}</a>)}
-                </div>
-                <a href="#add-ad" className="px-4 py-2 rounded-lg font-semibold text-sm"
-                   style={{backgroundColor: BRAND.accent, color:"#fff"}}>Разместить объявление</a>
-              </nav>
-            </header>
+              ))}
 
-            <section className="max-w-6xl mx-auto px-4 pt-16 pb-12">
-              <div className="grid md:grid-cols-2 gap-10 items-center">
-                <div>
-                  <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
-                    {BRAND.tagline}
-                  </h1>
-                  <p className="mt-4 text-lg text-neutral-600">{BRAND.sub}</p>
-                  <div className="mt-6 flex flex-wrap gap-3">
-                    <a href="#poster" className="px-5 py-3 rounded-lg font-semibold"
-                       style={{backgroundColor: BRAND.accent, color:"#fff"}}>Посмотреть пример</a>
-                    <a href="#features" className="px-5 py-3 rounded-lg font-semibold border border-neutral-300 text-neutral-700 hover:bg-neutral-50">
-                      Что внутри
-                    </a>
-                  </div>
-                </div>
-                <div className="rounded-2xl border border-neutral-200 bg-white shadow p-6">
-                  <div className="aspect-[16/10] rounded-lg bg-neutral-100 grid place-items-center text-neutral-500">
-                    Превью объявлений
-                  </div>
-                </div>
-              </div>
-            </section>
+              <button onClick={()=>go(-1)} aria-label="Предыдущий" className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/80 hover:bg-white border border-neutral-200 w-9 h-9 grid place-items-center">‹</button>
+              <button onClick={()=>go(1)} aria-label="Следующий" className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/80 hover:bg-white border border-neutral-200 w-9 h-9 grid place-items-center">›</button>
 
-            <section id="features" className="py-16 bg-neutral-50">
-              <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-3 gap-6">
-                {[{t:"Локальность",d:"Все объявления завязаны на ваш район или город."},
-                  {t:"Честные тарифы",d:"Онлайн бесплатно, оффлайн — понятные пакеты."},
-                  {t:"Безопасность",d:"Верификация и защита от мошенников."}]
-                  .map((f,i)=>(
-                  <div key={i} className="rounded-xl p-6 bg-white border border-neutral-200 shadow-sm">
-                    <div className="w-6 h-6 rounded-full mb-3" style={{backgroundColor: BRAND.accent}}></div>
-                    <h3 className="font-semibold">{f.t}</h3>
-                    <p className="mt-2 text-sm text-neutral-600">{f.d}</p>
-                  </div>
+              <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-2">
+                {slides.map((_,k)=>(
+                  <button key={k} onClick={()=>setI(k)} aria-label={`Слайд ${k+1}`} className={`h-2 rounded-full transition-all ${k===i?'w-6 bg-neutral-900':'w-2 bg-neutral-300'}`} />
                 ))}
               </div>
-            </section>
+            </div>
+          </div>
+        );
+      }
 
-            <footer className="py-10 border-t border-neutral-200">
-              <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-neutral-500">
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-lg grid place-items-center font-bold text-[10px]"
-                       style={{backgroundColor: BRAND.accent, color:"#fff"}}>QD</div>
-                  <span className="font-semibold text-neutral-700">{BRAND.name}</span>
-                </div>
-                <p>© 2025 QDESK. Бета-версия.</p>
+      /* ==== CHAT STUB (болталка в зоне поиска) ==== */
+      function ChatStub(){
+        const [open, setOpen] = React.useState(true);
+        const [input, setInput] = React.useState("");
+        const [sending, setSending] = React.useState(false);
+        const [messages, setMessages] = React.useState([
+          { role: "assistant", text: "Привет! Спроси, как в чате: «айфон до 20к в центре» — я отправлю запрос." }
+        ]);
+
+        async function sendMessage(e){
+          e?.preventDefault();
+          const text = input.trim();
+          if(!text || sending) return;
+          setInput("");
+          setMessages(m=>[...m, {role:"user", text}]);
+          setSending(true);
+          try{
+            const r = await fetch(N8N_WEBHOOK + "?v=" + Date.now(), {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ message: text })
+            });
+            let reply = "Готово! Я принял ваш запрос.";
+            try {
+              const data = await r.json();
+              if (data && typeof data.reply === "string") reply = data.reply;
+            } catch(_) {}
+            setMessages(m=>[...m, {role:"assistant", text: reply}]);
+          } catch(err){
+            setMessages(m=>[...m, {role:"assistant", text: "Не удалось связаться с сервисом. Проверь вебхук или CORS."}]);
+          } finally {
+            setSending(false);
+          }
+        }
+
+        return (
+          <div className="mt-6">
+            <div className="rounded-2xl border border-neutral-200 bg-white shadow-sm overflow-hidden">
+              <div className="px-4 py-3 flex items-center justify-between">
+                <div className="font-semibold">Поиск как в чате (beta)</div>
+                <button
+                  onClick={()=>setOpen(o=>!o)}
+                  className="text-sm px-3 py-1.5 rounded-lg border border-neutral-200 hover:bg-neutral-50"
+                >
+                  {open ? "Свернуть" : "Развернуть"}
+                </button>
               </div>
-            </footer>
+
+              {open && (
+                <div className="px-4 pb-4">
+                  <div className="h-52 overflow-auto rounded-xl border border-neutral-100 p-3 bg-neutral-50">
+                    {messages.map((m,i)=>(
+                      <div
+                        key={i}
+                        className={
+                          "mb-2 max-w-[85%] rounded-xl px-3 py-2 text-sm " +
+                          (m.role === "user"
+                            ? "ml-auto bg-blue-600 text-white"
+                            : "mr-auto bg-white border border-neutral-200")
+                        }
+                      >
+                        {m.text}
+                      </div>
+                    ))}
+                    {sending && (
+                      <div className="mr-auto bg-white border border-neutral-200 rounded-xl px-3 py-2 text-sm inline-block">
+                        Печатаю…
+                      </div>
+                    )}
+                  </div>
+
+                  <form onSubmit={sendMessage} className="mt-3 flex items-center gap-2">
+                    <input
+                      value={input}
+                      onChange={e=>setInput(e.target.value)}
+                      placeholder='Например: "айфон до 20к центр"'
+                      className="flex-1 outline-none rounded-xl border border-neutral-200 px-3 py-2 text-[15px] placeholder:text-neutral-400"
+                    />
+                    <button
+                      type="submit"
+                      disabled={sending}
+                      className="px-4 py-2 rounded-xl font-semibold text-white disabled:opacity-60"
+                      style={{backgroundColor: BRAND.accent}}
+                    >
+                      Отправить
+                    </button>
+                  </form>
+
+                  <div className="mt-2 text-xs text-neutral-500">
+                    Если запрос не уходит: включите CORS для вебхука в n8n или используйте свой домен.
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      }
+
+      /* ==== GRID BELOW SEARCH (как у тебя было) ==== */
+      function SearchInside(){
+        const covers = [
+          { id:1, img:"assets/iphone8-cover.jpg", title:"iPhone 8, 64 ГБ" },
+          { id:2, img:"assets/stels-cover.jpg", title:"Велосипед Stels" },
+          { id:3, img:"assets/washmachine-cover.jpg", title:"Ремонт стиральных машин" },
+          { id:4, img:"assets/macbook-cover.jpg", title:"MacBook Air 2015" },
+          { id:5, img:"assets/stroller-cover.jpg", title:"Детская коляска" },
+        ];
+
+        return (
+          <section className="max-w-6xl mx-auto px-4 py-12 bg-neutral-50">
+            <h2 className="text-2xl font-bold mb-6">Что внутри QDESK</h2>
+
+            {/* болталка прямо здесь */}
+            <ChatStub />
+
+            <div className="mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+              {covers.map(c=>(
+                <div key={c.id} className="rounded-xl border border-neutral-200 overflow-hidden shadow">
+                  <img src={c.img} alt={c.title} className="w-full h-32 object-cover" />
+                  <div className="px-3 py-2 text-sm font-medium truncate">{c.title}</div>
+                </div>
+              ))}
+            </div>
+          </section>
+        );
+      }
+
+      /* ==== SAFE SPOT (с фото) ==== */
+      function SafeSpot(){
+        return (
+          <section id="safe-spot" className="py-16 bg-neutral-950">
+            <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
+              <div className="rounded-2xl border border-neutral-800 bg-neutral-900 shadow p-6 overflow-hidden">
+                <img src="assets/safe-spot.jpg" alt="QDESK Safe Spot" className="w-full h-full object-cover rounded-lg" />
+              </div>
+              <div>
+                <h2 className="text-3xl font-bold mb-3 text-white">QDESK Safe Spot</h2>
+                <p className="text-neutral-400 mb-5">Нейтральные точки встречи с камерой наблюдения и верификацией выдачи. Выберите удобную локацию, подтвердите сделку QR‑кодом — и всё.</p>
+                <ul className="space-y-3 text-neutral-300">
+                  <li>• Нейтральная территория: кафе, коворкинги и партнёрские точки.</li>
+                  <li>• Камера и журнал визитов: повышают доверие обеих сторон.</li>
+                  <li>• QR/Пин‑код подтверждения: выдача товара фиксируется.</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+        );
+      }
+
+      /* ==== HEADER + APP ==== */
+      function Header(){
+        return (
+          <header className="max-w-6xl mx-auto px-4 py-6 flex justify-between items-center">
+            <div className="text-lg font-bold">{BRAND.name}</div>
+            <button className="bg-blue-500 text-white px-4 py-2 rounded-lg">Разместить объявление</button>
+          </header>
+        );
+      }
+
+      function App(){
+        return (
+          <div>
+            <Header />
+            <main className="max-w-6xl mx-auto px-4">
+              <h1 className="text-4xl font-bold mb-4">{BRAND.tagline}</h1>
+              <p className="mb-6 text-lg text-neutral-700">{BRAND.sub}</p>
+
+              <HeroCarousel />
+              <SearchInside />
+              <SafeSpot />
+            </main>
           </div>
         );
       }
