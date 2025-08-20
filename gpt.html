@@ -255,40 +255,46 @@ function SearchInside() {
         );
       }
 
-      /* ===== SAFE SPOT — DARK ===== */
-      function SafeZonePreview(){
-        return (
-          <section id="safe-zone" className="py-16 bg-neutral-950">
-            <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
-              <div className="rounded-2xl border border-neutral-800 bg-neutral-900 shadow p-6">
-                <div className="aspect-[16/10] rounded-lg bg-neutral-800 grid place-items-center text-neutral-500 text-sm">Иллюстрация QDESK Safe Spot</div>
-                <div className="mt-4 grid grid-cols-3 gap-3">
-                  {[Pin, Camera, Lock].map((Icon,k)=>(
-                    <div key={k} className="rounded-lg border border-neutral-800 bg-neutral-900 py-4 grid place-items-center">
-                      <Icon className="w-7 h-7" style={{color: BRAND.accent}} aria-hidden />
-                    </div>
-                  ))}
-                </div>
+    /* ===== SAFE SPOT — DARK ===== */
+function SafeZonePreview(){
+  return (
+    <section id="safe-zone" className="py-16 bg-neutral-950">
+      <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
+        <div className="rounded-2xl border border-neutral-800 bg-neutral-900 shadow p-6">
+          <div className="aspect-[16/10] rounded-lg overflow-hidden">
+            <img 
+              src="assets/safe-spot.jpg" 
+              alt="QDESK Safe Spot" 
+              className="w-full h-full object-cover" 
+            />
+          </div>
+          <div className="mt-4 grid grid-cols-3 gap-3">
+            {[Pin, Camera, Lock].map((Icon,k)=>(
+              <div key={k} className="rounded-lg border border-neutral-800 bg-neutral-900 py-4 grid place-items-center">
+                <Icon className="w-7 h-7" style={{color: BRAND.accent}} aria-hidden />
               </div>
-              <div>
-                <h2 className="text-3xl font-bold mb-3 text-white">QDESK Safe Spot</h2>
-                <p className="text-neutral-400 mb-5">Нейтральные точки встречи с камерой наблюдения и верификацией выдачи. Выберите удобную локацию, подтвердите сделку QR‑кодом — и всё.</p>
-                <ul className="space-y-3 text-neutral-300">
-                  <li className="flex items-start gap-3"><Pin className="w-5 h-5 mt-1" style={{color: BRAND.accent}} aria-hidden /><span><b>Нейтральная территория:</b> кафе, коворкинги и партнёрские точки.</span></li>
-                  <li className="flex items-start gap-3"><Camera className="w-5 h-5 mt-1" style={{color: BRAND.accent}} aria-hidden /><span><b>Камера и журнал визитов:</b> повышают доверие обеих сторон.</span></li>
-                  <li className="flex items-start gap-3"><Lock className="w-5 h-5 mt-1" style={{color: BRAND.accent}} aria-hidden /><span><b>QR/Пин‑код подтверждения:</b> выдача товара фиксируется.</span></li>
-                  <li className="flex items-start gap-3"><Card className="w-5 h-5 mt-1" style={{color: BRAND.accent}} aria-hidden /><span><b>Оплата «на месте»:</b> безопасная оплата через QDESK (опционально).</span></li>
-                </ul>
-                <div className="mt-6 flex flex-wrap gap-3">
-                  <a href="#choose-safe-zone" className="px-5 py-3 rounded-lg font-semibold text-white" style={{backgroundColor: BRAND.accent}}>Выбрать QDESK Safe Spot</a>
-                  <a href="#how-it-works" className="px-5 py-3 rounded-lg font-semibold border border-neutral-700 text-neutral-300 hover:bg-neutral-900">Как это работает</a>
-                </div>
-                <div className="mt-4 inline-flex items-center gap-2 text-xs text-neutral-500"><span className="px-2 py-1 rounded bg-neutral-900 border border-neutral-800">BETA</span><span>Запуск в пилоте — подключаем партнёрские точки</span></div>
-              </div>
-            </div>
-          </section>
-        );
-      }
+            ))}
+          </div>
+        </div>
+        <div>
+          <h2 className="text-3xl font-bold mb-3 text-white">QDESK Safe Spot</h2>
+          <p className="text-neutral-400 mb-5">Нейтральные точки встречи с камерой наблюдения и верификацией выдачи. Выберите удобную локацию, подтвердите сделку QR-кодом — и всё.</p>
+          <ul className="space-y-3 text-neutral-300">
+            <li className="flex items-start gap-3"><Pin className="w-5 h-5 mt-1" style={{color: BRAND.accent}} aria-hidden /><span><b>Нейтральная территория:</b> кафе, коворкинги и партнёрские точки.</span></li>
+            <li className="flex items-start gap-3"><Camera className="w-5 h-5 mt-1" style={{color: BRAND.accent}} aria-hidden /><span><b>Камера и журнал визитов:</b> повышают доверие обеих сторон.</span></li>
+            <li className="flex items-start gap-3"><Lock className="w-5 h-5 mt-1" style={{color: BRAND.accent}} aria-hidden /><span><b>QR/Пин-код подтверждения:</b> выдача товара фиксируется.</span></li>
+            <li className="flex items-start gap-3"><Card className="w-5 h-5 mt-1" style={{color: BRAND.accent}} aria-hidden /><span><b>Оплата «на месте»:</b> безопасная оплата через QDESK (опционально).</span></li>
+          </ul>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a href="#choose-safe-zone" className="px-5 py-3 rounded-lg font-semibold text-white" style={{backgroundColor: BRAND.accent}}>Выбрать QDESK Safe Spot</a>
+            <a href="#how-it-works" className="px-5 py-3 rounded-lg font-semibold border border-neutral-700 text-neutral-300 hover:bg-neutral-900">Как это работает</a>
+          </div>
+          <div className="mt-4 inline-flex items-center gap-2 text-xs text-neutral-500"><span className="px-2 py-1 rounded bg-neutral-900 border border-neutral-800">BETA</span><span>Запуск в пилоте — подключаем партнёрские точки</span></div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
       /* ===== HEADER ===== */
       function Header(){
