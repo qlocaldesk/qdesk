@@ -1,503 +1,162 @@
 <!doctype html>
 <html lang="ru">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>QDESK Chat + Bottom Cards</title>
-<style>
-  :root{
-    --bg:#0b0c0f; --panel:#12141a; --muted:#8b93a7; --text:#e9edf5; --accent:#6ea8fe;
-    --card:#171a21; --border:#222735; --ok:#3ad29f; --warn:#ffcf66; --danger:#ff7a7a;
-    --radius:16px;
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0; background:linear-gradient(180deg,#0b0c0f 0%,#0e1117 100%); color:var(--text);
-    font:16px/1.5 Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    overflow:hidden;
-  }
-  .app{
-    height:100%; display:grid; grid-template-rows:auto 1fr; gap:12px; padding:16px;
-    max-width:1100px; margin:0 auto; position:relative;
-  }
-  header{
-    display:flex; gap:12px; align-items:center; justify-content:space-between;
-    background:var(--panel); border:1px solid var(--border); padding:10px 12px; border-radius:var(--radius);
-  }
-  .brand{display:flex; gap:12px; align-items:center}
-  .brand .logo{
-    width:32px; height:32px; border-radius:10px; background:linear-gradient(135deg,#6ea8fe, #9f7aea);
-    box-shadow:0 8px 24px rgba(110,168,254,.25);
-  }
-  .btn{
-    border:1px solid var(--border); background:#141824; color:var(--text); padding:8px 12px; border-radius:12px; cursor:pointer;
-    transition:.2s transform,.2s background,.2s border-color;
-  }
-  .btn:hover{transform:translateY(-1px); border-color:#2b3243}
-  .btn.ghost{background:transparent}
-  .btn.success{background:#14251e; border-color:#1f3e2f}
-  .btn.warn{background:#2a2213; border-color:#4b3b16}
-  .btn.danger{background:#2a1616; border-color:#4b1f1f}
-  .chip{font-size:11px; padding:2px 8px; border:1px solid var(--border); border-radius:999px; background:#141824; color:#cfe1ff}
-  .muted{color:var(--muted)}
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>QDESK — локальная доска объявлений</title>
+    <link rel="preconnect" href="https://unpkg.com">
+    <style>body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial}</style>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-white">
+    <div id="root"></div>
 
-  /* Layout */
-  .main{
-    height:100%; display:grid; grid-template-columns:1fr; grid-template-rows:1fr; gap:12px; min-height:0; position:relative;
-  }
-  /* Chat area (скролл) */
-  .chat{
-    background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
-    display:grid; grid-template-rows: 1fr auto; min-height:0; overflow:hidden;
-  }
-  .history{
-    overflow:auto; padding:12px; display:flex; flex-direction:column; gap:12px; min-height:0;
-  }
-  .message{max-width:80%; padding:10px 12px; border-radius:14px; border:1px solid var(--border); background:var(--card);}
-  .message.user{margin-left:auto; background:#182033}
-  .message.assistant{margin-right:auto}
-  .message .role{font-size:12px; color:var(--muted)}
-  .message .body{white-space:pre-wrap}
-  .composer{
-    position:sticky; bottom:0; background:linear-gradient(180deg, rgba(18,20,26,0) 0%, rgba(18,20,26,1) 30%);
-    padding:12px; border-top:1px solid var(--border);
-  }
-  .input{
-    display:flex; gap:8px; background:#121725; border:1px solid var(--border); border-radius:14px; padding:8px;
-  }
-  .input textarea{
-    width:100%; resize:none; background:transparent; border:0; outline:0; color:var(--text); padding:6px 8px; max-height:130px;
-  }
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-  /* Bottom Sheet Deck */
-  .deck{
-    position:absolute; left:0; right:0; bottom:0;
-    transform:translateY(0);
-    display:flex; justify-content:center; pointer-events:none; /* клики только по карточкам */
-  }
-  .sheet{
-    width:min(980px, 100%); padding:10px; padding-bottom:16px;
-    background:rgba(16,19,27,.9); backdrop-filter:saturate(1.2) blur(10px);
-    border:1px solid var(--border); border-radius:18px 18px 0 0;
-    box-shadow:0 -10px 40px rgba(0,0,0,.45);
-    pointer-events:auto;
-  }
-  .sheet header{
-    display:flex; align-items:center; justify-content:space-between; gap:10px; padding:4px 4px 8px 4px;
-  }
-  .sheet .grab{width:38px; height:4px; border-radius:999px; background:#293042; margin:6px auto 8px auto;}
-  .mode-switch{display:flex; gap:8px;}
-  .mode-switch .btn.active{background:#182033; border-color:#2e3b58}
+    <script type="text/babel">
+      const BRAND = {
+        name: "QDESK",
+        accent: "#007AFF",
+        tagline: "Локальная доска объявлений нового поколения",
+        sub: "Размести объявление онлайн и получи листовку с QR-кодом для оффлайна."
+      };
 
-  .deck-area{
-    position:relative; height:320px; overflow:visible;
-  }
-  /* Card style */
-  .swipe-card{
-    position:absolute; top:0; left:50%; transform:translateX(-50%);
-    width:min(840px, 96%); height:310px;
-    background:var(--card); border:1px solid var(--border); border-radius:16px; overflow:hidden;
-    box-shadow:0 16px 60px rgba(0,0,0,.45);
-    user-select:none; touch-action:pan-y;
-  }
-  .swipe-card .media{
-    position:absolute; inset:0 50% 0 0; overflow:hidden; min-width:0;
-    background:#0f131c;
-  }
-  .swipe-card img{
-    width:100%; height:100%; object-fit:cover; display:block;
-  }
-  .swipe-card .content{
-    position:absolute; inset:0 0 0 50%; padding:12px; display:grid; grid-template-rows:auto 1fr auto; gap:8px;
-  }
-  .title{font-weight:700}
-  .meta{font-size:12px; color:var(--muted); display:flex; gap:8px; align-items:center; flex-wrap:wrap}
-  .price{color:var(--ok); font-weight:700}
-  .tags{display:flex; gap:6px; flex-wrap:wrap}
-  .tag{font-size:11px; border:1px solid var(--border); border-radius:999px; padding:2px 8px; background:#141824}
-  .actions{display:flex; gap:8px; align-items:center; justify-content:flex-end}
-  .like, .nope, .open{
-    display:inline-flex; align-items:center; gap:6px;
-  }
-  .nope{color:#ff9999}
-  .like{color:#9cffc9}
-  .open{color:#cfe1ff}
-  .badge{
-    position:absolute; top:10px; left:10px; padding:6px 10px; border-radius:10px; font-weight:700; letter-spacing:.3px;
-    transform:rotate(-6deg); opacity:0; pointer-events:none;
-  }
-  .badge.yes{background:#133123; color:#9cffc9; border:1px solid #1a5a3f}
-  .badge.no{background:#331717; color:#ffb8b8; border:1px solid #5a1a1a}
-
-  /* List mode inside sheet */
-  .list{display:none; grid-template-columns:repeat(3, 1fr); gap:10px}
-  .list .item{
-    background:var(--card); border:1px solid var(--border); border-radius:14px; overflow:hidden; display:grid; grid-template-rows:140px auto; min-height:0;
-  }
-  .list .item img{width:100%; height:140px; object-fit:cover}
-  .list .item .pad{padding:8px; display:grid; gap:6px}
-  .list .item .pad .meta{font-size:12px}
-
-  /* Quick reply area */
-  .quick{
-    display:flex; gap:8px; margin-top:8px; background:#121725; border:1px solid var(--border); border-radius:12px; padding:8px;
-  }
-  .quick input{
-    flex:1; border:0; outline:0; background:transparent; color:var(--text); padding:4px 8px;
-  }
-
-  /* Modal */
-  .modal{
-    position:fixed; inset:0; background:rgba(0,0,0,.6); display:none; align-items:center; justify-content:center; z-index:30;
-  }
-  .modal.open{display:flex}
-  .modal .dialog{
-    width:min(900px, 96%); background:var(--panel); border:1px solid var(--border); border-radius:18px; overflow:hidden;
-    display:grid; grid-template-columns:1fr 1fr; min-height:420px;
-  }
-  .dialog .gallery{background:#0f131c}
-  .dialog .gallery img{width:100%; height:100%; object-fit:cover}
-  .dialog .info{padding:14px; display:grid; gap:8px; align-content:start}
-</style>
-</head>
-<body>
-  <div class="app">
-    <header>
-      <div class="brand">
-        <div class="logo" aria-hidden="true"></div>
-        <div>
-          <div style="font-weight:700">QDESK Search</div>
-          <div class="muted" style="font-size:12px">Диалоговый поиск • карточки снизу со свайпом</div>
-        </div>
-      </div>
-      <div class="muted" style="display:flex; gap:10px; align-items:center;">
-        <span class="chip">Beta</span>
-        <span style="font-size:12px">A/D — нет/да • Enter — открыть</span>
-      </div>
-    </header>
-
-    <section class="main">
-      <!-- Chat -->
-      <section class="chat" id="chat">
-        <div class="history" id="history">
-          <div class="message assistant"><div class="role">QDESK</div><div class="body">Опиши, что ищешь. Я покажу варианты снизу. Можно свайпать или открыть и написать продавцу.</div></div>
-          <div class="message user"><div class="role">Ты</div><div class="body">Диван‑кровать, лофт, до 25 000 ₽, с нишей, доставка сегодня</div></div>
-          <div class="message assistant"><div class="role">QDESK</div><div class="body">Нашёл 6 релевантных позиций. Листай снизу. Уточнить район?</div></div>
-        </div>
-        <div class="composer">
-          <form class="input" id="composerForm">
-            <textarea id="chatInput" rows="1" placeholder="Напишите запрос… (Shift+Enter — перенос)"></textarea>
-            <button class="btn" id="sendBtn" type="submit">Отправить</button>
-          </form>
-        </div>
-      </section>
-
-      <!-- Bottom Sheet Deck -->
-      <div class="deck" id="deck">
-        <div class="sheet">
-          <div class="grab"></div>
-          <header>
-            <div style="display:flex; gap:8px; align-items:center;">
-              <strong>Варианты рядом</strong>
-              <span class="chip" id="countChip">6</span>
-            </div>
-            <div class="mode-switch">
-              <button class="btn active" id="modeSwipe" aria-pressed="true">Swipe</button>
-              <button class="btn" id="modeList" aria-pressed="false">Лента</button>
-            </div>
-          </header>
-
-          <div class="deck-area" id="deckArea" aria-live="polite"></div>
-
-          <div class="list" id="listArea"></div>
-
-          <div class="quick">
-            <input id="quickMsg" placeholder="Быстро написать продавцу выбранной карточки…" />
-            <button class="btn" id="quickSend">Отправить</button>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <!-- Modal -->
-  <div class="modal" id="modal">
-    <div class="dialog">
-      <div class="gallery"><img id="modalImg" alt=""></div>
-      <div class="info">
-        <h3 id="modalTitle" class="title"></h3>
-        <div class="meta"><span id="modalPrice" class="price"></span> • <span id="modalSize"></span> • <span id="modalCond"></span></div>
-        <div class="tags" id="modalTags"></div>
-        <p id="modalDesc" class="muted"></p>
-        <div style="display:flex; gap:8px; margin-top:auto;">
-          <button class="btn success" id="modalContact">Связаться</button>
-          <button class="btn ghost" id="modalClose">Закрыть</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-<script>
-  // --- Demo data (с фото обязательно) ---
-  const data = [
-    {id:'1', title:'Диван‑кровать Loft «Бруклин»', price:'24 500 ₽', size:'140×200', cond:'Хорошее', img:'https://picsum.photos/id/1084/800/600', desc:'Ниша для белья, доставка сегодня +1 500 ₽', tags:['лофт','ниша','доставка сегодня']},
-    {id:'2', title:'Metal Frame Sofa', price:'22 000 ₽', size:'90×200', cond:'Отличное', img:'https://picsum.photos/id/1011/800/600', desc:'Металлическое основание, самовывоз', tags:['лофт','самовывоз']},
-    {id:'3', title:'Лофт‑диван с нишей', price:'19 900 ₽', size:'140×200', cond:'Хорошее', img:'https://picsum.photos/id/1067/800/600', desc:'Доставка до 22:00', tags:['ниша','доставка']},
-    {id:'4', title:'Compact Sofa Bed', price:'17 500 ₽', size:'80×190', cond:'Хорошее', img:'https://picsum.photos/id/1040/800/600', desc:'Компактный, район СЗАО', tags:['компакт','СЗАО']},
-    {id:'5', title:'Диван «Ржавый лофт»', price:'25 000 ₽', size:'160×200', cond:'Идеал', img:'https://picsum.photos/id/1050/800/600', desc:'Отличное состояние, помощь с подъёмом', tags:['идеал','подъём']},
-    {id:'6', title:'Sofa Bed Oak Base', price:'23 400 ₽', size:'120×200', cond:'Отличное', img:'https://picsum.photos/id/1027/800/600', desc:'Основание из массива', tags:['массив дуба']}
-  ];
-
-  // --- Elements ---
-  const deckArea = document.getElementById('deckArea');
-  const listArea = document.getElementById('listArea');
-  const countChip = document.getElementById('countChip');
-  const quickMsg = document.getElementById('quickMsg');
-  const quickSend = document.getElementById('quickSend');
-  const modeSwipeBtn = document.getElementById('modeSwipe');
-  const modeListBtn = document.getElementById('modeList');
-
-  const modal = document.getElementById('modal');
-  const modalImg = document.getElementById('modalImg');
-  const modalTitle = document.getElementById('modalTitle');
-  const modalPrice = document.getElementById('modalPrice');
-  const modalSize = document.getElementById('modalSize');
-  const modalCond = document.getElementById('modalCond');
-  const modalTags = document.getElementById('modalTags');
-  const modalDesc = document.getElementById('modalDesc');
-  const modalClose = document.getElementById('modalClose');
-  const modalContact = document.getElementById('modalContact');
-
-  // --- State ---
-  let stack = [...data]; // верх стека — последний элемент
-  let current = null;
-
-  // --- Renderers ---
-  function renderDeck(){
-    deckArea.innerHTML = '';
-    countChip.textContent = stack.length;
-    if (!stack.length) {
-      const empty = document.createElement('div');
-      empty.className = 'swipe-card';
-      empty.innerHTML = `<div class="content" style="inset:0;display:grid;place-items:center;">
-        <div class="muted">Пока всё. Уточнить район или бюджет?</div></div>`;
-      deckArea.appendChild(empty);
-      current = null;
-      return;
-    }
-
-    // Рендерим максимум 3 верхних карточки (нижние — как «фантомы»)
-    const top3 = stack.slice(-3);
-    top3.forEach((item, i) => {
-      const idxFromBottom = top3.length - 1 - i; // 0 — верхняя
-      const card = document.createElement('div');
-      card.className = 'swipe-card';
-      card.style.zIndex = 10 + i;
-      card.style.transform = `translateX(-50%) translateY(${idxFromBottom*8}px) scale(${1 - idxFromBottom*0.02})`;
-      card.dataset.id = item.id;
-      card.innerHTML = `
-        <div class="media"><img src="${item.img}" alt=""></div>
-        <div class="content">
-          <div>
-            <div class="title">${item.title}</div>
-            <div class="meta"><span class="price">${item.price}</span> • <span>${item.size}</span> • <span>${item.cond}</span></div>
-          </div>
-          <div>
-            <div class="tags">${item.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
-            <div class="muted" style="margin-top:6px">${item.desc}</div>
-          </div>
-          <div class="actions">
-            <button class="btn danger nope">Нет</button>
-            <button class="btn open">Открыть</button>
-            <button class="btn success like">Вау!</button>
-          </div>
-        </div>
-        <div class="badge yes">В ИЗБРАННОЕ</div>
-        <div class="badge no">ПРОПУСТИТЬ</div>
-      `;
-      deckArea.appendChild(card);
-
-      if (i === top3.length - 1) attachSwipe(card, item); // верхняя — интерактивная
-    });
-
-    current = stack[stack.length-1];
-  }
-
-  function renderList(){
-    listArea.innerHTML = data.map(item => `
-      <div class="item">
-        <img src="${item.img}" alt="">
-        <div class="pad">
-          <div class="title">${item.title}</div>
-          <div class="meta"><span class="price">${item.price}</span> • ${item.size} • ${item.cond}</div>
-          <div class="muted">${item.desc}</div>
-          <div class="tags" style="margin-top:4px">${item.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
-          <div class="actions" style="justify-content:space-between; margin-top:6px">
-            <button class="btn danger" onclick="nopeById('${item.id}')">Нет</button>
-            <button class="btn" onclick="openModal('${item.id}')">Открыть</button>
-            <button class="btn success" onclick="likeById('${item.id}')">Вау!</button>
-          </div>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  // --- Swipe mechanics ---
-  const DRAG_THRESHOLD = 90; // px для решения
-  function attachSwipe(card, item){
-    let startX=0, startY=0, dx=0, dy=0, dragging=false;
-
-    const onDown = (e)=>{
-      dragging=true;
-      const p = 'touches' in e ? e.touches[0] : e;
-      startX = p.clientX; startY = p.clientY; dx=0; dy=0;
-      card.style.transition='none';
-    };
-    const onMove = (e)=>{
-      if(!dragging) return;
-      const p = 'touches' in e ? e.touches[0] : e;
-      dx = p.clientX - startX; dy = p.clientY - startY;
-      const rot = dx * 0.06;
-      card.style.transform = `translateX(calc(-50% + ${dx}px)) translateY(${dy}px) rotate(${rot}deg)`;
-      // badges
-      card.querySelector('.badge.yes').style.opacity = Math.max(0, Math.min(1, (dx/DRAG_THRESHOLD)));
-      card.querySelector('.badge.no').style.opacity  = Math.max(0, Math.min(1, (-dx/DRAG_THRESHOLD)));
-    };
-    const onUp = ()=>{
-      if(!dragging) return;
-      dragging=false;
-      const decision = dx > DRAG_THRESHOLD ? 'like' : dx < -DRAG_THRESHOLD ? 'nope' : 'reset';
-      card.style.transition='transform .25s ease';
-
-      if(decision==='reset'){
-        card.style.transform='translateX(-50%)';
-        card.querySelectorAll('.badge').forEach(b=>b.style.opacity=0);
-      } else {
-        const offX = decision==='like' ? window.innerWidth : -window.innerWidth;
-        card.style.transform = `translateX(${offX}px) rotate(${dx*0.06}deg)`;
-        setTimeout(()=>{
-          if(decision==='like') like(item);
-          else nope(item);
-        }, 200);
-      }
-    };
-
-    // Buttons
-    card.querySelector('.like').onclick = ()=>{ like(item); };
-    card.querySelector('.nope').onclick = ()=>{ nope(item); };
-    card.querySelector('.open').onclick = ()=>{ openModal(item.id); };
-
-    // Events
-    card.addEventListener('mousedown', onDown);
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('mouseup', onUp);
-    card.addEventListener('touchstart', onDown, {passive:true});
-    card.addEventListener('touchmove', onMove, {passive:true});
-    card.addEventListener('touchend', onUp);
-  }
-
-  // --- Actions ---
-  function like(item){
-    stack = stack.filter(x=>x.id!==item.id);
-    console.log('LIKE', item.id);
-    renderDeck(); renderList();
-  }
-  function nope(item){
-    stack = stack.filter(x=>x.id!==item.id);
-    console.log('NOPE', item.id);
-    renderDeck(); renderList();
-  }
-  // for list buttons
-  window.likeById = (id)=> like(data.find(x=>x.id===id));
-  window.nopeById = (id)=> nope(data.find(x=>x.id===id));
-
-  function openModal(id){
-    const item = data.find(x=>x.id===id);
-    if(!item) return;
-    modalImg.src = item.img;
-    modalTitle.textContent = item.title;
-    modalPrice.textContent = item.price;
-    modalSize.textContent = item.size;
-    modalCond.textContent = item.cond;
-    modalDesc.textContent = item.desc;
-    modalTags.innerHTML = item.tags.map(t=>`<span class="tag">${t}</span>`).join('');
-    modal.classList.add('open');
-  }
-
-  modalClose.onclick = ()=> modal.classList.remove('open');
-  modal.addEventListener('click',(e)=>{ if(e.target===modal) modal.classList.remove('open'); });
-  modalContact.onclick = ()=> {
-    alert('Откроем чат с продавцом (здесь будет ваш обработчик).');
-    modal.classList.remove('open');
-  };
-
-  // Quick message (к выбранной верхней карточке)
-  quickSend.onclick = ()=>{
-    const text = quickMsg.value.trim();
-    if(!text) return;
-    if(!current){ alert('Нет выбранной карточки.'); return; }
-    // Здесь вызов вебхука/чата с продавцом:
-    console.log('MESSAGE to', current.id, ':', text);
-    quickMsg.value='';
-  };
-
-  // Modes
-  function setMode(mode){
-    const swipe = mode==='swipe';
-    document.getElementById('deckArea').style.display = swipe ? 'block' : 'none';
-    document.getElementById('listArea').style.display = swipe ? 'none' : 'grid';
-    modeSwipeBtn.classList.toggle('active', swipe);
-    modeSwipeBtn.setAttribute('aria-pressed', swipe);
-    modeListBtn.classList.toggle('active', !swipe);
-    modeListBtn.setAttribute('aria-pressed', !swipe);
-  }
-  modeSwipeBtn.onclick = ()=> setMode('swipe');
-  modeListBtn.onclick = ()=> setMode('list');
-
-  // Keyboard controls
-  window.addEventListener('keydown', (e)=>{
-    if(!stack.length) return;
-    if(e.key==='ArrowLeft' || e.key.toLowerCase()==='a'){ nope(stack[stack.length-1]); }
-    if(e.key==='ArrowRight' || e.key.toLowerCase()==='d'){ like(stack[stack.length-1]); }
-    if(e.key==='Enter'){ openModal(stack[stack.length-1].id); }
-  });
-
-  // Init
-  renderDeck();
-  renderList();
-  setMode('swipe');
-
-  // Chat composer (имитация ответа)
-  const history = document.getElementById('history');
-  const form = document.getElementById('composerForm');
-  const input = document.getElementById('chatInput');
-  input.addEventListener('keydown', (e)=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); form.requestSubmit(); }});
-  form.addEventListener('submit', (e)=>{
-    e.preventDefault();
-    const text = input.value.trim(); if(!text) return;
-    history.insertAdjacentHTML('beforeend', `<div class="message user"><div class="role">Ты</div><div class="body"></div></div>`);
-    history.lastElementChild.querySelector('.body').textContent = text;
-
-    const resp = document.createElement('div');
-    resp.className='message assistant';
-    resp.innerHTML = `<div class="role">QDESK</div><div class="body muted">Ищу ещё варианты…</div>`;
-    history.appendChild(resp);
-    history.scrollTop = history.scrollHeight;
-    input.value='';
-
-    setTimeout(()=>{
-      resp.querySelector('.body').classList.remove('muted');
-      resp.querySelector('.body').textContent = 'Добавил ещё 2 варианта внизу. Могу отфильтровать по району?';
-      // Демонстрация «догрузки»
-      const extra = [
-        {id:String(Date.now()), title:'Loft Sofa Fresh', price:'21 900 ₽', size:'140×200', cond:'Хорошее', img:'https://picsum.photos/id/1043/800/600', desc:'Почти новый, САО', tags:['лофт','САО']},
-        {id:String(Date.now()+1), title:'Sofa Bed Minimal', price:'18 700 ₽', size:'120×200', cond:'Хорошее', img:'https://picsum.photos/id/1035/800/600', desc:'Минимализм, самовывоз', tags:['минимал','самовывоз']}
+      const MOCK = [
+        { id: 1, title: "iPhone 8, 64 ГБ", price: "5 000 ₽", area: "Центральный", city: "Новокузнецк", img:"https://picsum.photos/id/1084/600/400" },
+        { id: 2, title: "Велосипед Stels", price: "12 000 ₽", area: "Кузнецкий", city: "Новокузнецк", img:"https://picsum.photos/id/1011/600/400" },
+        { id: 3, title: "Ремонт стиральных машин", price: "от 1 500 ₽", area: "Орджоникидзевский", city: "Новокузнецк", img:"https://picsum.photos/id/1067/600/400" },
+        { id: 4, title: "MacBook Air 2015", price: "25 000 ₽", area: "Центральный", city: "Новокузнецк", img:"https://picsum.photos/id/1040/600/400" },
+        { id: 5, title: "Детская коляска", price: "3 500 ₽", area: "Кузнецкий", city: "Новокузнецк", img:"https://picsum.photos/id/1050/600/400" },
       ];
-      data.push(...extra); stack.push(...extra);
-      renderDeck(); renderList(); countChip.textContent = stack.length;
-    }, 600);
-  });
-</script>
-</body>
+
+      /* ==== HERO CAROUSEL ==== */
+      function HeroCarousel(){
+        const slides = MOCK;
+        const [i, setI] = React.useState(0);
+        const n = slides.length;
+        React.useEffect(()=>{
+          const t = setInterval(()=> setI(prev => (prev+1)%n), 3500);
+          return ()=> clearInterval(t);
+        }, [n]);
+        return (
+          <div className="rounded-2xl border border-neutral-200 bg-white shadow p-0 overflow-hidden">
+            <div className="relative aspect-[16/10]">
+              {slides.map((s,idx)=>(
+                <div key={s.id} className={`absolute inset-0 transition-opacity duration-500 ${idx===i ? 'opacity-100' : 'opacity-0'}`}>
+                  <img src={s.img} alt={s.title} className="w-full h-full object-cover" />
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      }
+
+      /* ===== Новый поиск: чат + свайп ===== */
+      function SearchInside() {
+        const [q, setQ] = React.useState("");
+        const [history, setHistory] = React.useState([
+          {role:"assistant", text:"Привет! Опиши, что ищешь — варианты появятся снизу 👇"}
+        ]);
+        const [stack, setStack] = React.useState([...MOCK]);
+
+        const onSubmit = (e)=>{
+          e.preventDefault();
+          if(!q.trim()) return;
+          setHistory(h=>[...h,{role:"user",text:q},{role:"assistant",text:"Нашёл несколько вариантов снизу. Могу уточнить по району?"}]);
+          setQ("");
+        };
+
+        const like = (id)=>{
+          setStack(s=>s.filter(x=>x.id!==id));
+          console.log("LIKE", id);
+        };
+        const nope = (id)=>{
+          setStack(s=>s.filter(x=>x.id!==id));
+          console.log("NOPE", id);
+        };
+
+        const current = stack[stack.length-1];
+
+        return (
+          <section id="inside" className="py-16 bg-neutral-50">
+            <div className="max-w-4xl mx-auto px-4">
+              <h2 className="text-3xl font-bold mb-3">Диалоговый поиск</h2>
+              <p className="text-neutral-600 mb-6">Спрашивай как в чате — мы покажем подходящее рядом.</p>
+
+              {/* История чата */}
+              <div className="border rounded-xl bg-white p-4 mb-4 h-64 overflow-y-auto">
+                {history.map((m,i)=>(
+                  <div key={i} className={`mb-2 ${m.role==="user"?"text-right":""}`}>
+                    <div className={`inline-block px-3 py-2 rounded-lg ${m.role==="user"?"bg-blue-500 text-white":"bg-neutral-200"}`}>{m.text}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Composer */}
+              <form onSubmit={onSubmit} className="flex gap-2 mb-8">
+                <input value={q} onChange={e=>setQ(e.target.value)} placeholder="Например: диван лофт до 20к" className="flex-1 border rounded-lg px-3 py-2"/>
+                <button className="px-4 py-2 rounded-lg text-white font-semibold" style={{backgroundColor:BRAND.accent}}>Отправить</button>
+              </form>
+
+              {/* Дек карточек снизу */}
+              <div className="relative h-96">
+                {current ? (
+                  <div key={current.id} className="absolute inset-0 flex flex-col md:flex-row border rounded-xl bg-white shadow overflow-hidden">
+                    <img src={current.img} alt={current.title} className="md:w-1/2 object-cover"/>
+                    <div className="p-4 flex flex-col flex-1">
+                      <h3 className="font-semibold text-lg mb-1">{current.title}</h3>
+                      <p className="text-sm text-neutral-600 mb-3">{current.price} • {current.city}, {current.area}</p>
+                      <div className="mt-auto flex gap-3">
+                        <button onClick={()=>nope(current.id)} className="flex-1 border border-red-300 text-red-600 rounded-lg py-2">Нет</button>
+                        <button onClick={()=>like(current.id)} className="flex-1 bg-green-500 text-white rounded-lg py-2">Вау!</button>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="absolute inset-0 grid place-items-center text-neutral-500">Больше ничего нет. Попробуй новый запрос.</div>
+                )}
+              </div>
+            </div>
+          </section>
+        );
+      }
+
+      /* ===== HEADER ===== */
+      function Header(){
+        return (
+          <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-neutral-200">
+            <nav className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg grid place-items-center font-bold text-sm" style={{backgroundColor: BRAND.accent, color:"#fff"}}>QD</div>
+                <span className="font-bold tracking-tight">{BRAND.name}</span>
+              </div>
+              <a href="cabinet.html" className="px-4 py-2 rounded-lg font-semibold text-sm" style={{backgroundColor: BRAND.accent, color:"#fff"}}>Разместить объявление</a>
+            </nav>
+          </header>
+        );
+      }
+
+      function App(){
+        return (
+          <div className="min-h-screen w-full bg-white text-neutral-900">
+            <Header />
+            <section className="max-w-6xl mx-auto px-4 pt-16 pb-12">
+              <div className="grid md:grid-cols-2 gap-10 items-center">
+                <div>
+                  <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">{BRAND.tagline}</h1>
+                  <p className="mt-4 text-lg text-neutral-600">{BRAND.sub}</p>
+                </div>
+                <HeroCarousel />
+              </div>
+            </section>
+            <SearchInside />
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+  </body>
 </html>
