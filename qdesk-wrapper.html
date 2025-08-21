@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>QDESK • Обёртка главной с чат‑поиском</title>
+<style>
+  html,body{height:100%;margin:0}
+  .host{position:fixed; inset:0; overflow:hidden; background:#000}
+  .host iframe{
+    position:absolute; inset:0; width:100%; height:100%; border:0; background:#fff;
+  }
+
+  :root{
+    --bg:#0b0c0f; --panel:#12141a; --muted:#8b93a7; --text:#e9edf5; --accent:#6ea8fe;
+    --card:#171a21; --border:#222735; --ok:#3ad29f; --radius:16px;
+  }
+  .qdesk{
+    position:fixed; left:0; right:0; bottom:0; z-index:2147483000;
+    font:14px/1.5 Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    color:var(--text); pointer-events:none;
+  }
+  .qdesk *{box-sizing:border-box}
+
+  .qdesk-fab{
+    position:fixed; right:16px; bottom:16px; z-index:2147483001;
+    background:linear-gradient(135deg,#6ea8fe,#9f7aea);
+    color:#0b0c0f; border:0; border-radius:999px; padding:12px 14px; cursor:pointer;
+    font-weight:700; box-shadow:0 12px 40px rgba(110,168,254,.35);
+    pointer-events:auto;
+  }
+
+  .qdesk-panel{
+    margin:0 auto; width:min(1100px, 100%);
+    background:var(--panel); border:1px solid var(--border);
+    border-radius:18px 18px 0 0; overflow:hidden;
+    transform:translateY(100%); transition:transform .28s ease;
+    pointer-events:auto;
+  }
+  .qdesk.open .qdesk-panel{transform:translateY(0)}
+  .qd-header{
+    display:flex; align-items:center; justify-content:space-between; gap:8px; padding:10px 12px;
+    border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg,#141824 0%,#12141a 100%);
+  }
+  .qd-chip{font-size:11px; padding:2px 8px; border:1px solid var(--border); border-radius:999px; background:#141824; color:#cfe1ff}
+  .qd-muted{color:var(--muted); font-size:12px}
+
+  .qd-main{display:grid; grid-template-rows:1fr auto; height:360px; min-height:0}
+  .qd-history{
+    padding:12px; overflow:auto; display:flex; flex-direction:column; gap:10px; min-height:0;
+    background:rgba(13,16,23,.4);
+  }
+  .qd-msg{max-width:80%; padding:10px 12px; border:1px solid var(--border); border-radius:14px; background:var(--card)}
+  .qd-msg.user{margin-left:auto; background:#182033}
+  .qd-msg .role{font-size:12px; color:var(--muted)}
+
+  .qd-composer{padding:10px; border-top:1px solid var(--border); background:#111520}
+  .qd-input{
+    display:flex; gap:8px; align-items:flex-end; background:#121725; border:1px solid var(--border); border-radius:12px; padding:8px;
+  }
+  .qd-input textarea{flex:1; resize:none; max-height:120px; border:0; outline:0; background:transparent; color:var(--text)}
+
+  .qd-deck{border-top:1px solid var(--border); background:rgba(16,19,27,.88); backdrop-filter:saturate(1.2) blur(10px)}
+  .qd-deck-head{display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px 12px}
+  .qd-area{position:relative; height:300px}
+  .qd-card{
+    position:absolute; top:0; left:50%; transform:translateX(-50%);
+    width:min(900px, 96%); height:290px;
+    background:var(--card); border:1px solid var(--border); border-radius:16px; overflow:hidden;
+    box-shadow:0 16px 60px rgba(0,0,0,.45); user-select:none; touch-action:pan-y;
+  }
+  .qd-media{position:absolute; inset:0 50% 0 0; background:#0f131c; overflow:hidden}
+  .qd-media img{width:100%; height:100%; object-fit:cover}
+  .qd-content{position:absolute; inset:0 0 0 50%; padding:12px; display:grid; grid-template-rows:auto 1fr auto; gap:8px}
+  .qd-title{font-weight:700}
+  .qd-meta{font-size:12px; color:var(--muted); display:flex; gap:8px; flex-wrap:wrap}
+  .qd-price{color:var(--ok); font-weight:700}
+  .qd-tags{display:flex; flex-wrap:wrap; gap:6px}
+  .qd-tag{font-size:11px; border:1px solid var(--border); border-radius:999px; padding:2px 8px; background:#141824}
+  .qd-actions{display:flex; gap:8px; justify-content:flex-end}
+  .qd-btn{border:1px solid var(--border); background:#141824; color:var(--text); padding:8px 12px; border-radius:12px; cursor:pointer}
+  .qd-btn.ok{background:#14251e; border-color:#1f3e2f}
+  .qd-btn.no{background:#2a1616; border-color:#4b1f1f}
+  .qd-badge{position:absolute; top:10px; left:10px; padding:6px 10px; border-radius:10px; font-weight:700; letter-spacing:.3px; transform:rotate(-6deg); opacity:0; pointer-events:none}
+  .qd-badge.y{background:#133123; color:#9cffc9; border:1px solid #1a5a3f}
+  .qd-badge.n{background:#331717; color:#ffb8b8; border:1px solid #5a1a1a}
+
+  .qd-modal{position:fixed; inset:0; background:rgba(0,0,0,.6); display:none; align-items:center; justify-content:center; z-index:2147483002}
+  .qd-modal.open{display:flex}
+  .qd-dialog{width:min(900px,96%); background:var(--panel); border:1px solid var(--border); border-radius:18px; overflow:hidden; display:grid; grid-template-columns:1fr 1fr; min-height:420px}
+  .qd-gallery{background:#0f131c}
+  .qd-gallery img{width:100%; height:100%; object-fit:cover}
+  .qd-info{padding:14px; display:grid; gap:8px; align-content:start}
+</style>
+</head>
+<body>
+  <div class="host">
+    <iframe id="siteFrame" sandbox="allow-same-origin allow-forms allow-scripts" src=""></iframe>
+  </div>
+
+  <div class="qdesk" id="qdesk">
+    <button class="qdesk-fab" id="qdeskFab">Поиск QDESK</button>
+
+    <div class="qdesk-panel" id="qdeskPanel" role="dialog" aria-label="QDESK чат и карточки">
+      <div class="qd-header">
+        <div style="display:flex; gap:8px; align-items:center;">
+          <strong>QDESK • Диалоговый поиск</strong>
+          <span class="qd-chip" id="qdCount">0</span>
+        </div>
+        <div class="qd-muted">Shift+Enter — перенос строки</div>
+      </div>
+
+      <div class="qd-main">
+        <div class="qd-history" id="qdHistory">
+          <div class="qd-msg"><div class="role">QDESK</div><div>Опишите, что ищете — варианты появятся снизу. Можно свайпать, открыть или сразу написать.</div></div>
+        </div>
+
+        <div class="qd-composer">
+          <form class="qd-input" id="qdForm">
+            <textarea id="qdInput" rows="1" placeholder="Например: «Стол из массива дуба до 15 000 ₽, самовывоз завтра»"></textarea>
+            <button class="qd-btn" type="submit">Отправить</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="qd-deck">
+        <div class="qd-deck-head">
+          <div style="display:flex; gap:8px; align-items:center;">
+            <strong>Подходящие варианты</strong>
+            <span class="qd-chip" id="qdCount2">0</span>
+          </div>
+          <div class="qd-muted">A — Нет • D — Вау! • Enter — Открыть</div>
+        </div>
+        <div class="qd-area" id="qdArea"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="qd-modal" id="qdModal">
+    <div class="qd-dialog">
+      <div class="qd-gallery"><img id="qdModalImg" alt=""></div>
+      <div class="qd-info">
+        <h3 id="qdModalTitle" class="qd-title"></h3>
+        <div class="qd-meta"><span id="qdModalPrice" class="qd-price"></span> • <span id="qdModalSize"></span> • <span id="qdModalCond"></span></div>
+        <div class="qd-tags" id="qdModalTags"></div>
+        <p class="qd-muted" id="qdModalDesc"></p>
+        <div style="display:flex; gap:8px; margin-top:auto;">
+          <button class="qd-btn ok" id="qdModalContact">Связаться</button>
+          <button class="qd-btn" id="qdModalClose">Закрыть</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const ORIGINAL_URL = 'index.html';
+  const frame = document.getElementById('siteFrame');
+  frame.src = ORIGINAL_URL;
+
+  const $ = (id)=>document.getElementById(id);
+  const root = $('qdesk'), panel = $('qdeskPanel'), fab = $('qdeskFab');
+  const historyEl = $('qdHistory'); const form = $('qdForm'); const input = $('qdInput');
+  const area = $('qdArea'); const c1 = $('qdCount'); const c2 = $('qdCount2');
+
+  const modal = $('qdModal'); const mImg=$('qdModalImg'); const mTitle=$('qdModalTitle'); const mPrice=$('qdModalPrice');
+  const mSize=$('qdModalSize'); const mCond=$('qdModalCond'); const mTags=$('qdModalTags'); const mDesc=$('qdModalDesc');
+  const mClose=$('qdModalClose'); const mContact=$('qdModalContact');
+
+  const data = [
+    {id:'1', title:'Диван‑кровать Loft «Бруклин»', price:'24 500 ₽', size:'140×200', cond:'Хорошее', img:'https://picsum.photos/id/1084/800/600', desc:'Ниша для белья, доставка сегодня +1 500 ₽', tags:['лофт','ниша','доставка сегодня']},
+    {id:'2', title:'Metal Frame Sofa', price:'22 000 ₽', size:'90×200', cond:'Отличное', img:'https://picsum.photos/id/1011/800/600', desc:'Металлическое основание, самовывоз', tags:['лофт','самовывоз']},
+    {id:'3', title:'Лофт‑диван с нишей', price:'19 900 ₽', size:'140×200', cond:'Хорошее', img:'https://picsum.photos/id/1067/800/600', desc:'Доставка до 22:00', tags:['ниша','доставка']},
+    {id:'4', title:'Compact Sofa Bed', price:'17 500 ₽', size:'80×190', cond:'Хорошее', img:'https://picsum.photos/id/1040/800/600', desc:'Компактный, район СЗАО', tags:['компакт','СЗАО']},
+    {id:'5', title:'Диван «Ржавый лофт»', price:'25 000 ₽', size:'160×200', cond:'Идеал', img:'https://picsum.photos/id/1050/800/600', desc:'Отличное состояние, помощь с подъёмом', tags:['идеал','подъём']},
+    {id:'6', title:'Sofa Bed Oak Base', price:'23 400 ₽', size:'120×200', cond:'Отличное', img:'https://picsum.photos/id/1027/800/600', desc:'Основание из массива', tags:['массив дуба']}
+  ];
+  let stack=[...data]; let current=null;
+
+  function renderDeck(){
+    area.innerHTML=''; c1.textContent=stack.length; c2.textContent=stack.length;
+    if(!stack.length){
+      const card=document.createElement('div'); card.className='qd-card';
+      card.innerHTML='<div class="qd-content" style="inset:0;display:grid;place-items:center;"><div class="qd-muted">Пока всё. Уточнить район или бюджет?</div></div>';
+      area.appendChild(card); current=null; return;
+    }
+    const top3=stack.slice(-3);
+    top3.forEach((item,i)=>{
+      const idx=top3.length-1-i;
+      const card=document.createElement('div'); card.className='qd-card';
+      card.style.zIndex=10+i; card.style.transform=`translateX(-50%) translateY(${idx*8}px) scale(${1-idx*0.02})`;
+      card.dataset.id=item.id;
+      card.innerHTML=`
+        <div class="qd-media"><img src="${item.img}" alt=""></div>
+        <div class="qd-content">
+          <div>
+            <div class="qd-title">${item.title}</div>
+            <div class="qd-meta"><span class="qd-price">${item.price}</span> • ${item.size} • ${item.cond}</div>
+          </div>
+          <div>
+            <div class="qd-tags">${item.tags.map(t=>`<span class="qd-tag">${t}</span>`).join('')}</div>
+            <div class="qd-muted" style="margin-top:6px">${item.desc}</div>
+          </div>
+          <div class="qd-actions">
+            <button class="qd-btn no">Нет</button>
+            <button class="qd-btn open">Открыть</button>
+            <button class="qd-btn ok">Вау!</button>
+          </div>
+        </div>
+        <div class="qd-badge y">В ИЗБРАННОЕ</div>
+        <div class="qd-badge n">ПРОПУСТИТЬ</div>
+      `;
+      area.appendChild(card);
+      if(i===top3.length-1) attachSwipe(card,item);
+    });
+    current=stack[stack.length-1];
+  }
+
+  const DRAG=90;
+  function attachSwipe(card,item){
+    let sx=0, sy=0, dx=0, dy=0, drag=false;
+    const onDown=(e)=>{ drag=true; const p='touches'in e?e.touches[0]:e; sx=p.clientX; sy=p.clientY; dx=dy=0; card.style.transition='none'; };
+    const onMove=(e)=>{ if(!drag) return; const p='touches'in e?e.touches[0]:e; dx=p.clientX-sx; dy=p.clientY-sy;
+      const rot=dx*0.06; card.style.transform=`translateX(calc(-50% + ${dx}px)) translateY(${dy}px) rotate(${rot}deg)`;
+      card.querySelector('.qd-badge.y').style.opacity=Math.max(0,Math.min(1, dx/DRAG));
+      card.querySelector('.qd-badge.n').style.opacity=Math.max(0,Math.min(1,-dx/DRAG));
+    };
+    const onUp=()=>{ if(!drag) return; drag=false;
+      const decision= dx>DRAG?'like': dx<-DRAG?'nope':'reset';
+      card.style.transition='transform .25s ease';
+      if(decision==='reset'){ card.style.transform='translateX(-50%)'; card.querySelectorAll('.qd-badge').forEach(b=>b.style.opacity=0); }
+      else{
+        const off=decision==='like'? innerWidth : -innerWidth;
+        card.style.transform=`translateX(${off}px) rotate(${dx*0.06}deg)`;
+        setTimeout(()=>{ decision==='like'?like(item):nope(item); }, 200);
+      }
+    };
+    card.querySelector('.qd-btn.ok').onclick=()=>like(item);
+    card.querySelector('.qd-btn.no').onclick=()=>nope(item);
+    card.querySelector('.qd-btn.open').onclick=()=>openModal(item.id);
+    card.addEventListener('mousedown',onDown); addEventListener('mousemove',onMove); addEventListener('mouseup',onUp);
+    card.addEventListener('touchstart',onDown,{passive:true}); card.addEventListener('touchmove',onMove,{passive:true}); card.addEventListener('touchend',onUp);
+  }
+
+  function like(item){ stack=stack.filter(x=>x.id!==item.id); renderDeck(); }
+  function nope(item){ stack=stack.filter(x=>x.id!==item.id); renderDeck(); }
+  function openModal(id){
+    const it=data.find(x=>x.id===id); if(!it) return;
+    mImg.src=it.img; mTitle.textContent=it.title; mPrice.textContent=it.price;
+    mSize.textContent=it.size; mCond.textContent=it.cond; mDesc.textContent=it.desc;
+    mTags.innerHTML=it.tags.map(t=>`<span class="qd-tag">${t}</span>`).join('');
+    modal.classList.add('open');
+  }
+  mClose.onclick=()=>modal.classList.remove('open');
+  modal.addEventListener('click',(e)=>{ if(e.target===modal) modal.classList.remove('open'); });
+  mContact.onclick=()=>{ alert('Тут откроем чат с продавцом / отправим вебхук.'); modal.classList.remove('open'); };
+
+  addEventListener('keydown',(e)=>{
+    if(document.activeElement===input) return;
+    if(!stack.length) return;
+    if(e.key==='ArrowLeft' || e.key.toLowerCase()==='a') nope(stack[stack.length-1]);
+    if(e.key==='ArrowRight' || e.key.toLowerCase()==='d') like(stack[stack.length-1]);
+    if(e.key==='Enter') openModal(stack[stack.length-1].id);
+  });
+
+  fab.onclick=()=> root.classList.toggle('open');
+
+  input.addEventListener('keydown',(e)=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); form.requestSubmit(); }});
+  form.addEventListener('submit',(e)=>{
+    e.preventDefault();
+    const text=input.value.trim(); if(!text) return;
+    historyEl.insertAdjacentHTML('beforeend', `<div class="qd-msg user"><div class="role">Вы</div><div></div></div>`);
+    historyEl.lastElementChild.lastElementChild.textContent=text;
+    const resp=document.createElement('div'); resp.className='qd-msg'; resp.innerHTML='<div class="role">QDESK</div><div class="qd-muted">Ищу варианты…</div>';
+    historyEl.appendChild(resp); historyEl.scrollTop=historyEl.scrollHeight; input.value='';
+
+    setTimeout(()=>{
+      resp.lastElementChild.classList.remove('qd-muted');
+      resp.lastElementChild.textContent='Добавил ещё 2 объявления снизу. Уточнить район или бюджет?';
+      const extra=[
+        {id:String(Date.now()),   title:'Loft Sofa Fresh', price:'21 900 ₽', size:'140×200', cond:'Хорошее', img:'https://picsum.photos/id/1043/800/600', desc:'Почти новый, САО', tags:['лофт','САО']},
+        {id:String(Date.now()+1), title:'Sofa Bed Minimal', price:'18 700 ₽', size:'120×200', cond:'Хорошее', img:'https://picsum.photos/id/1035/800/600', desc:'Минимализм, самовывоз', tags:['минимал','самовывоз']}
+      ];
+      data.push(...extra); stack.push(...extra); renderDeck();
+    }, 600);
+  });
+
+  renderDeck();
+</script>
+</body>
+</html>
