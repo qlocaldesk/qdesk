@@ -7,6 +7,55 @@
     <link rel="preconnect" href="https://unpkg.com">
     <style>body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial}</style>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .qd-marquee{ --dur:35s; }
+      .qd-marquee .qd-fade{
+        -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+                mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+      }
+      .qd-track{ display:flex; gap:32px; will-change: transform; animation: qd-scroll var(--dur) linear infinite; }
+      @keyframes qd-scroll{ from{ transform: translateX(0); } to{ transform: translateX(-50%); } }
+      .qd-dot{ width:6px; height:6px; border-radius:999px; background:rgb(209 213 219); align-self:center; }
+      
+      /* Стили из вашего кода */
+      :root{
+        --bg:#ffffff; --fg:#0f172a; --muted:#6b7280; --brand:#111827;
+        --accent:#2563eb; --accent-2:#111827; --spot:#0ea5e9; --ring: rgba(37,99,235,.25);
+        --card:#f8fafc; --shadow: 0 10px 25px rgba(15,23,42,.08);
+      }
+      .search-btn{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid #e5e7eb;background:#fff;border-radius:14px;cursor:pointer;min-width:260px}
+      .search-btn:hover{border-color:#d1d5db;box-shadow:0 0 0 4px var(--ring)}
+      .search-btn kbd{font-size:12px;color:#6b7280;border:1px solid #e5e7eb;padding:2px 6px;border-radius:8px;background:#f8fafc}
+      
+      /* Mobile */
+      .only-mobile{display:none}
+      .hamburger{display:none;background:#fff;border:1px solid #e5e7eb;width:42px;height:42px;border-radius:12px;align-items:center;justify-content:center}
+      .drawer{position:fixed;inset:0;background:rgba(15,23,42,.4);backdrop-filter: blur(2px);display:none;z-index:1000}
+      .drawer.open{display:block}
+      .drawer .panel{position:absolute;right:0;top:0;height:100%;width:min(86%,360px);background:#fff;box-shadow:var(--shadow);padding:22px;display:flex;flex-direction:column;gap:16px}
+      .drawer .panel a{padding:12px 10px;border-radius:12px}
+      .drawer .panel a:hover{background:#f3f4f6}
+      
+      /* Стили для чата */
+      .chat-card{background:var(--card);border:1px solid #e5e7eb;border-radius:20px;padding:16px;box-shadow:var(--shadow)}
+      .bubble{max-width:90%;padding:10px 12px;border-radius:16px;margin:8px 0;font-size:14px}
+      .bubble.ai{background:#fff;border:1px solid #e5e7eb}
+      .bubble.user{background:#e0f2fe;border:1px solid #bae6fd;align-self:flex-end}
+      .chat-window{display:flex;flex-direction:column}
+      .input-row{margin-top:10px;display:flex;gap:8px}
+      .input-row input{flex:1;padding:12px 14px;border:1px solid #e5e7eb;border-radius:12px}
+      .input-row button{padding:12px 14px;border-radius:12px;border:1px solid #e5e7eb;background:#fff;cursor:pointer}
+      
+      /* Support section */
+      .support-card{background:#fcfcff;border:1px solid #e5e7eb;border-radius:20px;padding:22px;box-shadow:var(--shadow)}
+      
+      @media (max-width:980px){
+        .primary-nav{display:none}
+        .search-btn{min-width:0;flex:1}
+        .only-mobile{display:initial}
+        .hamburger{display:inline-flex}
+      }
+    </style>
   </head>
   <body class="bg-white">
     <div id="root"></div>
@@ -26,9 +75,9 @@
       const MOCK = [
         { id: 1, title: "iPhone 8, 64 ГБ", price: "5 000 ₽", area: "Центральный", city: "Новокузнецк" },
         { id: 2, title: "Велосипед Stels", price: "12 000 ₽", area: "Кузнецкий", city: "Новокузнецк" },
-        { id: 3, title: "Ремонт стиральных машин", price: "от 1 500 ₽", area: "Орджоникидзевский", city: "Новокузнецк" },
+        { id: 3, title: "Ремонт стиральных машин", price: "от 1 500 ₽", area: "Орджоникидзевский", city: "Новокузнецk" },
         { id: 4, title: "MacBook Air 2015", price: "25 000 ₽", area: "Центральный", city: "Новокузнецк" },
-        { id: 5, title: "Детская коляска", price: "3 500 ₽", area: "Кузнецкий", city: "Новокузнецк" },
+        { id: 5, title: "Детская коляска", price: "3 500 ₽", area: "Кузнецкий", city: "Новокузнецk" },
       ];
 
       /* ==== ICONS (inline SVG, stroke 1.5) ==== */
@@ -40,18 +89,285 @@
         Camera: (props)=>(<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M4 8h3l2-3h6l2 3h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2z"/><circle cx="12" cy="13" r="3.5"/></svg>),
         Lock: (props)=>(<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V8a4 4 0 1 1 8 0v3"/></svg>),
         Card: (props)=>(<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}><rect x="2.5" y="5.5" width="19" height="13" rx="2.5"/><path d="M2.5 10.5h19M7 15.5h4"/></svg>),
+        Search: (props)=>(<svg width="18" height="18" viewBox="0 0 24 24" fill="none" {...props}><path d="M21 21l-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2"/></svg>),
+        Menu: (props)=>(<svg width="20" height="20" viewBox="0 0 24 24" fill="none" {...props}><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>),
+        Close: (props)=>(<svg width="20" height="20" viewBox="0 0 24 24" fill="none" {...props}><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>)
       };
-      const { Shield, Handshake, CheckBadge, Pin, Camera, Lock, Card } = ico;
+      const { Shield, Handshake, CheckBadge, Pin, Camera, Lock, Card, Search, Menu, Close } = ico;
 
-      /* ==== HERO CAROUSEL ==== */
-      function makeThumb({title, accent}) {
-        const bg1 = encodeURIComponent(accent || BRAND.accent);
-        const bg2 = encodeURIComponent("#0ea5e9");
-        const safeText = encodeURIComponent(title.length > 18 ? title.slice(0,18) + "…" : title);
-        const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 480'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='${bg1}'/><stop offset='1' stop-color='${bg2}'/></linearGradient></defs><rect width='100%' height='100%' fill='url(#g)'/><g fill='white' opacity='0.2'><circle cx='520' cy='90' r='80'/><circle cx='80' cy='400' r='60'/></g><rect x='24' y='24' width='160' height='36' rx='10' fill='rgba(255,255,255,0.85)'/><text x='40' y='49' font-size='20' font-family='Inter, Arial' fill='#0f172a'>QDESK • рядом</text><rect x='24' y='380' width='260' height='64' rx='14' fill='rgba(255,255,255,0.9)'/><text x='40' y='420' font-size='26' font-weight='700' font-family='Inter, Arial' fill='#0f172a'>${safeText}</text></svg>`;
-        return `data:image/svg+xml;utf8,${svg}`;
+      /* ===== БЕГУЩАЯ СТРОКА ПАРТНЕРОВ (СТИЛЬ 3) ===== */
+      function PartnersMarquee() {
+        const PARTNERS = [
+          { name: "Яндекс Доставка" },
+          { name: "Достависта" },
+          { name: "Боксберри" },
+          { name: "СберЛогистика" },
+          { name: "CDEK" },
+          { name: "ПЭК" },
+          { name: "DHL" },
+          { name: "DPD" }
+        ];
+        
+        const list = [...PARTNERS, ...PARTNERS, ...PARTNERS];
+        
+        return (
+          <section className="qd-marquee bg-white border-y border-neutral-200">
+            <div className="qd-fade overflow-hidden group">
+              <div className="qd-track group-hover:[animation-play-state:paused]" style={{ width: "300%" }}>
+                {list.map((p,i)=>(
+                  <div key={i} className="flex items-center gap-3 text-neutral-700">
+                    <div className="qd-dot" />
+                    <span className="text-sm sm:text-base">{p.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
       }
 
+      /* ===== МОДАЛЬНОЕ ОКНО ЧАТА ===== */
+      function ChatModal({ isOpen, onClose }) {
+        const [messages, setMessages] = React.useState([
+          { text: "Привет! Что ищешь? Можешь описать в двух словах.", isUser: false }
+        ]);
+        const [inputValue, setInputValue] = React.useState("");
+
+        const handleSubmit = (e) => {
+          e.preventDefault();
+          if (!inputValue.trim()) return;
+
+          setMessages(prev => [...prev, { text: inputValue, isUser: true }]);
+          setInputValue("");
+
+          setTimeout(() => {
+            setMessages(prev => [...prev, { 
+              text: "Окей, нашёл несколько вариантов неподалёку. Хочешь назначить встречу в QDESK Spot на завтра?", 
+              isUser: false 
+            }]);
+          }, 500);
+        };
+
+        if (!isOpen) return null;
+
+        return (
+          <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl flex flex-col">
+              <div className="flex items-center justify-between p-4 border-b border-neutral-200">
+                <span className="font-semibold">Поиск с ИИ</span>
+                <button onClick={onClose} className="p-2 rounded-lg hover:bg-neutral-100">
+                  <Close className="w-5 h-5" />
+                </button>
+              </div>
+              
+              <div className="p-4 bg-neutral-50 flex-1 max-h-96 overflow-y-auto">
+                {messages.map((msg, i) => (
+                  <div key={i} className={`flex ${msg.isUser ? 'justify-end' : 'justify-start'} mb-3`}>
+                    <div className={`max-w-xs p-3 rounded-2xl ${
+                      msg.isUser 
+                        ? 'bg-blue-500 text-white' 
+                        : 'bg-white border border-neutral-200'
+                    }`}>
+                      {msg.text}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <form onSubmit={handleSubmit} className="p-4 border-t border-neutral-200 flex gap-2">
+                <input
+                  type="text"
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  placeholder="Например: «стул лофт до 3к в центре города»"
+                  className="flex-1 p-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button 
+                  type="submit"
+                  className="px-4 py-3 bg-blue-500 text-white rounded-xl font-semibold hover:bg-blue-600"
+                >
+                  Отправить
+                </button>
+              </form>
+            </div>
+          </div>
+        );
+      }
+
+      /* ===== МОБИЛЬНОЕ МЕНЮ ===== */
+      function MobileMenu({ isOpen, onClose }) {
+        if (!isOpen) return null;
+
+        return (
+          <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40" onClick={onClose}>
+            <div className="absolute right-0 top-0 h-full w-80 bg-white shadow-xl p-6" onClick={e => e.stopPropagation()}>
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg grid place-items-center font-bold text-sm" 
+                       style={{backgroundColor: BRAND.accent, color:"#fff"}}>
+                    QD
+                  </div>
+                  <span className="font-bold tracking-tight">{BRAND.name}</span>
+                </div>
+                <button onClick={onClose} className="p-2 rounded-lg hover:bg-neutral-100">
+                  <Close className="w-5 h-5" />
+                </button>
+              </div>
+              
+              <nav className="space-y-2">
+                <a href="#spot" className="block py-3 px-4 rounded-xl hover:bg-neutral-100">QDESK Spot</a>
+                <a href="#hub" className="block py-3 px-4 rounded-xl hover:bg-neutral-100">Hub</a>
+                <a href="#about" className="block py-3 px-4 rounded-xl hover:bg-neutral-100">О проекте</a>
+                <a href="cabinet.html" className="block py-3 px-4 rounded-xl bg-blue-500 text-white text-center font-semibold">
+                  Разместить объявление
+                </a>
+              </nav>
+              
+              <div className="absolute bottom-6 left-6 right-6 text-xs text-neutral-500">
+                © QDESK · beta
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      /* ===== ОБНОВЛЕННЫЙ HEADER ===== */
+      function Header(){
+        const [isChatOpen, setIsChatOpen] = React.useState(false);
+        const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+
+        return (
+          <>
+            <header className="sticky top-0 z-30 bg-white/90 backdrop-blur border-b border-neutral-200">
+              <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg grid place-items-center font-bold text-sm" 
+                       style={{backgroundColor: BRAND.accent, color:"#fff"}}>
+                    QD
+                  </div>
+                  <span className="font-bold tracking-tight">{BRAND.name}</span>
+                </div>
+
+                <button 
+                  className="search-btn"
+                  onClick={() => setIsChatOpen(true)}
+                >
+                  <Search className="text-neutral-400" />
+                  <span>Поиск как в чате…</span>
+                  <kbd className="hidden md:inline">Ctrl K</kbd>
+                </button>
+
+                <nav className="primary-nav hidden md:flex items-center gap-6 text-sm">
+                  <a href="#spot" className="hover:text-neutral-600">QDESK Spot</a>
+                  <a href="#hub" className="hover:text-neutral-600">Hub</a>
+                  <a href="#about" className="hover:text-neutral-600">О проекте</a>
+                  <a href="cabinet.html" className="px-4 py-2 rounded-lg font-semibold text-sm" 
+                     style={{backgroundColor: BRAND.accent, color:"#fff"}}>
+                    Разместить объявление
+                  </a>
+                </nav>
+
+                <div className="md:hidden flex items-center gap-3">
+                  <a href="cabinet.html" className="px-3 py-2 rounded-lg font-semibold text-sm" 
+                     style={{backgroundColor: BRAND.accent, color:"#fff"}}>
+                    Разместить
+                  </a>
+                  <button 
+                    className="hamburger"
+                    onClick={() => setIsMobileMenuOpen(true)}
+                  >
+                    <Menu className="text-neutral-700" />
+                  </button>
+                </div>
+              </div>
+            </header>
+
+            <ChatModal isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
+            <MobileMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
+          </>
+        );
+      }
+
+      /* ==== ОБНОВЛЕННЫЙ ГЕРОЙ ==== */
+      function Hero() {
+        return (
+          <section className="max-w-6xl mx-auto px-4 pt-16 pb-12">
+            <div className="grid md:grid-cols-2 gap-10 items-center">
+              <div>
+                <span className="inline-flex items-center gap-2 text-sm px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 font-medium mb-4">
+                  Безопасные сделки · QDESK <span className="text-blue-900 font-bold">Spot</span>
+                </span>
+                
+                <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
+                  Объявления по-новому — без фильтров, через чат с ИИ
+                </h1>
+                
+                <p className="mt-4 text-lg text-neutral-600">
+                  Просто напиши, что ищешь. Мы подберём лучшее и поможем встретиться в QDESK Spot.
+                </p>
+                
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <button 
+                    onClick={() => document.querySelector('.search-btn')?.click()}
+                    className="px-5 py-3 rounded-lg font-semibold text-white"
+                    style={{backgroundColor: BRAND.accent}}
+                  >
+                    Начать поиск
+                  </button>
+                  <a href="#support" className="px-5 py-3 rounded-lg font-semibold border border-neutral-300 text-neutral-700 hover:bg-neutral-50">
+                    Поддержать проект
+                  </a>
+                </div>
+              </div>
+
+              <div className="chat-card">
+                <div className="chat-window">
+                  <div className="bubble user">Нужна детская кроватка до 8 000 ₽, в центре.</div>
+                  <div className="bubble ai">Нашли 3 варианта рядом с тобой. Предложить встречу в QDESK Spot у кофейни на Пушкина, 12?</div>
+                  <div className="bubble user">Да, и покажи с доставкой.</div>
+                </div>
+                <div className="input-row">
+                  <input type="text" placeholder="Напиши запрос…" />
+                  <button type="button" onClick={() => document.querySelector('.search-btn')?.click()}>
+                    Отправить
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+        );
+      }
+
+      /* ===== СЕКЦИЯ ПОДДЕРЖКИ ===== */
+      function SupportSection() {
+        return (
+          <section id="support" className="py-16 bg-white border-t border-neutral-200">
+            <div className="max-w-6xl mx-auto px-4">
+              <div className="support-card">
+                <h2 className="text-2xl font-bold mb-3">Поддержать проект</h2>
+                <p className="text-neutral-600 mb-6">
+                  QDESK строит альтернативную доску объявлений с акцентом на безопасность и чат‑поиск. 
+                  Ваш вклад помогает нам запустить QDESK Spot и инфраструктуру.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <button 
+                    onClick={() => alert('Демо: здесь будет окно оплаты / форма доната.')}
+                    className="px-5 py-3 rounded-lg font-semibold text-white"
+                    style={{backgroundColor: BRAND.accent}}
+                  >
+                    Внести вклад
+                  </button>
+                  <a href="#about" className="px-5 py-3 rounded-lg font-semibold border border-neutral-300 text-neutral-700 hover:bg-neutral-50">
+                    О проекте
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+        );
+      }
+
+      /* ==== HERO CAROUSEL (оригинальный) ==== */
       function HeroCarousel(){
         const slides = React.useMemo(() => ([
           { ...MOCK[0], img: "assets/iphone8-cover.jpg" },
@@ -90,12 +406,12 @@
                 </div>
               ))}
 
-              <button onClick={()=>go(-1)} aria-label="Предыдущий" className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/80 hover:bg-white border border-neutral-200 w-9 h-9 grid place-items-center">‹</button>
-              <button onClick={()=>go(1)} aria-label="Следующий" className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/80 hover:bg-white border border-neutral-200 w-9 h-9 grid place-items-center">›</button>
+              <button onClick={()=>go(-1)} className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/80 hover:bg-white border border-neutral-200 w-9 h-9 grid place-items-center">‹</button>
+              <button onClick={()=>go(1)} className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/80 hover:bg-white border border-neutral-200 w-9 h-9 grid place-items-center">›</button>
 
               <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-2">
                 {slides.map((_,k)=>(
-                  <button key={k} onClick={()=>setI(k)} aria-label={`Слайд ${k+1}`} className={`h-2 rounded-full transition-all ${k===i?'w-6 bg-neutral-900':'w-2 bg-neutral-300'}`} />
+                  <button key={k} onClick={()=>setI(k)} className={`h-2 rounded-full transition-all ${k===i?'w-6 bg-neutral-900':'w-2 bg-neutral-300'}`} />
                 ))}
               </div>
             </div>
@@ -104,119 +420,114 @@
       }
 
       /* ===== Поисковик ===== */
-function SearchInside() {
-  const [q, setQ] = React.useState("");
-  const [results, setResults] = React.useState(MOCK);
+      function SearchInside() {
+        const [q, setQ] = React.useState("");
+        const [results, setResults] = React.useState(MOCK);
 
-  // Карты обложек для карточек ниже
-  const COVERS = {
-    1: "assets/iphone8-cover.jpg",
-    2: "assets/stels-cover.jpg",
-    3: "assets/washmachine-cover.jpg",
-    4: "assets/macbook-cover.jpg",
-    5: "assets/stroller-cover.jpg",
-  };
-  const cover = (id) => (COVERS[id] ? COVERS[id] + "?v=1" : "");
+        const COVERS = {
+          1: "assets/iphone8-cover.jpg",
+          2: "assets/stels-cover.jpg", 
+          3: "assets/washmachine-cover.jpg",
+          4: "assets/macbook-cover.jpg",
+          5: "assets/stroller-cover.jpg",
+        };
+        const cover = (id) => (COVERS[id] ? COVERS[id] + "?v=1" : "");
 
-  const runSearch = (query) => {
-    const s = (query || q).toLowerCase();
-    if (!s) { setResults(MOCK); return; }
-    setResults(MOCK.filter(item =>
-      item.title.toLowerCase().includes(s) ||
-      item.area.toLowerCase().includes(s) ||
-      item.city.toLowerCase().includes(s) ||
-      item.price.toLowerCase().includes(s)
-    ));
-  };
+        const runSearch = (query) => {
+          const s = (query || q).toLowerCase();
+          if (!s) { setResults(MOCK); return; }
+          setResults(MOCK.filter(item =>
+            item.title.toLowerCase().includes(s) ||
+            item.area.toLowerCase().includes(s) ||
+            item.city.toLowerCase().includes(s) ||
+            item.price.toLowerCase().includes(s)
+          ));
+        };
 
-  const onSubmit = (e) => { e.preventDefault(); runSearch(q); };
+        const onSubmit = (e) => { e.preventDefault(); runSearch(q); };
 
-  const quick = ["айфон до 20к центр","ремонт стиралки сегодня","велосипед до 15к кузнецкий","ноутбук до 30к"];
+        const quick = ["айфон до 20к центр","ремонт стиралки сегодня","велосипед до 15к кузнецкий","ноутбук до 30к"];
 
-  return (
-    <section id="inside" className="py-16 bg-neutral-50">
-      <div className="max-w-6xl mx-auto px-4">
-        <h2 className="text-3xl font-bold mb-3">Что внутри QDESK</h2>
-        <p className="text-neutral-600 mb-8">
-          Никаких тысяч фильтров — просто спроси, как в чате. Мы покажем подходящее рядом.
-        </p>
+        return (
+          <section id="inside" className="py-16 bg-neutral-50">
+            <div className="max-w-6xl mx-auto px-4">
+              <h2 className="text-3xl font-bold mb-3">Что внутри QDESK</h2>
+              <p className="text-neutral-600 mb-8">
+                Никаких тысяч фильтров — просто спроси, как в чате. Мы покажем подходящее рядом.
+              </p>
 
-        {/* Поисковая строка */}
-        <form onSubmit={onSubmit} className="mb-3">
-          <div className="mx-auto rounded-2xl border border-neutral-200 bg-white shadow-sm hover:shadow transition focus-within:shadow-md">
-            <div className="flex items-center gap-3 px-4 py-3">
-              <div className="w-5 h-5 grid place-items-center text-neutral-400">⌕</div>
-              <input
-                value={q}
-                onChange={(e)=>setQ(e.target.value)}
-                placeholder='Например: "айфон до 20к в центре" или "мастер по стиралке сегодня"'
-                className="flex-1 outline-none text-[15px] placeholder:text-neutral-400"
-              />
-              <button
-                type="submit"
-                className="px-3 py-1.5 rounded-lg font-semibold text-white"
-                style={{backgroundColor: BRAND.accent}}
-                aria-label="Найти"
-              >Найти</button>
-            </div>
-          </div>
-        </form>
+              <form onSubmit={onSubmit} className="mb-3">
+                <div className="mx-auto rounded-2xl border border-neutral-200 bg-white shadow-sm hover:shadow transition focus-within:shadow-md">
+                  <div className="flex items-center gap-3 px-4 py-3">
+                    <div className="w-5 h-5 grid place-items-center text-neutral-400">⌕</div>
+                    <input
+                      value={q}
+                      onChange={(e)=>setQ(e.target.value)}
+                      placeholder='Например: "айфон до 20к в центре" или "мастер по стиралке сегодня"'
+                      className="flex-1 outline-none text-[15px] placeholder:text-neutral-400"
+                    />
+                    <button
+                      type="submit"
+                      className="px-3 py-1.5 rounded-lg font-semibold text-white"
+                      style={{backgroundColor: BRAND.accent}}
+                    >Найти</button>
+                  </div>
+                </div>
+              </form>
 
-        {/* Быстрые запросы */}
-        <div className="flex flex-wrap gap-2 mb-8">
-          {quick.map((t,i)=>(
-            <button
-              key={i}
-              onClick={()=>{ setQ(t); runSearch(t); }}
-              className="text-sm px-3 py-1.5 rounded-full border border-neutral-200 bg-white hover:bg-neutral-100"
-            >{t}</button>
-          ))}
-        </div>
-
-        {/* Сетка с реальными фото обложек (дубликат наших слайдов) */}
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {results.map(item=>(
-            <a
-              key={item.id}
-              href={`#l-${item.id}`}
-              className="rounded-xl border border-neutral-200 bg-white shadow-sm hover:shadow transition overflow-hidden"
-            >
-              <div className="aspect-[4/3] bg-neutral-100">
-                <img
-                  src={cover(item.id)}
-                  alt={item.title}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
+              <div className="flex flex-wrap gap-2 mb-8">
+                {quick.map((t,i)=>(
+                  <button
+                    key={i}
+                    onClick={()=>{ setQ(t); runSearch(t); }}
+                    className="text-sm px-3 py-1.5 rounded-full border border-neutral-200 bg-white hover:bg-neutral-100"
+                  >{t}</button>
+                ))}
               </div>
-              <div className="p-4">
-                <h3 className="font-semibold line-clamp-2">{item.title}</h3>
-                <p className="text-sm text-neutral-600">
-                  {item.price} • {item.city}, {item.area}
-                </p>
-              </div>
-            </a>
-          ))}
-          {results.length === 0 && (
-            <div className="col-span-full text-neutral-500">
-              Ничего не нашли. Попробуйте изменить запрос.
-            </div>
-          )}
-        </div>
 
-        <div className="mt-10 text-center">
-          <a
-            href="#add-ad"
-            className="px-6 py-3 rounded-lg font-semibold text-white"
-            style={{backgroundColor: BRAND.accent}}
-          >
-            Мне нужно →
-          </a>
-        </div>
-      </div>
-    </section>
-  );
-}
+              <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+                {results.map(item=>(
+                  <a
+                    key={item.id}
+                    href={`#l-${item.id}`}
+                    className="rounded-xl border border-neutral-200 bg-white shadow-sm hover:shadow transition overflow-hidden"
+                  >
+                    <div className="aspect-[4/3] bg-neutral-100">
+                      <img
+                        src={cover(item.id)}
+                        alt={item.title}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div className="p-4">
+                      <h3 className="font-semibold line-clamp-2">{item.title}</h3>
+                      <p className="text-sm text-neutral-600">
+                        {item.price} • {item.city}, {item.area}
+                      </p>
+                    </div>
+                  </a>
+                ))}
+                {results.length === 0 && (
+                  <div className="col-span-full text-neutral-500">
+                    Ничего не нашли. Попробуйте изменить запрос.
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-10 text-center">
+                <a
+                  href="#add-ad"
+                  className="px-6 py-3 rounded-lg font-semibold text-white"
+                  style={{backgroundColor: BRAND.accent}}
+                >
+                  Мне нужно →
+                </a>
+              </div>
+            </div>
+          </section>
+        );
+      }
 
       /* ===== ЭЛЕМЕНТЫ ДОВЕРИЯ — DARK ===== */
       function TrustBadges(){
@@ -228,14 +539,14 @@ function SearchInside() {
         return (
           <section className="py-16 bg-neutral-900">
             <div className="max-w-6xl mx-auto px-4">
-              <h2 className="text-2xl md:text-3xl font-bold mb-2 text:white text-white">Элементы доверия</h2>
+              <h2 className="text-2xl md:text-3xl font-bold mb-2 text-white">Элементы доверия</h2>
               <p className="text-neutral-400 mb-8">Сделки на QDESK сопровождаются прозрачными метками и понятными правилами.</p>
               <div className="grid md:grid-cols-3 gap-6">
                 {badges.map(({title, desc, Icon}, i)=>(
                   <div key={i} className="group rounded-2xl border border-neutral-700 bg-neutral-800 p-5 shadow-sm hover:shadow-md transition relative overflow-hidden">
-                    <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full opacity-20 blur-2xl" style={{backgroundColor: BRAND.accent}} aria-hidden />
+                    <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full opacity-20 blur-2xl" style={{backgroundColor: BRAND.accent}} />
                     <div className="flex items-start gap-3">
-                      <div className="p-2 rounded-xl ring-1 ring-neutral-700 bg-neutral-900 group-hover:scale-110 transition" aria-hidden>
+                      <div className="p-2 rounded-xl ring-1 ring-neutral-700 bg-neutral-900 group-hover:scale-110 transition">
                         <Icon className="w-6 h-6" style={{color: BRAND.accent}} />
                       </div>
                       <div>
@@ -243,8 +554,8 @@ function SearchInside() {
                         <p className="text-sm text-neutral-400">{desc}</p>
                       </div>
                     </div>
-                    <div className="mt-4 inline-flex items: center items-center gap-1 text-[11px] px-2 py-1 rounded-full border border-neutral-700 text-neutral-400 bg-neutral-900 group-hover:-translate-y-0.5 transition">
-                      <span className="w-2 h-2 rounded-full" style={{backgroundColor: BRAND.accent}} aria-hidden />
+                    <div className="mt-4 inline-flex items-center gap-1 text-[11px] px-2 py-1 rounded-full border border-neutral-700 text-neutral-400 bg-neutral-900 group-hover:-translate-y-0.5 transition">
+                      <span className="w-2 h-2 rounded-full" style={{backgroundColor: BRAND.accent}} />
                       <span>Метка доверия</span>
                     </div>
                   </div>
@@ -254,65 +565,45 @@ function SearchInside() {
           </section>
         );
       }
-	  
 
-
-    /* ===== SAFE SPOT — DARK ===== */
-function SafeZonePreview(){
-  return (
-    <section id="safe-zone" className="py-16 bg-neutral-950">
-      <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
-        <div className="rounded-2xl border border-neutral-800 bg-neutral-900 shadow p-6">
-          <div className="aspect-[16/10] rounded-lg overflow-hidden">
-            <img 
-              src="assets/safe-spot.jpg" 
-              alt="QDESK Safe Spot" 
-              className="w-full h-full object-cover" 
-            />
-          </div>
-          <div className="mt-4 grid grid-cols-3 gap-3">
-            {[Pin, Camera, Lock].map((Icon,k)=>(
-              <div key={k} className="rounded-lg border border-neutral-800 bg-neutral-900 py-4 grid place-items-center">
-                <Icon className="w-7 h-7" style={{color: BRAND.accent}} aria-hidden />
-              </div>
-            ))}
-          </div>
-        </div>
-        <div>
-          <h2 className="text-3xl font-bold mb-3 text-white">QDESK Safe Spot</h2>
-          <p className="text-neutral-400 mb-5">Нейтральные точки встречи с камерой наблюдения и верификацией выдачи. Выберите удобную локацию, подтвердите сделку QR-кодом — и всё.</p>
-          <ul className="space-y-3 text-neutral-300">
-            <li className="flex items-start gap-3"><Pin className="w-5 h-5 mt-1" style={{color: BRAND.accent}} aria-hidden /><span><b>Нейтральная территория:</b> кафе, коворкинги и партнёрские точки.</span></li>
-            <li className="flex items-start gap-3"><Camera className="w-5 h-5 mt-1" style={{color: BRAND.accent}} aria-hidden /><span><b>Камера и журнал визитов:</b> повышают доверие обеих сторон.</span></li>
-            <li className="flex items-start gap-3"><Lock className="w-5 h-5 mt-1" style={{color: BRAND.accent}} aria-hidden /><span><b>QR/Пин-код подтверждения:</b> выдача товара фиксируется.</span></li>
-            <li className="flex items-start gap-3"><Card className="w-5 h-5 mt-1" style={{color: BRAND.accent}} aria-hidden /><span><b>Оплата «на месте»:</b> безопасная оплата через QDESK (опционально).</span></li>
-          </ul>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <a href="#choose-safe-zone" className="px-5 py-3 rounded-lg font-semibold text-white" style={{backgroundColor: BRAND.accent}}>Выбрать QDESK Safe Spot</a>
-            <a href="#how-it-works" className="px-5 py-3 rounded-lg font-semibold border border-neutral-700 text-neutral-300 hover:bg-neutral-900">Как это работает</a>
-          </div>
-          <div className="mt-4 inline-flex items-center gap-2 text-xs text-neutral-500"><span className="px-2 py-1 rounded bg-neutral-900 border border-neutral-800">BETA</span><span>Запуск в пилоте — подключаем партнёрские точки</span></div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-      /* ===== HEADER ===== */
-      function Header(){
+      /* ===== SAFE SPOT — DARK ===== */
+      function SafeZonePreview(){
         return (
-          <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-neutral-200">
-            <nav className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg grid place-items-center font-bold text-sm" style={{backgroundColor: BRAND.accent, color:"#fff"}}>QD</div>
-                <span className="font-bold tracking-tight">{BRAND.name}</span>
+          <section id="safe-zone" className="py-16 bg-neutral-950">
+            <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
+              <div className="rounded-2xl border border-neutral-800 bg-neutral-900 shadow p-6">
+                <div className="aspect-[16/10] rounded-lg overflow-hidden">
+                  <img 
+                    src="assets/safe-spot.jpg" 
+                    alt="QDESK Safe Spot" 
+                    className="w-full h-full object-cover" 
+                  />
+                </div>
+                <div className="mt-4 grid grid-cols-3 gap-3">
+                  {[Pin, Camera, Lock].map((Icon,k)=>(
+                    <div key={k} className="rounded-lg border border-neutral-800 bg-neutral-900 py-4 grid place-items-center">
+                      <Icon className="w-7 h-7" style={{color: BRAND.accent}} />
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="hidden md:flex items-center gap-6 text-sm">
-                {["Товары","Услуги","Недвижимость","Работа"].map(i => <a key={i} href="#" className="hover:text-neutral-600">{i}</a>)}
+              <div>
+                <h2 className="text-3xl font-bold mb-3 text-white">QDESK Safe Spot</h2>
+                <p className="text-neutral-400 mb-5">Нейтральные точки встречи с камерой наблюдения и верификацией выдачи. Выберите удобную локацию, подтвердите сделку QR-кодом — и всё.</p>
+                <ul className="space-y-3 text-neutral-300">
+                  <li className="flex items-start gap-3"><Pin className="w-5 h-5 mt-1" style={{color: BRAND.accent}} /><span><b>Нейтральная территория:</b> кафе, коворкинги и партнёрские точки.</span></li>
+                  <li className="flex items-start gap-3"><Camera className="w-5 h-5 mt-1" style={{color: BRAND.accent}} /><span><b>Камера и журнал визитов:</b> повышают доверие обеих сторон.</span></li>
+                  <li className="flex items-start gap-3"><Lock className="w-5 h-5 mt-1" style={{color: BRAND.accent}} /><span><b>QR/Пин-код подтверждения:</b> выдача товара фиксируется.</span></li>
+                  <li className="flex items-start gap-3"><Card className="w-5 h-5 mt-1" style={{color: BRAND.accent}} /><span><b>Оплата «на месте»:</b> безопасная оплата через QDESK (опционально).</span></li>
+                </ul>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <a href="#choose-safe-zone" className="px-5 py-3 rounded-lg font-semibold text-white" style={{backgroundColor: BRAND.accent}}>Выбрать QDESK Safe Spot</a>
+                  <a href="#how-it-works" className="px-5 py-3 rounded-lg font-semibold border border-neutral-700 text-neutral-300 hover:bg-neutral-900">Как это работает</a>
+                </div>
+                <div className="mt-4 inline-flex items-center gap-2 text-xs text-neutral-500"><span className="px-2 py-1 rounded bg-neutral-900 border border-neutral-800">BETA</span><span>Запуск в пилоте — подключаем партнёрские точки</span></div>
               </div>
-              <a href="cabinet.html" className="px-4 py-2 rounded-lg font-semibold text-sm" style={{backgroundColor: BRAND.accent, color:"#fff"}}>Разместить объявление</a>
-            </nav>
-          </header>
+            </div>
+          </section>
         );
       }
 
@@ -320,34 +611,13 @@ function SafeZonePreview(){
         return (
           <div className="min-h-screen w-full bg-white text-neutral-900">
             <Header />
-
-            {/* Hero */}
-            <section className="max-w-6xl mx-auto px-4 pt-16 pb-12">
-              <div className="grid md:grid-cols-2 gap-10 items-center">
-                <div>
-                  <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">{BRAND.tagline}</h1>
-                  <p className="mt-4 text-lg text-neutral-600">{BRAND.sub}</p>
-                  <div className="mt-6 flex flex-wrap gap-3">
-                    <a href="#poster" className="px-5 py-3 rounded-lg font-semibold" style={{backgroundColor: BRAND.accent, color:"#fff"}}>Посмотреть пример</a>
-                    <a href="#inside" className="px-5 py-3 rounded-lg font-semibold border border-neutral-300 text-neutral-700 hover:bg-neutral-50">Что внутри</a>
-                  </div>
-                </div>
-
-                {/* Карусель превью объявлений */}
-                <HeroCarousel />
-              </div>
-            </section>
-
-            {/* ЭЛЕМЕНТЫ ДОВЕРИЯ — DARK */}
+            <Hero />
+            <PartnersMarquee />
             <TrustBadges />
-
-            {/* SAFE ZONE — DARK */}
             <SafeZonePreview />
-
-            {/* Поисковик */}
             <SearchInside />
-
-            {/* Футер — DARK */}
+            <SupportSection />
+            
             <footer className="py-12 border-t border-neutral-800 bg-neutral-900">
               <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-3 gap-8 text-sm">
                 <div>
