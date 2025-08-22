@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QDESK — Партнёрам</title>
+  <meta name="description" content="Партнёрам QDESK: как стать локацией SPOT, логистическим, финтех- или медиа‑партнёром. Форматы сотрудничества, требования, модели дохода и быстрый старт."/>
+  <style>
+    :root{
+      --bg:#0b0b0b;
+      --card:#121212;
+      --muted:#9ca3af;
+      --text:#f5f5f5;
+      --accent:#ffffff;
+      --line:#1f2937;
+      --brand:#ffffff;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;}
+    a{color:var(--text);text-decoration:none}
+    a:hover{opacity:.9}
+    .container{max-width:1080px;margin:0 auto;padding:0 20px}
+    .header{position:sticky;top:0;background:rgba(11,11,11,.8);backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--line);z-index:30}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    .brand{display:flex;gap:10px;align-items:center}
+    .logo{width:26px;height:26px;border:1px solid var(--brand);border-radius:6px;display:grid;place-items:center;font-weight:700;letter-spacing:.5px}
+    .brand-name{font-weight:700;letter-spacing:.5px}
+    .menu{display:flex;gap:18px;align-items:center}
+    .menu a{color:var(--muted)}
+    .menu a.active{color:var(--text)}
+    .cta{display:flex;gap:10px;align-items:center}
+    .btn{padding:10px 14px;border:1px solid var(--line);border-radius:12px;}
+    .btn.primary{background:var(--accent);color:#000;font-weight:600;border-color:transparent}
+    .btn.ghost{color:var(--text)}
+
+    .hero{padding:64px 0 28px;border-bottom:1px dashed var(--line)}
+    .eyebrow{color:var(--muted);text-transform:uppercase;letter-spacing:.12em;font-size:12px}
+    h1{margin:10px 0 10px;font-size:44px;line-height:1.1;letter-spacing:-.02em}
+    .lead{max-width:820px;color:#d1d5db}
+
+    .grid{display:grid;gap:18px}
+    @media(min-width:800px){.grid.cols-3{grid-template-columns:repeat(3,1fr)} .grid.cols-2{grid-template-columns:repeat(2,1fr)} .grid.cols-4{grid-template-columns:repeat(4,1fr)}}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.0));border:1px solid var(--line);border-radius:18px;padding:20px}
+    .card h3{margin:0 0 6px;font-size:18px}
+    .card p{margin:0;color:#d1d5db}
+    .muted{color:var(--muted)}
+
+    .section{padding:36px 0;border-bottom:1px dashed var(--line)}
+    .section h2{font-size:28px;margin:0 0 10px}
+
+    .list{display:grid;gap:10px}
+    .list li{display:flex;gap:10px;align-items:flex-start}
+    .dot{width:8px;height:8px;border-radius:50%;background:#fff;margin-top:8px;flex:0 0 auto}
+
+    .steps{counter-reset:s}
+    .step{position:relative;padding-left:42px}
+    .step:before{counter-increment:s;content:counter(s);position:absolute;left:0;top:0;width:28px;height:28px;border-radius:10px;border:1px solid var(--line);display:grid;place-items:center;font-weight:700}
+
+    .kpi{display:flex;gap:20px;flex-wrap:wrap}
+    .kpi .n{font-weight:800;font-size:28px}
+
+    footer{padding:26px 0}
+    .foot-grid{display:grid;gap:18px}
+    @media(min-width:800px){.foot-grid{grid-template-columns:2fr 1fr 1fr 1fr}}
+    .foot-title{font-weight:700;margin-bottom:8px}
+    .copy{border-top:1px solid var(--line);margin-top:16px;padding-top:12px;color:var(--muted);font-size:14px}
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container nav">
+      <a class="brand" href="index.html" aria-label="На главную">
+        <span class="logo">Q</span>
+        <span class="brand-name">QDESK</span>
+      </a>
+      <nav class="menu" aria-label="Главное меню">
+        <a href="about.html">О нас</a>
+        <a href="inside.html">Что внутри</a>
+        <a href="spots.html" title="QDESK Spot — безопасные точки">SPOT</a>
+        <a href="partners.html" class="active">Партнёрам</a>
+        <a href="support.html">Поддержать</a>
+      </nav>
+      <div class="cta">
+        <a class="btn ghost" href="mailto:partners@qdesk.app">Связаться</a>
+        <a class="btn primary" href="#apply">Стать партнёром</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <div class="eyebrow">Партнёрства</div>
+      <h1>Подключайтесь к QDESK: локации SPOT, логистика, финтех, бренды</h1>
+      <p class="lead">Мы соединяем онлайн‑поиск с офлайн‑сделками. Партнёры помогают сделать обмены безопасными, быстрыми и удобными. Ниже — форматы сотрудничества, требования и как запуститься за 7 дней.</p>
+    </section>
+
+    <section class="section container">
+      <h2>Форматы сотрудничества</h2>
+      <div class="grid cols-3">
+        <div class="card">
+          <h3>SPOT‑локации</h3>
+          <p>Коворкинги, кафе, пункты выдачи. Даёте нейтральное место, камеры и минимальную стойку — мы приводим поток сделок.</p>
+        </div>
+        <div class="card">
+          <h3>Логистика</h3>
+          <p>Курьерские компании и частные перевозчики: последняя миля, хранение 24–48 ч., забор/доставка между SPOT.</p>
+        </div>
+        <div class="card">
+          <h3>Финтех</h3>
+          <p>Эквайринг, QR‑оплата, эскроу/холд средств, чеки и возвраты. Ищем PSP и банки для пилота.</p>
+        </div>
+        <div class="card">
+          <h3>Безопасность</h3>
+          <p>Охрана, видеонаблюдение, аналитика. Интеграция с VMS и хранение фрагментов передачи.</p>
+        </div>
+        <div class="card">
+          <h3>Бренды и медиа</h3>
+          <p>Кобрендинг SPOT, спонсорские зоны, оффлайн‑активации и тест‑драйвы продуктов.</p>
+        </div>
+        <div class="card">
+          <h3>Интеграции/API</h3>
+          <p>Синхронизация статусов, webhooks, отчётность. Готовим публичный API для партнёров.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container">
+      <h2>Как это работает для SPOT‑локации</h2>
+      <div class="grid cols-2">
+        <div class="card steps">
+          <div class="step">
+            <h3>Отклик на заявку</h3>
+            <p>Вы оставляете контакты, получаете чек‑лист требований и договор оферты.</p>
+          </div>
+          <div class="step">
+            <h3>Подготовка точки</h3>
+            <p>Камера/угол обзора, стойка/зона выдачи, табличка QDESK SPOT, QR для подтверждения.</p>
+          </div>
+          <div class="step">
+            <h3>Старт пилота</h3>
+            <p>Подключаем в карту SPOT, обучаем персонал (15–30 мин), запускаем сделки.</p>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Что получаете</h3>
+          <ul class="list">
+            <li><span class="dot"></span><span>Доп. поток людей и продаж в локации.</span></li>
+            <li><span class="dot"></span><span>Долю с каждой успешной сделки (rev‑share).</span></li>
+            <li><span class="dot"></span><span>Кобрендинг и присутствие в карте SPOT.</span></li>
+            <li><span class="dot"></span><span>Минимальные требования к инфраструктуре.</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container">
+      <h2>Модели дохода</h2>
+      <div class="grid cols-3">
+        <div class="card"><h3>Rev‑share</h3><p>Фиксированный % от сервисной комиссии за сделки, прошедшие через вашу точку.</p></div>
+        <div class="card"><h3>Плата за хранение</h3><p>Опционально: фикс за 24–48 часов хранения, прозрачная тарификация в приложении.</p></div>
+        <div class="card"><h3>Спонсорство SPOT</h3><p>Брендирование точки, мерч, промо‑активации, интеграции в контент.</p></div>
+      </div>
+    </section>
+
+    <section class="section container">
+      <h2>Требования к SPOT</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>Минимум инфраструктуры</h3>
+          <ul class="list">
+            <li><span class="dot"></span><span>Камера с обзором зоны передачи (хранение записей 7–30 дней).</span></li>
+            <li><span class="dot"></span><span>Место 2–4 м² для стойки/полки, доступ в рабочие часы.</span></li>
+            <li><span class="dot"></span><span>Табличка и QR‑код QDESK SPOT (даем готовый комплект).</span></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Операционные правила</h3>
+          <ul class="list">
+            <li><span class="dot"></span><span>Подтверждение выдачи по QR/пин‑коду в приложении.</span></li>
+            <li><span class="dot"></span><span>Соблюдение SLA: время ожидания до 5 минут.</span></li>
+            <li><span class="dot"></span><span>Базовый инструктаж персонала (15–30 минут).</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container">
+      <h2>Интеграции и отчётность</h2>
+      <div class="grid cols-3">
+        <div class="card"><h3>Webhooks</h3><p>События: бронирование, прибытие, выдача, спор, возврат.</p></div>
+        <div class="card"><h3>API</h3><p>Статусы, слоты хранения, смены, выгрузка транзакций.</p></div>
+        <div class="card"><h3>Дашборд</h3><p>Онлайн‑отчёты по сделкам, SLA, доходу партнёра.</p></div>
+      </div>
+    </section>
+
+    <section class="section container">
+      <h2>Кейс‑пилот (пример)</h2>
+      <div class="grid cols-2">
+        <div class="card"><h3>Локация</h3><p>Коворкинг в центре города, 9:00–21:00, 2 камеры, 1 стойка. Поток: +320 посещений/мес.</p></div>
+        <div class="card"><h3>Результат за 30 дней</h3><p>112 сделок через SPOT, средняя комиссия X, доход партнёра Y. NPS посетителей 9.1/10.</p></div>
+      </div>
+      <p class="muted">*Цифры ориентировочные, для презентации формата.</p>
+    </section>
+
+    <section class="section container" id="apply">
+      <h2>Как начать</h2>
+      <div class="grid cols-2">
+        <div class="card steps">
+          <div class="step">
+            <h3>Оставьте заявку</h3>
+            <p>Укажите тип партнёрства и город. Мы пришлём чек‑лист и оферту.</p>
+          </div>
+          <div class="step">
+            <h3>Подготовьте точку/интеграцию</h3>
+            <p>Высылаем бренд‑пак и скрипт‑инструкции. Помогаем настроить.</p>
+          </div>
+          <div class="step">
+            <h3>Запуск пилота</h3>
+            <p>Подключаем к карте SPOT и дашборду. Первые сделки — в течение недели.</p>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Контакты</h3>
+          <ul class="list">
+            <li><span class="dot"></span><span>Email: <a href="mailto:partners@qdesk.app">partners@qdesk.app</a></span></li>
+            <li><span class="dot"></span><span>Телеграм: @QDESK_partners</span></li>
+            <li><span class="dot"></span><span>Форма: <a href="#">Заявка на партнёрство</a> (короткая анкета)</span></li>
+          </ul>
+          <div class="kpi" style="margin-top:10px">
+            <div><div class="n">7 дней</div><div class="muted">от заявки до пилота</div></div>
+            <div><div class="n">24/7</div><div class="muted">доступ к дашборду</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container">
+      <h2>FAQ</h2>
+      <div class="grid cols-2">
+        <div class="card"><h3>Кто несёт ответственность?</h3><p>Оплата идёт через QDESK/партнёрский PSP с холдом. Выдача подтверждается QR/пином. Локация фиксирует факт передачи.</p></div>
+        <div class="card"><h3>Что с крупногабаритом?</h3><p>Для габаритных позиций — только подтверждение на SPOT, хранение по согласованию с логистическим партнёром.</p></div>
+        <div class="card"><h3>Как считаем доход партнёра?</h3><p>Процент от нашей комиссии; отчёт и выплата раз в неделю.</p></div>
+        <div class="card"><h3>Можно ли брендировать точку?</h3><p>Да, у нас есть готовый мерч‑пак: стойка, таблички, наклейки, QR.</p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container foot-grid">
+      <div>
+        <div class="brand" style="margin-bottom:8px">
+          <span class="logo">Q</span>
+          <span class="brand-name">QDESK</span>
+        </div>
+        <p class="muted">Альтернативная доска объявлений с диалоговым поиском и безопасными точками встреч (SPOT).</p>
+      </div>
+      <div>
+        <div class="foot-title">Навигация</div>
+        <div class="list">
+          <a href="about.html">О нас</a>
+          <a href="inside.html">Что внутри</a>
+          <a href="spots.html">SPOT</a>
+          <a href="partners.html">Партнёрам</a>
+          <a href="support.html">Поддержать</a>
+        </div>
+      </div>
+      <div>
+        <div class="foot-title">Контакты</div>
+        <div class="list">
+          <a href="mailto:partners@qdesk.app">partners@qdesk.app</a>
+          <span class="muted">VK · Telegram · YouTube</span>
+        </div>
+      </div>
+      <div>
+        <div class="foot-title">Доки</div>
+        <div class="list">
+          <a href="privacy.html">Политика конфиденциальности</a>
+          <a href="terms.html">Пользовательское соглашение</a>
+        </div>
+      </div>
+    </div>
+    <div class="container copy">© <span id="y"></span> QDESK. Все права защищены.</div>
+  </footer>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

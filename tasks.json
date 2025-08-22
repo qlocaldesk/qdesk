@@ -1,0 +1,64 @@
+{
+  "name": "QDESK — запуск 25 августа",
+  "desc": "",
+  "closed": false,
+  "idOrganization": null,
+  "pinned": false,
+  "powerUps": [],
+  "dateLastActivity": "2025-08-21T18:00:00.000Z",
+  "prefs": {
+    "permissionLevel": "private",
+    "voting": "disabled",
+    "comments": "members",
+    "invitations": "members",
+    "selfJoin": true,
+    "cardCovers": true,
+    "isTemplate": false,
+    "hideVotes": false,
+    "background": "blue",
+    "backgroundBrightness": "dark",
+    "backgroundBottomColor": "#0079BF",
+    "backgroundTopColor": "#0079BF",
+    "canBePublic": true,
+    "canBeEnterprise": true,
+    "canBeOrg": true,
+    "canBePrivate": true
+  },
+  "labelNames": {
+    "green": "Готово",
+    "yellow": "В работе",
+    "orange": "Важно",
+    "red": "Баг",
+    "purple": "",
+    "blue": ""
+  },
+  "lists": [
+    {
+      "id": "list_to_do",
+      "name": "To Do",
+      "closed": false,
+      "pos": 16384,
+      "subscribed": false
+    }
+  ],
+  "cards": [
+    { "id": "c1",  "name": "Главная страница",         "desc": "Сделать hero-блок, меню и кнопку «Поддержать проект».",                               "closed": false, "idList": "list_to_do", "pos": 16384, "idMembers": [], "idLabels": [], "due": null, "dueComplete": false, "subscribed": false },
+    { "id": "c2",  "name": "Кабинет объявлений",       "desc": "Проверить, что форма/кабинет для размещения объявлений работает корректно.",       "closed": false, "idList": "list_to_do", "pos": 32768, "idMembers": [], "idLabels": [], "due": null, "dueComplete": false, "subscribed": false },
+    { "id": "c3",  "name": "Яндекс.Метрика",           "desc": "Подключить счётчик, добавить цели.",                                                "closed": false, "idList": "list_to_do", "pos": 49152, "idMembers": [], "idLabels": [], "due": null, "dueComplete": false, "subscribed": false },
+    { "id": "c4",  "name": "Тексты",                   "desc": "Согласовать тексты в hero-блоке и меню.",                                           "closed": false, "idList": "list_to_do", "pos": 65536, "idMembers": [], "idLabels": [], "due": null, "dueComplete": false, "subscribed": false },
+    { "id": "c5",  "name": "Бегущая строка с партнёрами", "desc": "Добавить логотипы партнёров (Яндекс Доставка, Сбер, Достависта и др.).",      "closed": false, "idList": "list_to_do", "pos": 81920, "idMembers": [], "idLabels": [], "due": null, "dueComplete": false, "subscribed": false },
+    { "id": "c6",  "name": "Логотип и favicon",        "desc": "Подключить favicon и лого.",                                                         "closed": false, "idList": "list_to_do", "pos": 98304, "idMembers": [], "idLabels": [], "due": null, "dueComplete": false, "subscribed": false },
+    { "id": "c7",  "name": "Адаптив",                  "desc": "Проверить отображение сайта на мобильных устройствах.",                             "closed": false, "idList": "list_to_do", "pos": 114688, "idMembers": [], "idLabels": [], "due": null, "dueComplete": false, "subscribed": false },
+    { "id": "c8",  "name": "Проверка ссылок",          "desc": "Проверить все ссылки (например, «Разместить» → cabinet.html).",                     "closed": false, "idList": "list_to_do", "pos": 131072, "idMembers": [], "idLabels": [], "due": null, "dueComplete": false, "subscribed": false },
+    { "id": "c9",  "name": "SSL",                      "desc": "Установить SSL-сертификат (https).",                                                 "closed": false, "idList": "list_to_do", "pos": 147456, "idMembers": [], "idLabels": [], "due": null, "dueComplete": false, "subscribed": false },
+    { "id": "c10", "name": "QR-коды",                  "desc": "Сделать QR с UTM-метками для листовок.",                                             "closed": false, "idList": "list_to_do", "pos": 163840, "idMembers": [], "idLabels": [], "due": null, "dueComplete": false, "subscribed": false },
+    { "id": "c11", "name": "Цели Метрики",             "desc": "Настроить цели (клики, регистрации, размещения).",                                   "closed": false, "idList": "list_to_do", "pos": 180224, "idMembers": [], "idLabels": [], "due": null, "dueComplete": false, "subscribed": false },
+    { "id": "c12", "name": "Тестовый трафик",          "desc": "Прогнать трафик 24 августа для проверки.",                                           "closed": false, "idList": "list_to_do", "pos": 196608, "idMembers": [], "idLabels": [], "due": null, "dueComplete": false, "subscribed": false },
+    { "id": "c13", "name": "Анонс в соцсетях",         "desc": "Подготовить и опубликовать анонс запуска.",                                          "closed": false, "idList": "list_to_do", "pos": 212992, "idMembers": [], "idLabels": [], "due": null, "dueComplete": false, "subscribed": false },
+    { "id": "c14", "name": "Листовки/партнёрка",       "desc": "Запустить первые листовки и партнёрскую рассылку.",                                  "closed": false, "idList": "list_to_do", "pos": 229376, "idMembers": [], "idLabels": [], "due": null, "dueComplete": false, "subscribed": false },
+    { "id": "c15", "name": "Проверка стабильности",    "desc": "Проверить стабильность сайта после первых визитов.",                                  "closed": false, "idList": "list_to_do", "pos": 245760, "idMembers": [], "idLabels": [], "due": null, "dueComplete": false, "subscribed": false }
+  ],
+  "checklists": [],
+  "members": [],
+  "customFields": []
+}

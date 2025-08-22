@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QDESK — Контакты</title>
+  <meta name="description" content="Контакты QDESK: поддержка пользователей, партнёрства, реклама/СМИ, приватность (DPO), адрес и реквизиты. Форма обратной связи и карта."/>
+  <style>
+    :root{
+      --bg:#0b0b0b; --card:#121212; --muted:#9ca3af; --text:#f5f5f5;
+      --accent:#ffffff; --line:#1f2937; --brand:#ffffff;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    a{color:var(--text);text-decoration:none}
+    a:hover{opacity:.9}
+    .container{max-width:1080px;margin:0 auto;padding:0 20px}
+    .header{position:sticky;top:0;background:rgba(11,11,11,.8);backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--line);z-index:30}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    .brand{display:flex;gap:10px;align-items:center}
+    .logo{width:26px;height:26px;border:1px solid var(--brand);border-radius:6px;display:grid;place-items:center;font-weight:700;letter-spacing:.5px}
+    .brand-name{font-weight:700;letter-spacing:.5px}
+    .menu{display:flex;gap:18px;align-items:center}
+    .menu a{color:var(--muted)}
+    .menu a.active{color:var(--text)}
+    .cta{display:flex;gap:10px;align-items:center}
+    .btn{padding:10px 14px;border:1px solid var(--line);border-radius:12px;cursor:pointer}
+    .btn.primary{background:var(--accent);color:#000;font-weight:600;border-color:transparent}
+    .btn.ghost{color:var(--text)}
+
+    .hero{padding:64px 0 28px;border-bottom:1px dashed var(--line)}
+    .eyebrow{color:var(--muted);text-transform:uppercase;letter-spacing:.12em;font-size:12px}
+    h1{margin:10px 0 10px;font-size:44px;line-height:1.1;letter-spacing:-.02em}
+    .lead{max-width:860px;color:#d1d5db}
+
+    .section{padding:36px 0;border-bottom:1px dashed var(--line)}
+    .section h2{font-size:28px;margin:0 0 10px}
+    .muted{color:var(--muted)}
+
+    .grid{display:grid;gap:18px}
+    @media(min-width:800px){
+      .grid.cols-2{grid-template-columns:repeat(2,1fr)}
+      .grid.cols-3{grid-template-columns:repeat(3,1fr)}
+    }
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0));border:1px solid var(--line);border-radius:18px;padding:20px}
+    .card h3{margin:0 0 6px;font-size:18px}
+    .card p{margin:0;color:#d1d5db}
+
+    .list{display:grid;gap:10px}
+    .list li{display:flex;gap:10px;align-items:flex-start}
+    .dot{width:8px;height:8px;border-radius:50%;background:#fff;margin-top:8px;flex:0 0 auto}
+
+    .mini-map{height:280px;border:1px dashed var(--line);border-radius:16px;display:grid;place-items:center;color:#cfd3da}
+
+    .form{display:grid;gap:12px}
+    .form .row{display:grid;gap:12px}
+    @media(min-width:800px){.form .row{grid-template-columns:1fr 1fr}}
+    input,textarea,select{width:100%;background:#0f0f0f;border:1px solid var(--line);border-radius:12px;padding:12px;color:var(--text);font:inherit}
+    textarea{min-height:120px;resize:vertical}
+    label{font-size:14px;color:#d1d5db}
+
+    footer{padding:26px 0}
+    .foot-grid{display:grid;gap:18px}
+    @media(min-width:800px){.foot-grid{grid-template-columns:2fr 1fr 1fr 1fr}}
+    .foot-title{font-weight:700;margin-bottom:8px}
+    .copy{border-top:1px solid var(--line);margin-top:16px;padding-top:12px;color:#9aa3af;font-size:14px}
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container nav">
+      <a class="brand" href="index.html" aria-label="На главную">
+        <span class="logo">Q</span>
+        <span class="brand-name">QDESK</span>
+      </a>
+      <nav class="menu" aria-label="Главное меню">
+        <a href="about.html">О нас</a>
+        <a href="inside.html">Что внутри</a>
+        <a href="spots.html">SPOT</a>
+        <a href="partners.html">Партнёрам</a>
+        <a href="ads.html">Реклама</a>
+        <a href="faq.html">FAQ</a>
+        <a href="support.html">Поддержка</a>
+        <a href="contacts.html" class="active">Контакты</a>
+      </nav>
+      <div class="cta">
+        <a class="btn ghost" href="#form">Написать нам</a>
+        <a class="btn primary" href="cabinet.html">Разместить объявление</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero container">
+      <div class="eyebrow">Связь</div>
+      <h1>Контакты QDESK</h1>
+      <p class="lead">Ниже — все способы связаться с нами: поддержка пользователей, партнёрства, реклама/СМИ и вопросы по приватности. Есть адрес и реквизиты, мини-карта и форма обратной связи.</p>
+    </section>
+
+    <!-- WHO TO CONTACT -->
+    <section class="section container">
+      <h2>Куда писать</h2>
+      <div class="grid cols-3">
+        <div class="card">
+          <h3>Поддержка пользователей</h3>
+          <ul class="list">
+            <li><span class="dot"></span><span>Email: <a href="mailto:hello@qdesk.app">hello@qdesk.app</a></span></li>
+            <li><span class="dot"></span><span>Telegram: <span class="muted">@QDESK_support</span></span></li>
+            <li><span class="dot"></span><span>Время ответа: 2–8 часов в рабочие дни</span></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Партнёрства</h3>
+          <ul class="list">
+            <li><span class="dot"></span><span>Email: <a href="mailto:partners@qdesk.app">partners@qdesk.app</a></span></li>
+            <li><span class="dot"></span><span>SPOT-локации, логистика, финтех, интеграции</span></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Реклама и СМИ</h3>
+          <ul class="list">
+            <li><span class="dot"></span><span>Email: <a href="mailto:ads@qdesk.app">ads@qdesk.app</a></span></li>
+            <li><span class="dot"></span><span>Медиакит — по запросу</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ADDRESS + HOURS + DPO -->
+    <section class="section container">
+      <h2>Адрес, часы и приватность</h2>
+      <div class="grid cols-3">
+        <div class="card">
+          <h3>Юридический адрес</h3>
+          <p>ООО «Локальная марка»<br>Город, улица, дом — подставить<br><span class="muted">Почтовый индекс, страна</span></p>
+        </div>
+        <div class="card">
+          <h3>Часы работы</h3>
+          <p>Пн–Пт: 10:00–19:00<br>Сб–Вс: выходной<br><span class="muted">Часовой пояс: местный</span></p>
+        </div>
+        <div class="card">
+          <h3>Приватность (DPO)</h3>
+          <p>Вопросы по данным: <a href="mailto:privacy@qdesk.app">privacy@qdesk.app</a><br>Политика: <a href="privacy.html">privacy.html</a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- REQUISITES + MAP -->
+    <section class="section container">
+      <h2>Реквизиты и карта</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>Реквизиты компании</h3>
+          <ul class="list">
+            <li><span class="dot"></span><span>ООО «Локальная марка»</span></li>
+            <li><span class="dot"></span><span>ИНН: __________</span></li>
+            <li><span class="dot"></span><span>ОГРН: __________</span></li>
+            <li><span class="dot"></span><span>Банк: __________</span></li>
+            <li><span class="dot"></span><span>Р/с: __________, БИК: __________</span></li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="mini-map" aria-label="Карта офиса (заглушка)">Карта офиса / SPOT рядом (заглушка)</div>
+          <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
+            <a class="btn" href="#" aria-label="Открыть маршрут в картах">Открыть в картах</a>
+            <a class="btn ghost" href="spots.html">Карта SPOT</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT FORM -->
+    <section class="section container" id="form">
+      <h2>Написать нам</h2>
+      <form class="card form" onsubmit="event.preventDefault(); alert('Спасибо! Ваше сообщение отправлено.');">
+        <div class="row">
+          <div>
+            <label for="name">Имя</label>
+            <input id="name" type="text" placeholder="Как к вам обращаться" required>
+          </div>
+          <div>
+            <label for="email">Email</label>
+            <input id="email" type="email" placeholder="you@example.com" required>
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label for="topic">Тема</label>
+            <select id="topic" required>
+              <option value="">Выберите тему</option>
+              <option>Поддержка</option>
+              <option>Партнёрство</option>
+              <option>Реклама/СМИ</option>
+              <option>Приватность</option>
+              <option>Другое</option>
+            </select>
+          </div>
+          <div>
+            <label for="order">ID объявления/сделки (если есть)</label>
+            <input id="order" type="text" placeholder="Например, QD-12345">
+          </div>
+        </div>
+        <div>
+          <label for="msg">Сообщение</label>
+          <textarea id="msg" placeholder="Опишите вопрос максимально конкретно" required></textarea>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn primary" type="submit">Отправить</button>
+          <a class="btn ghost" href="mailto:hello@qdesk.app">Написать на email</a>
+        </div>
+        <p class="muted" style="margin-top:6px">Отправляя форму, вы соглашаетесь с <a href="terms.html">условиями сервиса</a> и <a href="privacy.html">политикой конфиденциальности</a>.</p>
+      </form>
+    </section>
+
+    <!-- SOCIAL -->
+    <section class="section container">
+      <h2>Соцсети и каналы</h2>
+      <div class="grid cols-3">
+        <div class="card"><h3>Новости</h3><p><a href="https://t.me/QDESK_news" target="_blank" rel="noreferrer">@QDESK_news</a></p></div>
+        <div class="card"><h3>Статусы</h3><p><span class="muted">@QDESK_status</span> (скоро)</p></div>
+        <div class="card"><h3>YouTube</h3><p><span class="muted">QDESK</span> (демо)</p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container foot-grid">
+      <div>
+        <div class="brand" style="margin-bottom:8px"><span class="logo">Q</span><span class="brand-name">QDESK</span></div>
+        <p class="muted">Альтернативная доска объявлений с диалоговым поиском и безопасными точками встреч (SPOT).</p>
+      </div>
+      <div>
+        <div class="foot-title">Навигация</div>
+        <div class="list">
+          <a href="about.html">О нас</a>
+          <a href="inside.html">Что внутри</a>
+          <a href="spots.html">SPOT</a>
+          <a href="partners.html">Партнёрам</a>
+          <a href="ads.html">Реклама</a>
+          <a href="faq.html">FAQ</a>
+          <a href="support.html">Поддержка</a>
+          <a href="contacts.html">Контакты</a>
+        </div>
+      </div>
+      <div>
+        <div class="foot-title">Доки</div>
+        <div class="list">
+          <a href="privacy.html">Политика конфиденциальности</a>
+          <a href="terms.html">Пользовательское соглашение</a>
+          <a href="cookies.html">Куки (Cookies)</a>
+        </div>
+      </div>
+      <div>
+        <div class="foot-title">Связь</div>
+        <div class="list">
+          <a href="mailto:hello@qdesk.app">hello@qdesk.app</a>
+          <a href="mailto:privacy@qdesk.app">privacy@qdesk.app</a>
+        </div>
+      </div>
+    </div>
+    <div class="container copy">© <span id="y"></span> QDESK. Все права защищены.</div>
+  </footer>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

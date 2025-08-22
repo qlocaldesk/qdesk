@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QDESK — FAQ</title>
+  <meta name="description" content="FAQ QDESK: ответы на частые вопросы про диалоговый поиск, размещение объявлений, оплату, безопасность и точки SPOT."/>
+  <style>
+    :root{
+      --bg:#0b0b0b;--card:#121212;--muted:#9ca3af;--text:#f5f5f5;--accent:#ffffff;--line:#1f2937;--brand:#ffffff;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif}
+    a{color:var(--text);text-decoration:none}
+    a:hover{opacity:.9}
+    .container{max-width:1080px;margin:0 auto;padding:0 20px}
+    .header{position:sticky;top:0;background:rgba(11,11,11,.8);backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--line);z-index:30}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    .brand{display:flex;gap:10px;align-items:center}
+    .logo{width:26px;height:26px;border:1px solid var(--brand);border-radius:6px;display:grid;place-items:center;font-weight:700;letter-spacing:.5px}
+    .brand-name{font-weight:700;letter-spacing:.5px}
+    .menu{display:flex;gap:18px;align-items:center}
+    .menu a{color:var(--muted)}
+    .menu a.active{color:var(--text)}
+    .cta{display:flex;gap:10px;align-items:center}
+    .btn{padding:10px 14px;border:1px solid var(--line);border-radius:12px}
+    .btn.primary{background:var(--accent);color:#000;font-weight:600;border-color:transparent}
+    .btn.ghost{color:var(--text)}
+
+    .hero{padding:64px 0 28px;border-bottom:1px dashed var(--line)}
+    .eyebrow{color:var(--muted);text-transform:uppercase;letter-spacing:.12em;font-size:12px}
+    h1{margin:10px 0 10px;font-size:44px;line-height:1.1;letter-spacing:-.02em}
+    .lead{max-width:820px;color:#d1d5db}
+
+    .section{padding:36px 0;border-bottom:1px dashed var(--line)}
+    .section h2{font-size:28px;margin:0 0 10px}
+
+    .grid{display:grid;gap:18px}
+    @media(min-width:800px){.grid.cols-3{grid-template-columns:repeat(3,1fr)} .grid.cols-2{grid-template-columns:repeat(2,1fr)}}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.0));border:1px solid var(--line);border-radius:18px;padding:20px}
+    .q{margin:0 0 6px;font-size:18px}
+    .a{margin:0;color:#d1d5db}
+    .list{display:grid;gap:10px}
+    .dot{width:8px;height:8px;border-radius:50%;background:#fff;margin-top:8px;flex:0 0 auto}
+
+    footer{padding:26px 0}
+    .foot-grid{display:grid;gap:18px}
+    @media(min-width:800px){.foot-grid{grid-template-columns:2fr 1fr 1fr 1fr}}
+    .foot-title{font-weight:700;margin-bottom:8px}
+    .copy{border-top:1px solid var(--line);margin-top:16px;padding-top:12px;color:var(--muted);font-size:14px}
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container nav">
+      <a class="brand" href="index.html" aria-label="На главную">
+        <span class="logo">Q</span>
+        <span class="brand-name">QDESK</span>
+      </a>
+      <nav class="menu" aria-label="Главное меню">
+        <a href="about.html">О нас</a>
+        <a href="inside.html">Что внутри</a>
+        <a href="spots.html">SPOT</a>
+        <a href="partners.html">Партнёрам</a>
+        <a href="ads.html">Реклама</a>
+        <a href="faq.html" class="active">FAQ</a>
+        <a href="support.html">Поддержать</a>
+      </nav>
+      <div class="cta">
+        <a class="btn ghost" href="#contact">Задать вопрос</a>
+        <a class="btn primary" href="cabinet.html">Разместить объявление</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <div class="eyebrow">Помощь</div>
+      <h1>FAQ — частые вопросы</h1>
+      <p class="lead">Собрали короткие ответы про диалоговый поиск, размещение, безопасность SPOT, оплату и модерацию. Если чего‑то не хватает — напишите нам, дополним.</p>
+    </section>
+
+    <section class="section container">
+      <h2>Поиск и рекомендации</h2>
+      <div class="grid cols-2">
+        <div class="card"><h3 class="q">Q: Как работает диалоговый поиск?</h3><p class="a">Вы пишете запрос обычным языком. ИИ понимает смысл, задаёт уточняющие вопросы и показывает подходящие объявления. Чем конкретнее ответите — тем точнее подбор.</p></div>
+        <div class="card"><h3 class="q">Q: Нужны ли фильтры?</h3><p class="a">Нет. Мы заменили фильтры на диалог. Но ключевые параметры (город, бюджет, состояние) можно назвать в тексте запроса.</p></div>
+        <div class="card"><h3 class="q">Q: Можно ли сохранить подборку?</h3><p class="a">Да, сохраните запрос и включите уведомления — новые подходящие объявления будут приходить автоматически.</p></div>
+        <div class="card"><h3 class="q">Q: Как даёте приоритет объявлениям?</h3><p class="a">Мы подсвечиваем релевантные и проверенные лоты. Рекламные помечаются маркером «Промо».</p></div>
+      </div>
+    </section>
+
+    <section class="section container">
+      <h2>SPOT — безопасные точки</h2>
+      <div class="grid cols-2">
+        <div class="card"><h3 class="q">Q: Что такое QDESK SPOT?</h3><p class="a">Это проверенные точки для передачи товара: нейтральная территория, камеры, QR/пин‑код подтверждения. Некоторые SPOT предлагают хранение 24–48 часов.</p></div>
+        <div class="card"><h3 class="q">Q: Как выбрать SPOT?</h3><p class="a">При бронировании сделки мы показываем ближайшие точки по карте. Выбираете удобную и получаете код подтверждения.</p></div>
+        <div class="card"><h3 class="q">Q: Обязательно ли встречаться на SPOT?</h3><p class="a">Нет, но мы рекомендуем: SPOT снижает риски и ускоряет выдачу. Вне SPOT защита ограничена.</p></div>
+        <div class="card"><h3 class="q">Q: Камеры записывают разговоры?</h3><p class="a">Нет. Фиксируется только факт передачи (видео без звука) и отметка в системе по QR/пину.</p></div>
+      </div>
+    </section>
+
+    <section class="section container">
+      <h2>Оплата и защита</h2>
+      <div class="grid cols-2">
+        <div class="card"><h3 class="q">Q: Как проходит оплата?</h3><p class="a">Оплата по QR/картам через партнёрский эквайринг. Средства удерживаются до подтверждения получения на SPOT.</p></div>
+        <div class="card"><h3 class="q">Q: Что если товар не подошёл?</h3><p class="a">На SPOT можно сразу оформить возврат. Если спор — открываете кейс в приложении, мы подключаемся к разбору.</p></div>
+        <div class="card"><h3 class="q">Q: Комиссии?</h3><p class="a">Комиссия сервиса берётся с успешной сделки. Точные тарифы указаны при бронировании и в профиле объявления.</p></div>
+        <div class="card"><h3 class="q">Q: Наличные принимаете?</h3><p class="a">На SPOT — безнал (QR/карта). Наличная оплата возможна только по договорённости сторон вне SPOT и без защиты холдом.</p></div>
+      </div>
+    </section>
+
+    <section class="section container">
+      <h2>Размещение объявлений</h2>
+      <div class="grid cols-2">
+        <div class="card"><h3 class="q">Q: Как подать объявление?</h3><p class="a">Нажмите «Разместить объявление», заполните короткую форму и добавьте фото. Модерация занимает обычно до нескольких часов.</p></div>
+        <div class="card"><h3 class="q">Q: Есть платные продвижения?</h3><p class="a">Да: «Промо‑подсветка» и приоритет в подборках. Они помечаются и не влияют на честность поиска.</p></div>
+        <div class="card"><h3 class="q">Q: Требования к фото?</h3><p class="a">Реальные снимки товара, без водяных знаков и агрессивных коллажей. Лучше 4–8 фото, главный — фронтальный.</p></div>
+        <div class="card"><h3 class="q">Q: Запрещённые товары?</h3><p class="a">Да. Коротко: всё нелегальное, опасное и нарушающее права. Полный список — в <a href="terms.html">правилах</a>.</p></div>
+      </div>
+    </section>
+
+    <section class="section container">
+      <h2>Аккаунт и безопасность</h2>
+      <div class="grid cols-2">
+        <div class="card"><h3 class="q">Q: Как подтвердить аккаунт?</h3><p class="a">Через email или телефон. Для продавцов с оборотом — расширенная верификация.</p></div>
+        <div class="card"><h3 class="q">Q: Потерял доступ — что делать?</h3><p class="a">Используйте восстановление по почте/телефону. Если не помогает — напишите в поддержку, поможем вручную.</p></div>
+        <div class="card"><h3 class="q">Q: Как пожаловаться на объявление?</h3><p class="a">Кнопка «Пожаловаться» в карточке. Жалобу проверим, при нарушении — скрываем и уведомляем автора.</p></div>
+        <div class="card"><h3 class="q">Q: Как удалить данные?</h3><p class="a">В настройках аккаунта есть удаление профиля и истории. Подробнее в <a href="privacy.html">политике конфиденциальности</a>.</p></div>
+      </div>
+    </section>
+
+    <section class="section container">
+      <h2>Города, SPOT и партнёры</h2>
+      <div class="grid cols-2">
+        <div class="card"><h3 class="q">Q: В каких городах вы есть?</h3><p class="a">Стартуем поэтапно. Актуальная карта SPOT доступна на странице <a href="spots.html">SPOT</a>. Если хотите запустить SPOT у себя — напишите нам.</p></div>
+        <div class="card"><h3 class="q">Q: Как стать партнёром?</h3><p class="a">Перейдите на страницу <a href="partners.html">Партнёрам</a> — там форматы, требования и форма заявки.</p></div>
+      </div>
+    </section>
+
+    <section class="section container" id="contact">
+      <h2>Не нашли ответ?</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <h3 class="q">Напишите в поддержку</h3>
+          <p class="a">Email: <a href="mailto:hello@qdesk.app">hello@qdesk.app</a>. Сюда же присылайте идеи улучшений — мы обновим FAQ.</p>
+        </div>
+        <div class="card">
+          <h3 class="q">Для партнёров и СМИ</h3>
+          <p class="a">Партнёрам — <a href="mailto:partners@qdesk.app">partners@qdesk.app</a>, реклама — <a href="mailto:ads@qdesk.app">ads@qdesk.app</a>.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container foot-grid">
+      <div>
+        <div class="brand" style="margin-bottom:8px"><span class="logo">Q</span><span class="brand-name">QDESK</span></div>
+        <p class="muted">Альтернативная доска объявлений с диалоговым поиском и безопасными точками встреч (SPOT).</p>
+      </div>
+      <div>
+        <div class="foot-title">Навигация</div>
+        <div class="list">
+          <a href="about.html">О нас</a>
+          <a href="inside.html">Что внутри</a>
+          <a href="spots.html">SPOT</a>
+          <a href="partners.html">Партнёрам</a>
+          <a href="ads.html">Реклама</a>
+          <a href="faq.html">FAQ</a>
+          <a href="support.html">Поддержать</a>
+        </div>
+      </div>
+      <div>
+        <div class="foot-title">Контакты</div>
+        <div class="list">
+          <a href="mailto:hello@qdesk.app">hello@qdesk.app</a>
+          <span class="muted">VK · Telegram · YouTube</span>
+        </div>
+      </div>
+      <div>
+        <div class="foot-title">Доки</div>
+        <div class="list">
+          <a href="privacy.html">Политика конфиденциальности</a>
+          <a href="terms.html">Пользовательское соглашение</a>
+        </div>
+      </div>
+    </div>
+    <div class="container copy">© <span id="y"></span> QDESK. Все права защищены.</div>
+  </footer>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

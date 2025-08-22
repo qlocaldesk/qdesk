@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QDESK — Политика конфиденциальности</title>
+  <meta name="description" content="Политика конфиденциальности QDESK: какие данные мы собираем, как используем, кому передаем, сроки хранения, права пользователей и контакты для запросов."/>
+  <style>
+    :root{
+      --bg:#0b0b0b;
+      --card:#121212;
+      --muted:#9ca3af;
+      --text:#f5f5f5;
+      --accent:#ffffff;
+      --line:#1f2937;
+      --brand:#ffffff;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif}
+    a{color:var(--text);text-decoration:none}
+    a:hover{opacity:.9}
+    .container{max-width:1080px;margin:0 auto;padding:0 20px}
+    .header{position:sticky;top:0;background:rgba(11,11,11,.8);backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--line);z-index:30}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    .brand{display:flex;gap:10px;align-items:center}
+    .logo{width:26px;height:26px;border:1px solid var(--brand);border-radius:6px;display:grid;place-items:center;font-weight:700;letter-spacing:.5px}
+    .brand-name{font-weight:700;letter-spacing:.5px}
+    .menu{display:flex;gap:18px;align-items:center}
+    .menu a{color:var(--muted)}
+    .menu a.active{color:var(--text)}
+    .cta{display:flex;gap:10px;align-items:center}
+    .btn{padding:10px 14px;border:1px solid var(--line);border-radius:12px}
+    .btn.primary{background:var(--accent);color:#000;font-weight:600;border-color:transparent}
+    .btn.ghost{color:var(--text)}
+
+    .hero{padding:64px 0 28px;border-bottom:1px dashed var(--line)}
+    .eyebrow{color:var(--muted);text-transform:uppercase;letter-spacing:.12em;font-size:12px}
+    h1{margin:10px 0 10px;font-size:44px;line-height:1.1;letter-spacing:-.02em}
+    .lead{max-width:840px;color:#d1d5db}
+
+    .section{padding:36px 0;border-bottom:1px dashed var(--line)}
+    .section h2{font-size:28px;margin:0 0 10px}
+    .muted{color:var(--muted)}
+
+    .grid{display:grid;gap:18px}
+    @media(min-width:800px){.grid.cols-3{grid-template-columns:repeat(3,1fr)} .grid.cols-2{grid-template-columns:repeat(2,1fr)}}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0));border:1px solid var(--line);border-radius:18px;padding:20px}
+    .card h3{margin:0 0 6px;font-size:18px}
+    .card p{margin:0;color:#d1d5db}
+
+    .list{display:grid;gap:10px}
+    .list li{display:flex;gap:10px;align-items:flex-start}
+    .dot{width:8px;height:8px;border-radius:50%;background:#fff;margin-top:8px;flex:0 0 auto}
+
+    footer{padding:26px 0}
+    .foot-grid{display:grid;gap:18px}
+    @media(min-width:800px){.foot-grid{grid-template-columns:2fr 1fr 1fr 1fr}}
+    .foot-title{font-weight:700;margin-bottom:8px}
+    .copy{border-top:1px solid var(--line);margin-top:16px;padding-top:12px;color:var(--muted);font-size:14px}
+    .kbd{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;background:#0f0f0f;border:1px solid var(--line);padding:2px 6px;border-radius:6px;font-size:12px}
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container nav">
+      <a class="brand" href="index.html" aria-label="На главную">
+        <span class="logo">Q</span>
+        <span class="brand-name">QDESK</span>
+      </a>
+      <nav class="menu" aria-label="Главное меню">
+        <a href="about.html">О нас</a>
+        <a href="inside.html">Что внутри</a>
+        <a href="spots.html">SPOT</a>
+        <a href="partners.html">Партнёрам</a>
+        <a href="ads.html">Реклама</a>
+        <a href="faq.html">FAQ</a>
+        <a href="support.html">Поддержка</a>
+        <a href="contacts.html">Контакты</a>
+        <a href="privacy.html" class="active">Политика</a>
+      </nav>
+      <div class="cta">
+        <a class="btn ghost" href="#rights">Права пользователя</a>
+        <a class="btn primary" href="cabinet.html">Разместить объявление</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <div class="eyebrow">Юридические документы</div>
+      <h1>Политика конфиденциальности QDESK</h1>
+      <p class="lead">
+        Мы уважаем вашу приватность. На этой странице описано, какие данные мы собираем, как используем и защищаем,
+        кому передаем, сколько храним, а также какие у вас права и как их реализовать. Последнее обновление:
+        <span class="kbd" id="updated"></span>
+      </p>
+    </section>
+
+    <section class="section container">
+      <h2>Кто мы</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>Оператор данных</h3>
+          <p>QDESK (ООО «Локальная марка», далее — «мы/нас/наш сервис»). Контакты для вопросов приватности: <a href="mailto:privacy@qdesk.app">privacy@qdesk.app</a>.</p>
+        </div>
+        <div class="card">
+          <h3>Область действия</h3>
+          <p>Политика применяется к веб-сайту, приложениям и безопасным точкам QDESK Spot, включая поддержку, оплату и интеграции партнёров.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container">
+      <h2>Какие данные мы собираем</h2>
+      <div class="grid cols-3">
+        <div class="card">
+          <h3>Учётные</h3>
+          <p>Имя, email/телефон, пароль (хранится в хэшированном виде), город, фото профиля.</p>
+        </div>
+        <div class="card">
+          <h3>Контент</h3>
+          <p>Объявления, описания, фотографии, переписка по сделкам, отзывы.</p>
+        </div>
+        <div class="card">
+          <h3>Тех.данные</h3>
+          <p>IP, тип устройства/браузера, cookies, идентификаторы сессий, логи ошибок.</p>
+        </div>
+        <div class="card">
+          <h3>Платёжные</h3>
+          <p>Статусы транзакций, токены эквайринга/эскроу (карточные данные хранятся у PSP, не у нас).</p>
+        </div>
+        <div class="card">
+          <h3>Геоданные</h3>
+          <p>Город/район для подбора и карты SPOT (точная геолокация — только с вашего согласия).</p>
+        </div>
+        <div class="card">
+          <h3>SPOT-видеозаписи</h3>
+          <p>Факты передачи товара на точках SPOT (видео без звука) для урегулирования споров и безопасности.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container">
+      <h2>Зачем мы это делаем (цели и правовые основания)</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>Оказание сервиса</h3>
+          <p>Регистрация, поиск, сделки, уведомления. Основание: исполнение договора с пользователем.</p>
+        </div>
+        <div class="card">
+          <h3>Платежи и защита</h3>
+          <p>Приём оплат, холд, возвраты, антифрод, споры. Основание: договор, закон, легитимный интерес.</p>
+        </div>
+        <div class="card">
+          <h3>Улучшения и аналитика</h3>
+          <p>Отладка, метрики, A/B-тесты. Основание: легитимный интерес/согласие (для cookies).</p>
+        </div>
+        <div class="card">
+          <h3>Маркетинг</h3>
+          <p>Промо внутри сервиса и email-рассылки. Основание: согласие (можно отозвать в любой момент).</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container">
+      <h2>Cookies и локальное хранилище</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>Что используем</h3>
+          <p>Сессионные/постоянные cookies, localStorage для авторизации, настроек и аналитики.</p>
+        </div>
+        <div class="card">
+          <h3>Как управлять</h3>
+          <p>Через настройки браузера и баннер согласия. Отключение может ограничить функциональность.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container">
+      <h2>С кем делимся данными</h2>
+      <div class="grid cols-3">
+        <div class="card">
+          <h3>Платёжные провайдеры (PSP)</h3>
+          <p>Эквайринг, холд, возвраты. Передаём только необходимое для транзакций.</p>
+        </div>
+        <div class="card">
+          <h3>Партнёры SPOT</h3>
+          <p>Локации для передачи и хранения. Доступ к событиям сделки и отметке получения.</p>
+        </div>
+        <div class="card">
+          <h3>Логистика</h3>
+          <p>Забор/доставка, хранение. Минимально достаточные данные для выполнения услуги.</p>
+        </div>
+        <div class="card">
+          <h3>Провайдеры IT</h3>
+          <p>Хостинг, аналитика, почтовые и push-сервисы, антифрод.</p>
+        </div>
+        <div class="card">
+          <h3>Требования закона</h3>
+          <p>По запросу уполномоченных органов в пределах компетенции и закона.</p>
+        </div>
+        <div class="card">
+          <h3>Рекламные партнёры</h3>
+          <p>Только агрегированные/псевдонимизированные данные или с вашим согласия.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container">
+      <h2>Сроки хранения</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>Аккаунт и контент</h3>
+          <p>Пока действует аккаунт и 3 года после — для защиты от претензий и соблюдения закона.</p>
+        </div>
+        <div class="card">
+          <h3>SPOT-видео</h3>
+          <p>Обычно 7–30 дней, если не запрошено иное для спора/расследования.</p>
+        </div>
+        <div class="card">
+          <h3>Транзакции</h3>
+          <p>Согласно требованиям бухгалтерского и платежного законодательства.</p>
+        </div>
+        <div class="card">
+          <h3>Аналитика/логи</h3>
+          <p>От 30 дней до 24 месяцев, в зависимости от назначения и настроек.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container" id="rights">
+      <h2>Ваши права</h2>
+      <div class="grid cols-3">
+        <div class="card"><h3>Доступ</h3><p>Запросить копию ваших данных и список обработок.</p></div>
+        <div class="card"><h3>Исправление</h3><p>Исправить неточные или неполные данные.</p></div>
+        <div class="card"><h3>Удаление</h3><p>Попросить удалить данные (кроме случаев, когда хранение обязательно по закону).</p></div>
+        <div class="card"><h3>Ограничение</h3><p>Временно ограничить обработку в спорных ситуациях.</p></div>
+        <div class="card"><h3>Переносимость</h3><p>Получить данные в машиночитаемом виде и/или передать другому оператору.</p></div>
+        <div class="card"><h3>Возражение</h3><p>Возразить против маркетинговой обработки и отозвать согласие.</p></div>
+      </div>
+      <p class="muted">Чтобы реализовать права, напишите нам: <a href="mailto:privacy@qdesk.app">privacy@qdesk.app</a> или через <a href="support.html#contact">форму поддержки</a>. Мы ответим в разумный срок.</p>
+    </section>
+
+    <section class="section container">
+      <h2>Безопасность данных</h2>
+      <div class="grid cols-2">
+        <div class="card"><h3>Технические меры</h3><p>Шифрование в транзите (HTTPS), сегментация, резервные копии, контроль доступа, аудит.</p></div>
+        <div class="card"><h3>Организационные меры</h3><p>Обучение персонала, ограничение прав, договоры о конфиденциальности, DPIA при необходимости.</p></div>
+      </div>
+    </section>
+
+    <section class="section container">
+      <h2>Трансграничная передача</h2>
+      <div class="grid cols-2">
+        <div class="card"><h3>Когда это происходит</h3><p>Если сервис-провайдеры находятся за пределами вашей юрисдикции.</p></div>
+        <div class="card"><h3>Гарантии</h3><p>Стандартные договорные положения и/или иные правовые механизмы согласно применимому праву.</p></div>
+      </div>
+    </section>
+
+    <section class="section container">
+      <h2>Детям</h2>
+      <div class="card">
+        <p>Сервис не предназначен для лиц младше 14/16 лет (в зависимости от юрисдикции). Мы не собираем данные детей сознательно. Если вы считаете, что ребенок предоставил данные — свяжитесь с нами для удаления.</p>
+      </div>
+    </section>
+
+    <section class="section container">
+      <h2>Изменения политики</h2>
+      <div class="card">
+        <p>Мы можем время от времени обновлять политику. Значимые изменения публикуем на этой странице, указывая дату обновления. При необходимости запросим повторное согласие.</p>
+      </div>
+    </section>
+
+    <section class="section container">
+      <h2>Контакты по приватности</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>Email DPO/приватность</h3>
+          <p><a href="mailto:privacy@qdesk.app">privacy@qdesk.app</a></p>
+        </div>
+        <div class="card">
+          <h3>Общие вопросы</h3>
+          <p><a href="mailto:hello@qdesk.app">hello@qdesk.app</a> или <a href="support.html#contact">форма поддержки</a></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container foot-grid">
+      <div>
+        <div class="brand" style="margin-bottom:8px">
+          <span class="logo">Q</span>
+          <span class="brand-name">QDESK</span>
+        </div>
+        <p class="muted">Альтернативная доска объявлений с диалоговым поиском и безопасными точками встреч (SPOT).</p>
+      </div>
+      <div>
+        <div class="foot-title">Навигация</div>
+        <div class="list">
+          <a href="about.html">О нас</a>
+          <a href="inside.html">Что внутри</a>
+          <a href="spots.html">SPOT</a>
+          <a href="partners.html">Партнёрам</a>
+          <a href="ads.html">Реклама</a>
+          <a href="faq.html">FAQ</a>
+          <a href="support.html">Поддержка</a>
+          <a href="contacts.html">Контакты</a>
+        </div>
+      </div>
+      <div>
+        <div class="foot-title">Доки</div>
+        <div class="list">
+          <a href="privacy.html">Политика конфиденциальности</a>
+          <a href="terms.html">Пользовательское соглашение</a>
+        </div>
+      </div>
+      <div>
+        <div class="foot-title">Юр. инфо</div>
+        <div class="list">
+          <span class="muted">ООО «Локальная марка»</span>
+          <span class="muted">ИНН/ОГРН — подставить</span>
+        </div>
+      </div>
+    </div>
+    <div class="container copy">© <span id="y"></span> QDESK. Все права защищены.</div>
+  </footer>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+    // Дата обновления политики
+    const d = new Date();
+    const fmt = d.toLocaleDateString('ru-RU', { year:'numeric', month:'long', day:'numeric' });
+    document.getElementById('updated').textContent = fmt;
+  </script>
+</body>
+</html>

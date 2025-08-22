@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QDESK — Реклама</title>
+  <meta name="description" content="Реклама на QDESK: нативные интеграции, брендированные SPOT‑модули, спец‑проекты и охват активной аудитории."/>
+  <style>
+    :root{
+      --bg:#0b0b0b;
+      --card:#121212;
+      --muted:#9ca3af;
+      --text:#f5f5f5;
+      --accent:#ffffff;
+      --line:#1f2937;
+      --brand:#ffffff;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;}
+    a{color:var(--text);text-decoration:none}
+    a:hover{opacity:.9}
+    .container{max-width:1080px;margin:0 auto;padding:0 20px}
+    .header{position:sticky;top:0;background:rgba(11,11,11,.8);backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--line);z-index:30}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    .brand{display:flex;gap:10px;align-items:center}
+    .logo{width:26px;height:26px;border:1px solid var(--brand);border-radius:6px;display:grid;place-items:center;font-weight:700;letter-spacing:.5px}
+    .brand-name{font-weight:700;letter-spacing:.5px}
+    .menu{display:flex;gap:18px;align-items:center}
+    .menu a{color:var(--muted)}
+    .menu a.active{color:var(--text)}
+    .cta{display:flex;gap:10px;align-items:center}
+    .btn{padding:10px 14px;border:1px solid var(--line);border-radius:12px;}
+    .btn.primary{background:var(--accent);color:#000;font-weight:600;border-color:transparent}
+    .btn.ghost{color:var(--text)}
+
+    .hero{padding:64px 0 28px;border-bottom:1px dashed var(--line)}
+    .eyebrow{color:var(--muted);text-transform:uppercase;letter-spacing:.12em;font-size:12px}
+    h1{margin:10px 0 10px;font-size:44px;line-height:1.1;letter-spacing:-.02em}
+    .lead{max-width:800px;color:#d1d5db}
+
+    .grid{display:grid;gap:18px}
+    @media(min-width:800px){.grid.cols-3{grid-template-columns:repeat(3,1fr)} .grid.cols-2{grid-template-columns:repeat(2,1fr)}}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.0));border:1px solid var(--line);border-radius:18px;padding:20px}
+    .card h3{margin:0 0 6px;font-size:18px}
+    .card p{margin:0;color:#d1d5db}
+    .list{display:grid;gap:10px}
+    .dot{width:8px;height:8px;border-radius:50%;background:#fff;margin-top:8px;flex:0 0 auto}
+
+    .section{padding:36px 0;border-bottom:1px dashed var(--line)}
+    .section h2{font-size:28px;margin:0 0 10px}
+
+    .foot-cta{display:flex;flex-wrap:wrap;gap:10px}
+
+    footer{padding:26px 0}
+    .foot-grid{display:grid;gap:18px}
+    @media(min-width:800px){.foot-grid{grid-template-columns:2fr 1fr 1fr 1fr}}
+    .foot-title{font-weight:700;margin-bottom:8px}
+    .copy{border-top:1px solid var(--line);margin-top:16px;padding-top:12px;color:var(--muted);font-size:14px}
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container nav">
+      <a class="brand" href="index.html" aria-label="На главную">
+        <span class="logo">Q</span>
+        <span class="brand-name">QDESK</span>
+      </a>
+      <nav class="menu" aria-label="Главное меню">
+        <a href="about.html">О нас</a>
+        <a href="inside.html">Что внутри</a>
+        <a href="spots.html">SPOT</a>
+        <a href="partners.html">Партнёрам</a>
+        <a href="ads.html" class="active">Реклама</a>
+        <a href="support.html">Поддержать</a>
+      </nav>
+      <div class="cta">
+        <a class="btn ghost" href="mailto:ads@qdesk.app">Связаться</a>
+        <a class="btn primary" href="#offer">Разместить рекламу</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <div class="eyebrow">Рекламодателям</div>
+      <h1>Реклама на QDESK</h1>
+      <p class="lead">Наш сервис объединяет активную цифровую аудиторию, доверие и безопасность. Здесь бренды получают прямой доступ к пользователям в момент принятия решения о покупке.</p>
+    </section>
+
+    <section class="section container">
+      <h2>Форматы</h2>
+      <div class="grid cols-3">
+        <div class="card"><h3>Нативные интеграции</h3><p>Реклама вплетена в сценарий поиска и сделок: спец‑карточки, подборки, рекомендации.</p></div>
+        <div class="card"><h3>SPOT‑брендинг</h3><p>Брендированные безопасные точки QDESK Spot: мерч, оформление стойки, офлайн‑активации.</p></div>
+        <div class="card"><h3>Спец‑проекты</h3><p>Коллаборации, промо‑ивенты, тест‑драйвы и тематические кампании внутри платформы.</p></div>
+      </div>
+    </section>
+
+    <section class="section container">
+      <h2>Аудитория</h2>
+      <div class="grid cols-2">
+        <div class="card"><h3>Кто</h3><p>Молодые, технологичные пользователи 20–40 лет, активно покупающие и продающие онлайн.</p></div>
+        <div class="card"><h3>Где</h3><p>Россия и СНГ, крупные города. Ориентир на early adopters и прогрессивные сообщества.</p></div>
+      </div>
+    </section>
+
+    <section class="section container">
+      <h2>Преимущества QDESK</h2>
+      <div class="grid cols-3">
+        <div class="card"><h3>Контекст</h3><p>Показываем рекламу в момент запроса, когда у пользователя есть намерение купить.</p></div>
+        <div class="card"><h3>Прозрачность</h3><p>Чёткие метрики, отчётность, API для партнёров.</p></div>
+        <div class="card"><h3>Инновации</h3><p>AI‑подбор и персонализация рекламы под контекст сделки.</p></div>
+      </div>
+    </section>
+
+    <section class="section container" id="offer">
+      <h2>Как разместить рекламу</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>1. Заявка</h3>
+          <p>Оставьте контакты и формат интеграции. Мы свяжемся в течение 24 часов.</p>
+        </div>
+        <div class="card">
+          <h3>2. Запуск</h3>
+          <p>Подготовка креативов, интеграция в продукт и старт кампании в течение 7 дней.</p>
+        </div>
+      </div>
+      <div class="foot-cta" style="margin-top:14px">
+        <a class="btn ghost" href="mailto:ads@qdesk.app">Написать нам</a>
+        <a class="btn primary" href="mailto:ads@qdesk.app">Запросить медиакит</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container foot-grid">
+      <div>
+        <div class="brand" style="margin-bottom:8px">
+          <span class="logo">Q</span>
+          <span class="brand-name">QDESK</span>
+        </div>
+        <p class="muted">Альтернативная доска объявлений с диалоговым поиском и безопасными точками встреч (SPOT).</p>
+      </div>
+      <div>
+        <div class="foot-title">Навигация</div>
+        <div class="list">
+          <a href="about.html">О нас</a>
+          <a href="inside.html">Что внутри</a>
+          <a href="spots.html">SPOT</a>
+          <a href="partners.html">Партнёрам</a>
+          <a href="ads.html">Реклама</a>
+          <a href="support.html">Поддержать</a>
+        </div>
+      </div>
+      <div>
+        <div class="foot-title">Контакты</div>
+        <div class="list">
+          <a href="mailto:ads@qdesk.app">ads@qdesk.app</a>
+          <span class="muted">VK · Telegram · YouTube</span>
+        </div>
+      </div>
+      <div>
+        <div class="foot-title">Доки</div>
+        <div class="list">
+          <a href="privacy.html">Политика конфиденциальности</a>
+          <a href="terms.html">Пользовательское соглашение</a>
+        </div>
+      </div>
+    </div>
+    <div class="container copy">© <span id="y"></span> QDESK. Все права защищены.</div>
+  </footer>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QDESK — Пользовательское соглашение</title>
+  <meta name="description" content="Пользовательское соглашение QDESK: условия использования сервиса, правила размещения объявлений, сделки, оплата, SPOT-точки, ответственность и модерация."/>
+  <style>
+    :root{
+      --bg:#0b0b0b; --card:#121212; --muted:#9ca3af; --text:#f5f5f5;
+      --accent:#ffffff; --line:#1f2937; --brand:#ffffff;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    a{color:var(--text);text-decoration:none}
+    a:hover{opacity:.9}
+    .container{max-width:1080px;margin:0 auto;padding:0 20px}
+    .header{position:sticky;top:0;background:rgba(11,11,11,.8);backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--line);z-index:30}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    .brand{display:flex;gap:10px;align-items:center}
+    .logo{width:26px;height:26px;border:1px solid var(--brand);border-radius:6px;display:grid;place-items:center;font-weight:700;letter-spacing:.5px}
+    .brand-name{font-weight:700;letter-spacing:.5px}
+    .menu{display:flex;gap:18px;align-items:center}
+    .menu a{color:var(--muted)}
+    .menu a.active{color:var(--text)}
+    .cta{display:flex;gap:10px;align-items:center}
+    .btn{padding:10px 14px;border:1px solid var(--line);border-radius:12px}
+    .btn.primary{background:var(--accent);color:#000;font-weight:600;border-color:transparent}
+    .btn.ghost{color:var(--text)}
+
+    .hero{padding:64px 0 28px;border-bottom:1px dashed var(--line)}
+    .eyebrow{color:var(--muted);text-transform:uppercase;letter-spacing:.12em;font-size:12px}
+    h1{margin:10px 0 10px;font-size:44px;line-height:1.1;letter-spacing:-.02em}
+    .lead{max-width:840px;color:#d1d5db}
+
+    .section{padding:36px 0;border-bottom:1px dashed var(--line)}
+    .section h2{font-size:28px;margin:0 0 10px}
+    .muted{color:var(--muted)}
+
+    .grid{display:grid;gap:18px}
+    @media(min-width:800px){
+      .grid.cols-2{grid-template-columns:repeat(2,1fr)}
+      .grid.cols-3{grid-template-columns:repeat(3,1fr)}
+    }
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0));border:1px solid var(--line);border-radius:18px;padding:20px}
+    .card h3{margin:0 0 6px;font-size:18px}
+    .card p{margin:0;color:#d1d5db}
+
+    .toc{display:grid;gap:8px;margin-top:10px}
+    .toc a{color:#d1d5db}
+    .list{display:grid;gap:10px}
+    .list li{display:flex;gap:10px;align-items:flex-start}
+    .dot{width:8px;height:8px;border-radius:50%;background:#fff;margin-top:8px;flex:0 0 auto}
+
+    .kbd{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;background:#0f0f0f;border:1px solid var(--line);padding:2px 6px;border-radius:6px;font-size:12px}
+
+    footer{padding:26px 0}
+    .foot-grid{display:grid;gap:18px}
+    @media(min-width:800px){.foot-grid{grid-template-columns:2fr 1fr 1fr 1fr}}
+    .foot-title{font-weight:700;margin-bottom:8px}
+    .copy{border-top:1px solid var(--line);margin-top:16px;padding-top:12px;color:var(--muted);font-size:14px}
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container nav">
+      <a class="brand" href="index.html" aria-label="На главную">
+        <span class="logo">Q</span>
+        <span class="brand-name">QDESK</span>
+      </a>
+      <nav class="menu" aria-label="Главное меню">
+        <a href="about.html">О нас</a>
+        <a href="inside.html">Что внутри</a>
+        <a href="spots.html">SPOT</a>
+        <a href="partners.html">Партнёрам</a>
+        <a href="ads.html">Реклама</a>
+        <a href="faq.html">FAQ</a>
+        <a href="support.html">Поддержка</a>
+        <a href="terms.html" class="active">Соглашение</a>
+      </nav>
+      <div class="cta">
+        <a class="btn ghost" href="#toc">Содержание</a>
+        <a class="btn primary" href="cabinet.html">Разместить объявление</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <div class="eyebrow">Юридические документы</div>
+      <h1>Пользовательское соглашение QDESK</h1>
+      <p class="lead">
+        Настоящее соглашение (далее — «Соглашение») регулирует отношения между QDESK (ООО «Локальная марка») и вами как пользователем сервиса.
+        Используя сайт/приложения QDESK, вы подтверждаете, что прочитали и принимаете условия. Дата обновления:
+        <span class="kbd" id="updated"></span>
+      </p>
+      <div class="toc" id="toc">
+        <a href="#defs">1. Термины и стороны</a>
+        <a href="#general">2. Общие положения</a>
+        <a href="#account">3. Регистрация и аккаунт</a>
+        <a href="#content">4. Контент и права</a>
+        <a href="#listings">5. Объявления и правила</a>
+        <a href="#payments">6. Сделки, оплата и возвраты</a>
+        <a href="#spot">7. QDESK SPOT — безопасные точки</a>
+        <a href="#moderation">8. Модерация и ограничения</a>
+        <a href="#liability">9. Гарантии и ответственность</a>
+        <a href="#privacy">10. Персональные данные</a>
+        <a href="#term">11. Срок действия и расторжение</a>
+        <a href="#changes">12. Изменения условий</a>
+        <a href="#law">13. Применимое право</a>
+        <a href="#contacts">14. Контакты</a>
+      </div>
+    </section>
+
+    <section class="section container" id="defs">
+      <h2>1. Термины и стороны</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>Оператор</h3>
+          <p>ООО «Локальная марка» (QDESK), предоставляет функциональность поиска, размещения объявлений и сервисов SPOT.</p>
+        </div>
+        <div class="card">
+          <h3>Пользователь</h3>
+          <p>Физическое или юридическое лицо, использующее сервис. Продавец/Покупатель — пользователь, публикующий/приобретающий товар/услугу.</p>
+        </div>
+        <div class="card">
+          <h3>Сделка</h3>
+          <p>Оформленный через сервис процесс передачи товара/услуги и оплаты, в т.ч. с холдом средств.</p>
+        </div>
+        <div class="card">
+          <h3>SPOT</h3>
+          <p>Партнёрская или собственная безопасная точка QDESK для передачи товара с видеофиксацией и QR/пин-подтверждением.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container" id="general">
+      <h2>2. Общие положения</h2>
+      <div class="grid cols-2">
+        <div class="card"><h3>Публичная оферта</h3><p>Соглашение является публичной офертой. Использование сервиса = акцепт условий.</p></div>
+        <div class="card"><h3>Возраст</h3><p>Сервис не предназначен для лиц младше 14/16 лет (в зависимости от юрисдикции).</p></div>
+        <div class="card"><h3>Изменяемость</h3><p>Мы можем обновлять условия; актуальная версия публикуется на этой странице.</p></div>
+        <div class="card"><h3>Коммуникации</h3><p>Вы соглашаетесь получать сервисные уведомления (email, пуш, Telegram и др.).</p></div>
+      </div>
+    </section>
+
+    <section class="section container" id="account">
+      <h2>3. Регистрация и аккаунт</h2>
+      <div class="grid cols-2">
+        <div class="card"><h3>Достоверность</h3><p>Вы обязуетесь указывать актуальные данные и защищать доступ (пароль/2FA).</p></div>
+        <div class="card"><h3>Верификация</h3><p>Для ряда функций может потребоваться подтверждение email/телефона и расширенная проверка продавца.</p></div>
+        <div class="card"><h3>Безопасность</h3><p>Вы несёте ответственность за действия в аккаунте до момента уведомления поддержки об утечке.</p></div>
+        <div class="card"><h3>Удаление</h3><p>Вы можете удалить аккаунт через настройки; часть данных может храниться по закону.</p></div>
+      </div>
+    </section>
+
+    <section class="section container" id="content">
+      <h2>4. Контент и права</h2>
+      <div class="grid cols-2">
+        <div class="card"><h3>Ваш контент</h3><p>Тексты, фото и иные материалы — ответственность автора. Загружая их, вы гарантируете наличие прав.</p></div>
+        <div class="card"><h3>Лицензия сервису</h3><p>Вы предоставляете QDESK неисключительную, отменяемую, бессрочную на срок размещения лицензию на использование контента для работы сервиса (в/вне РФ), включая хранение, обработку, показ, адаптацию, модерацию, а также для промо сервиса (витрины/подборки).</p></div>
+        <div class="card"><h3>Запрет</h3><p>Нельзя публиковать материалы, нарушающие закон, права третьих лиц, содержащие оскорбления, спам, вредоносные ссылки.</p></div>
+        <div class="card"><h3>Искусственные манипуляции</h3><p>Запрещены накрутки просмотров/отзывов, обход ограничений, вмешательства в работу сервиса.</p></div>
+      </div>
+    </section>
+
+    <section class="section container" id="listings">
+      <h2>5. Объявления и правила</h2>
+      <div class="grid cols-2">
+        <div class="card"><h3>Точность описания</h3><p>Описание и фото должны соответствовать реальному состоянию товара/услуги.</p></div>
+        <div class="card"><h3>Запрещённые товары</h3><p>К размещению запрещены нелегальные, опасные предметы, а также то, что прямо указано в правилах — см. полный перечень на странице политики и FAQ.</p></div>
+        <div class="card"><h3>Платные услуги</h3><p>Доступны опции «Промо/подсветка». Факт промо помечается. Условия и цены — при оформлении.</p></div>
+        <div class="card"><h3>Релевантность</h3><p>Объявления с истёкшими/ложными данными могут скрываться или удаляться модерацией.</p></div>
+      </div>
+    </section>
+
+    <section class="section container" id="payments">
+      <h2>6. Сделки, оплата и возвраты</h2>
+      <div class="grid cols-2">
+        <div class="card"><h3>Оплата</h3><p>Платежи проходят через партнёрский эквайринг/PSP. Данные карт хранятся у PSP, не у QDESK.</p></div>
+        <div class="card"><h3>Холд (эскроу)</h3><p>Средства резервируются до подтверждения передачи на SPOT либо иного подтверждения в системе.</p></div>
+        <div class="card"><h3>Возвраты</h3><p>Если товар не подошёл на SPOT — оформляется возврат. Сроки зачисления определяются банком.</p></div>
+        <div class="card"><h3>Комиссии</h3><p>Комиссия сервиса удерживается со стороны продавца/покупателя согласно тарифам, отображаемым при бронировании.</p></div>
+      </div>
+    </section>
+
+    <section class="section container" id="spot">
+      <h2>7. QDESK SPOT — безопасные точки</h2>
+      <div class="grid cols-2">
+        <div class="card"><h3>Передача</h3><p>Подтверждение выдачи по QR/пин-коду. Видеофиксация факта передачи (без звука) для урегулирования споров.</p></div>
+        <div class="card"><h3>Хранение</h3><p>Отдельные SPOT могут предоставлять хранение 24–48 часов. Стоимость указывается при бронировании.</p></div>
+        <div class="card"><h3>Правила SPOT</h3><p>Следуйте инструкциям локации, уважайте персонал, соблюдайте договорённые слоты времени.</p></div>
+        <div class="card"><h3>Вне SPOT</h3><p>Сделки вне SPOT не поддерживаются эскроу-механикой и снижают уровень защиты.</p></div>
+      </div>
+    </section>
+
+    <section class="section container" id="moderation">
+      <h2>8. Модерация и ограничения</h2>
+      <div class="grid cols-2">
+        <div class="card"><h3>Право на модерацию</h3><p>Мы можем проверять, скрывать, изменять категорию или удалять объявления и отзывы, нарушающие правила.</p></div>
+        <div class="card"><h3>Блокировка</h3><p>При грубых/повторных нарушениях возможна временная или постоянная блокировка аккаунта.</p></div>
+        <div class="card"><h3>Жалобы</h3><p>Вы можете сообщить о нарушении через «Пожаловаться» или поддержку. Мы рассмотрим обращение в разумный срок.</p></div>
+        <div class="card"><h3>Претензии</h3><p>Споры между пользователями решаются в первую очередь между ними; QDESK помогает в рамках правил и доступных данных.</p></div>
+      </div>
+    </section>
+
+    <section class="section container" id="liability">
+      <h2>9. Гарантии и ответственность</h2>
+      <div class="grid cols-2">
+        <div class="card"><h3>AS IS</h3><p>Сервис предоставляется «как есть». Мы стремимся к бесперебойной работе, но не гарантируем её.</p></div>
+        <div class="card"><h3>Ограничение</h3><p>QDESK не является стороной сделки между пользователями и не несёт ответственность за качество товаров/услуг. Ответственность QDESK ограничена размером уплаченной комиссии за последнюю транзакцию, если иное не предусмотрено законом.</p></div>
+        <div class="card"><h3>Форс-мажор</h3><p>Стороны освобождаются от ответственности при обстоятельствах непреодолимой силы.</p></div>
+        <div class="card"><h3>Риски</h3><p>Вы понимаете и принимаете риски, связанные с покупкой у частных лиц, и обязуетесь проявлять разумную осмотрительность.</p></div>
+      </div>
+    </section>
+
+    <section class="section container" id="privacy">
+      <h2>10. Персональные данные</h2>
+      <div class="grid cols-2">
+        <div class="card"><h3>Политика</h3><p>Обработка данных регулируется <a href="privacy.html">Политикой конфиденциальности</a>.</p></div>
+        <div class="card"><h3>Cookies</h3><p>Используем cookies/локальное хранилище — подробности в политике и баннере согласия.</p></div>
+      </div>
+    </section>
+
+    <section class="section container" id="term">
+      <h2>11. Срок действия и расторжение</h2>
+      <div class="grid cols-2">
+        <div class="card"><h3>Срок</h3><p>Соглашение действует с момента акцепта и до удаления аккаунта или прекращения доступа.</p></div>
+        <div class="card"><h3>Расторжение</h3><p>Вы можете прекратить использование в любой момент. Мы можем приостановить/прекратить доступ при нарушениях.</p></div>
+      </div>
+    </section>
+
+    <section class="section container" id="changes">
+      <h2>12. Изменения условий</h2>
+      <div class="card">
+        <p>Мы вправе обновлять Соглашение. Значимые изменения публикуем на этой странице; продолжение использования = согласие с изменениями.</p>
+      </div>
+    </section>
+
+    <section class="section container" id="law">
+      <h2>13. Применимое право</h2>
+      <div class="card">
+        <p>Соглашение регулируется правом по месту регистрации Оператора. Споры подлежат рассмотрению в суде по месту регистрации Оператора, если иное не предусмотрено императивными нормами.</p>
+      </div>
+    </section>
+
+    <section class="section container" id="contacts">
+      <h2>14. Контакты</h2>
+      <div class="grid cols-2">
+        <div class="card"><h3>Поддержка</h3><p>Email: <a href="mailto:hello@qdesk.app">hello@qdesk.app</a> · Страница: <a href="support.html">Поддержка</a></p></div>
+        <div class="card"><h3>Юридические вопросы</h3><p>Email: <a href="mailto:privacy@qdesk.app">privacy@qdesk.app</a> · Реквизиты компании — внизу сайта или по запросу.</p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container foot-grid">
+      <div>
+        <div class="brand" style="margin-bottom:8px">
+          <span class="logo">Q</span>
+          <span class="brand-name">QDESK</span>
+        </div>
+        <p class="muted">Альтернативная доска объявлений с диалоговым поиском и безопасными точками встреч (SPOT).</p>
+      </div>
+      <div>
+        <div class="foot-title">Навигация</div>
+        <div class="list">
+          <a href="about.html">О нас</a>
+          <a href="inside.html">Что внутри</a>
+          <a href="spots.html">SPOT</a>
+          <a href="partners.html">Партнёрам</a>
+          <a href="ads.html">Реклама</a>
+          <a href="faq.html">FAQ</a>
+          <a href="support.html">Поддержка</a>
+        </div>
+      </div>
+      <div>
+        <div class="foot-title">Доки</div>
+        <div class="list">
+          <a href="privacy.html">Политика конфиденциальности</a>
+          <a href="terms.html">Пользовательское соглашение</a>
+        </div>
+      </div>
+      <div>
+        <div class="foot-title">Юр. инфо</div>
+        <div class="list">
+          <span class="muted">ООО «Локальная марка»</span>
+          <span class="muted">ИНН/ОГРН — подставить</span>
+        </div>
+      </div>
+    </div>
+    <div class="container copy">© <span id="y"></span> QDESK. Все права защищены.</div>
+  </footer>
+
+  <script>
+    // Год в копирайте и дата обновления
+    document.getElementById('y').textContent = new Date().getFullYear();
+    const d = new Date();
+    const fmt = d.toLocaleDateString('ru-RU', { year:'numeric', month:'long', day:'numeric' });
+    document.getElementById('updated').textContent = fmt;
+  </script>
+</body>
+</html>

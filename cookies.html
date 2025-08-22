@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QDESK — Куки (Cookies)</title>
+  <meta name="description" content="Куки и локальное хранилище QDESK: какие технологии мы используем, для чего, как управлять согласием и изменить настройки."/>
+  <style>
+    :root{--bg:#0b0b0b;--card:#121212;--muted:#9ca3af;--text:#f5f5f5;--accent:#ffffff;--line:#1f2937;--brand:#ffffff}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    a{color:var(--text);text-decoration:none}
+    a:hover{opacity:.9}
+    .container{max-width:1080px;margin:0 auto;padding:0 20px}
+    .header{position:sticky;top:0;background:rgba(11,11,11,.8);backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--line);z-index:30}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    .brand{display:flex;gap:10px;align-items:center}
+    .logo{width:26px;height:26px;border:1px solid var(--brand);border-radius:6px;display:grid;place-items:center;font-weight:700;letter-spacing:.5px}
+    .brand-name{font-weight:700;letter-spacing:.5px}
+    .menu{display:flex;gap:18px;align-items:center}
+    .menu a{color:var(--muted)}
+    .menu a.active{color:var(--text)}
+    .btn{padding:10px 14px;border:1px solid var(--line);border-radius:12px;cursor:pointer}
+    .btn.primary{background:var(--accent);color:#000;font-weight:600;border-color:transparent}
+    .btn.ghost{color:var(--text)}
+
+    .hero{padding:64px 0 28px;border-bottom:1px dashed var(--line)}
+    .eyebrow{color:var(--muted);text-transform:uppercase;letter-spacing:.12em;font-size:12px}
+    h1{margin:10px 0 10px;font-size:44px;line-height:1.1;letter-spacing:-.02em}
+    .lead{max-width:860px;color:#d1d5db}
+
+    .section{padding:36px 0;border-bottom:1px dashed var(--line)}
+    .section h2{font-size:28px;margin:0 0 10px}
+    .muted{color:var(--muted)}
+
+    .grid{display:grid;gap:18px}
+    @media(min-width:800px){.grid.cols-2{grid-template-columns:repeat(2,1fr)} .grid.cols-3{grid-template-columns:repeat(3,1fr)}}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0));border:1px solid var(--line);border-radius:18px;padding:20px}
+    .card h3{margin:0 0 6px;font-size:18px}
+    .card p{margin:0;color:#d1d5db}
+
+    .prefs{display:grid;gap:14px}
+    .row{display:flex;align-items:center;justify-content:space-between;gap:16px;border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:rgba(255,255,255,.02)}
+    .row .meta{max-width:680px}
+    .row .meta h3{margin:0 0 4px;font-size:16px}
+    .row .meta p{margin:0;color:#d1d5db;font-size:14px}
+
+    .switch{position:relative;display:inline-block;width:46px;height:26px}
+    .switch input{opacity:0;width:0;height:0}
+    .slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#222;border:1px solid var(--line);transition:.2s;border-radius:999px}
+    .slider:before{position:absolute;content:\"\";height:20px;width:20px;left:3px;top:2.5px;background:#fff;transition:.2s;border-radius:50%}
+    input:checked + .slider{background:#fff}
+    input:checked + .slider:before{transform:translateX(20px);background:#000}
+    input:disabled + .slider{opacity:.4;cursor:not-allowed}
+
+    table{width:100%;border-collapse:separate;border-spacing:0 8px}
+    th,td{padding:10px 12px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+    th:first-child,td:first-child{border-left:1px solid var(--line);border-top-left-radius:10px;border-bottom-left-radius:10px}
+    th:last-child,td:last-child{border-right:1px solid var(--line);border-top-right-radius:10px;border-bottom-right-radius:10px}
+    th{font-weight:600;text-align:left}
+    td{color:#d1d5db;font-size:14px}
+
+    footer{padding:26px 0}
+    .foot-grid{display:grid;gap:18px}
+    @media(min-width:800px){.foot-grid{grid-template-columns:2fr 1fr 1fr 1fr}}
+    .foot-title{font-weight:700;margin-bottom:8px}
+    .copy{border-top:1px solid var(--line);margin-top:16px;padding-top:12px;color:var(--muted);font-size:14px}
+    .kbd{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,\"Liberation Mono\",\"Courier New\",monospace;background:#0f0f0f;border:1px solid var(--line);padding:2px 6px;border-radius:6px;font-size:12px}
+    .note{font-size:13px;color:#c6cad1}
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container nav">
+      <a class="brand" href="index.html" aria-label="На главную">
+        <span class="logo">Q</span>
+        <span class="brand-name">QDESK</span>
+      </a>
+      <nav class="menu" aria-label="Главное меню">
+        <a href="about.html">О нас</a>
+        <a href="inside.html">Что внутри</a>
+        <a href="spots.html">SPOT</a>
+        <a href="partners.html">Партнёрам</a>
+        <a href="ads.html">Реклама</a>
+        <a href="faq.html">FAQ</a>
+        <a href="support.html">Поддержка</a>
+        <a href="privacy.html">Политика</a>
+        <a href="cookies.html" class="active">Куки</a>
+      </nav>
+      <div class="cta">
+        <a class="btn ghost" href="#manage">Изменить настройки</a>
+        <a class="btn primary" href="cabinet.html">Разместить объявление</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <div class="eyebrow">Юридические документы</div>
+      <h1>Файлы cookie и локальное хранилище</h1>
+      <p class="lead">
+        Мы используем cookie и локальное хранилище, чтобы сервис работал стабильно, становился удобнее и безопаснее.
+        Здесь можно посмотреть детали и управлять согласием. Последнее обновление:
+        <span class="kbd" id="updated"></span>
+      </p>
+    </section>
+
+    <section class="section container">
+      <h2>Что это такое</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>Cookie</h3>
+          <p>Небольшие текстовые файлы, которые сохраняются в вашем браузере. Они помогают нам запоминать сессии, настройки и измерять работу сервиса.</p>
+        </div>
+        <div class="card">
+          <h3>Локальное хранилище</h3>
+          <p>Записи в вашем браузере (localStorage/SessionStorage) для быстрого доступа к настройкам интерфейса, кешам и токенам, не содержащим платёжные данные.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container" id="manage">
+      <h2>Управление согласием</h2>
+      <div class="prefs">
+        <div class="row">
+          <div class="meta">
+            <h3>Строго необходимые</h3>
+            <p>Нужны для работы сайта: авторизация, безопасность, защита от CSRF. Их нельзя отключить.</p>
+          </div>
+          <label class="switch" aria-label="Строго необходимые куки (всегда включены)">
+            <input type="checkbox" checked disabled>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="row">
+          <div class="meta">
+            <h3>Предпочтения</h3>
+            <p>Язык, тема, последние параметры поиска. Улучшают удобство.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="ck_prefs">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="row">
+          <div class="meta">
+            <h3>Аналитика</h3>
+            <p>Анонимные метрики использования для улучшений и устранения ошибок.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="ck_analytics">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="row">
+          <div class="meta">
+            <h3>Маркетинг</h3>
+            <p>Показ релевантных промо-материалов и измерение их эффективности.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="ck_marketing">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px">
+          <button class="btn primary" id="btn_accept_all" type="button">Принять все</button>
+          <button class="btn" id="btn_reject" type="button">Отклонить необязательные</button>
+          <button class="btn" id="btn_save" type="button">Сохранить выбор</button>
+          <span class="note" id="save_note" style="display:none">Сохранено ✓</span>
+        </div>
+        <div class="note">Ваши настройки сохраняются в браузере. Их можно сбросить — <a href="#" id="reset_prefs">очистить выбор</a>.</div>
+      </div>
+    </section>
+
+    <section class="section container">
+      <h2>Примеры используемых технологий</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>Строго необходимые</h3>
+          <table>
+            <thead><tr><th>Имя</th><th>Назначение</th><th>Срок</th></tr></thead>
+            <tbody>
+              <tr><td>qdesk_session</td><td>Поддержание сессии пользователя</td><td>сеанс</td></tr>
+              <tr><td>qdesk_csrf</td><td>Защита от CSRF-атак</td><td>сеанс</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card">
+          <h3>Предпочтения</h3>
+          <table>
+            <thead><tr><th>Ключ</th><th>Назначение</th><th>Срок</th></tr></thead>
+            <tbody>
+              <tr><td>pref_lang</td><td>Выбранный язык интерфейса</td><td>12 мес.</td></tr>
+              <tr><td>pref_theme</td><td>Светлая/тёмная тема</td><td>12 мес.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card">
+          <h3>Аналитика</h3>
+          <table>
+            <thead><tr><th>Имя</th><th>Назначение</th><th>Срок</th></tr></thead>
+            <tbody>
+              <tr><td>analytics_id</td><td>Анонимный идентификатор посещения</td><td>13 мес.</td></tr>
+              <tr><td>perf_sample</td><td>Замеры скорости/ошибок</td><td>13 мес.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card">
+          <h3>Маркетинг</h3>
+          <table>
+            <thead><tr><th>Имя</th><th>Назначение</th><th>Срок</th></tr></thead>
+            <tbody>
+              <tr><td>promo_view</td><td>Учёт показов промо-блоков</td><td>6–12 мес.</td></tr>
+              <tr><td>campaign_src</td><td>Источники и кампании</td><td>6–12 мес.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p class="muted">Список может меняться при подключении/отключении провайдеров. Актуальные настройки — в блоке «Управление согласием» выше.</p>
+    </section>
+
+    <section class="section container">
+      <h2>Как ещё управлять cookie</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>Настройки браузера</h3>
+          <p>Вы можете удалять и блокировать cookie через настройки вашего браузера. Учтите, что часть функций без них работать не будет.</p>
+        </div>
+        <div class="card">
+          <h3>Подробнее о данных</h3>
+          <p>Как мы обрабатываем персональные данные — в <a href="privacy.html">Политике конфиденциальности</a>. Вопросы можно направить на <a href="mailto:privacy@qdesk.app">privacy@qdesk.app</a>.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container foot-grid">
+      <div>
+        <div class="brand" style="margin-bottom:8px"><span class="logo">Q</span><span class="brand-name">QDESK</span></div>
+        <p class="muted">Альтернативная доска объявлений с диалоговым поиском и безопасными точками встреч (SPOT).</p>
+      </div>
+      <div>
+        <div class="foot-title">Навигация</div>
+        <div class="list">
+          <a href="about.html">О нас</a>
+          <a href="inside.html">Что внутри</a>
+          <a href="spots.html">SPOT</a>
+          <a href="partners.html">Партнёрам</a>
+          <a href="ads.html">Реклама</a>
+          <a href="faq.html">FAQ</a>
+          <a href="support.html">Поддержка</a>
+        </div>
+      </div>
+      <div>
+        <div class="foot-title">Доки</div>
+        <div class="list">
+          <a href="privacy.html">Политика конфиденциальности</a>
+          <a href="terms.html">Пользовательское соглашение</a>
+          <a href="cookies.html">Куки (Cookies)</a>
+        </div>
+      </div>
+      <div>
+        <div class="foot-title">Контакты</div>
+        <div class="list">
+          <a href="mailto:privacy@qdesk.app">privacy@qdesk.app</a>
+          <a href="mailto:hello@qdesk.app">hello@qdesk.app</a>
+        </div>
+      </div>
+    </div>
+    <div class="container copy">© <span id="y"></span> QDESK. Все права защищены.</div>
+  </footer>
+
+  <script>
+    // Копирайт и дата обновления
+    document.getElementById('y').textContent = new Date().getFullYear();
+    document.getElementById('updated').textContent =
+      new Date().toLocaleDateString('ru-RU',{year:'numeric',month:'long',day:'numeric'});
+
+    // Работа с согласием
+    const key = 'qdesk_cookie_prefs';
+    const $ = (id)=>document.getElementById(id);
+    const els = { prefs:$('ck_prefs'), analytics:$('ck_analytics'), marketing:$('ck_marketing') };
+    const note = $('save_note');
+
+    function loadPrefs(){
+      try{
+        const raw = localStorage.getItem(key);
+        if(!raw) return;
+        const st = JSON.parse(raw);
+        els.prefs.checked = !!st.prefs;
+        els.analytics.checked = !!st.analytics;
+        els.marketing.checked = !!st.marketing;
+      }catch(e){}
+    }
+    function savePrefs(obj){
+      const state = obj || {
+        prefs: els.prefs.checked,
+        analytics: els.analytics.checked,
+        marketing: els.marketing.checked,
+        ts: Date.now()
+      };
+      localStorage.setItem(key, JSON.stringify(state));
+      // Можно передавать в dataLayer/консент-менеджер при наличии
+      note.style.display='inline';
+      setTimeout(()=>note.style.display='none', 1800);
+    }
+    $('btn_accept_all').onclick = ()=> savePrefs({prefs:true,analytics:true,marketing:true,ts:Date.now()});
+    $('btn_reject').onclick = ()=> savePrefs({prefs:false,analytics:false,marketing:false,ts:Date.now()});
+    $('btn_save').onclick = ()=> savePrefs();
+    $('reset_prefs').onclick = (e)=>{ e.preventDefault(); localStorage.removeItem(key); els.prefs.checked=false; els.analytics.checked=false; els.marketing.checked=false; };
+
+    loadPrefs();
+  </script>
+</body>
+</html>

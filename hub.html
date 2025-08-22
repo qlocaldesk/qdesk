@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QDESK — Hub</title>
+  <meta name="description" content="QDESK Hub — один вход ко всему: быстрые ссылки, статус сервисов, что нового, карта SPOT, роадмап, партнёрам, реклама, пресс-кит и комьюнити."/>
+  <style>
+    :root{
+      --bg:#0b0b0b; --card:#121212; --muted:#9ca3af; --text:#f5f5f5;
+      --accent:#ffffff; --line:#1f2937; --brand:#ffffff;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    a{color:var(--text);text-decoration:none}
+    a:hover{opacity:.9}
+    .container{max-width:1080px;margin:0 auto;padding:0 20px}
+    .header{position:sticky;top:0;background:rgba(11,11,11,.8);
+      backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--line);z-index:30}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    .brand{display:flex;gap:10px;align-items:center}
+    .logo{width:26px;height:26px;border:1px solid var(--brand);border-radius:6px;
+      display:grid;place-items:center;font-weight:700;letter-spacing:.5px}
+    .brand-name{font-weight:700;letter-spacing:.5px}
+    .menu{display:flex;gap:18px;align-items:center}
+    .menu a{color:var(--muted)}
+    .menu a.active{color:var(--text)}
+    .cta{display:flex;gap:10px;align-items:center}
+    .btn{padding:10px 14px;border:1px solid var(--line);border-radius:12px;cursor:pointer}
+    .btn.primary{background:var(--accent);color:#000;font-weight:600;border-color:transparent}
+    .btn.ghost{color:var(--text)}
+
+    .hero{padding:64px 0 28px;border-bottom:1px dashed var(--line)}
+    .eyebrow{color:var(--muted);text-transform:uppercase;letter-spacing:.12em;font-size:12px}
+    h1{margin:10px 0 10px;font-size:44px;line-height:1.1;letter-spacing:-.02em}
+    .lead{max-width:860px;color:#d1d5db}
+
+    .section{padding:36px 0;border-bottom:1px dashed var(--line)}
+    .section h2{font-size:28px;margin:0 0 10px}
+    .muted{color:var(--muted)}
+
+    .grid{display:grid;gap:18px}
+    @media(min-width:800px){
+      .grid.cols-2{grid-template-columns:repeat(2,1fr)}
+      .grid.cols-3{grid-template-columns:repeat(3,1fr)}
+      .grid.cols-4{grid-template-columns:repeat(4,1fr)}
+    }
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0));
+      border:1px solid var(--line);border-radius:18px;padding:20px}
+    .card h3{margin:0 0 6px;font-size:18px}
+    .card p{margin:0;color:#d1d5db}
+
+    .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);
+      border-radius:999px;padding:6px 10px;background:rgba(255,255,255,.02);font-size:13px}
+    .dot{width:8px;height:8px;border-radius:50%;background:#22c55e} /* зелёный OK */
+    .dot.warn{background:#f59e0b} .dot.err{background:#ef4444}
+
+    .mini-map{height:220px;border:1px dashed var(--line);border-radius:16px;
+      display:grid;place-items:center;color:#cfd3da}
+
+    .kpi{display:flex;flex-wrap:wrap;gap:20px}
+    .kpi .n{font-weight:800;font-size:28px}
+    .kpi .t{color:#cfd3da}
+
+    ul.clean{margin:0;padding-left:18px;color:#d1d5db}
+    ul.clean li{margin:4px 0}
+
+    footer{padding:26px 0}
+    .foot-grid{display:grid;gap:18px}
+    @media(min-width:800px){.foot-grid{grid-template-columns:2fr 1fr 1fr 1fr}}
+    .foot-title{font-weight:700;margin-bottom:8px}
+    .copy{border-top:1px solid var(--line);margin-top:16px;padding-top:12px;color:var(--muted);font-size:14px}
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container nav">
+      <a class="brand" href="index.html" aria-label="На главную">
+        <span class="logo">Q</span>
+        <span class="brand-name">QDESK</span>
+      </a>
+      <nav class="menu" aria-label="Главное меню">
+        <a href="hub.html" class="active">Hub</a>
+        <a href="about.html">О нас</a>
+        <a href="inside.html">Что внутри</a>
+        <a href="spots.html">SPOT</a>
+        <a href="partners.html">Партнёрам</a>
+        <a href="ads.html">Реклама</a>
+        <a href="faq.html">FAQ</a>
+        <a href="support.html">Поддержка</a>
+        <a href="contacts.html">Контакты</a>
+      </nav>
+      <div class="cta">
+        <a class="btn ghost" href="#quick">Быстрые ссылки</a>
+        <a class="btn primary" href="cabinet.html">Разместить объявление</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero container">
+      <div class="eyebrow">Центр действий</div>
+      <h1>QDESK Hub — один вход ко всему</h1>
+      <p class="lead">Здесь собраны быстрые ссылки, статус сервисов, обновления продукта, карта SPOT, роадмап и блоки для партнёров, рекламодателей и СМИ.</p>
+    </section>
+
+    <!-- QUICK LINKS -->
+    <section class="section container" id="quick">
+      <h2>Быстрые ссылки</h2>
+      <div class="grid cols-4">
+        <a class="card" href="search.html"><h3>Поиск</h3><p>Начать диалоговый поиск</p></a>
+        <a class="card" href="cabinet.html"><h3>Разместить объявление</h3><p>Быстрая форма</p></a>
+        <a class="card" href="spots.html"><h3>Карта SPOT</h3><p>Точки для безопасных встреч</p></a>
+        <a class="card" href="support.html"><h3>Поддержка / FAQ</h3><p>Ответы и контакты</p></a>
+
+        <a class="card" href="partners.html"><h3>Партнёрам</h3><p>Форматы и требования</p></a>
+        <a class="card" href="ads.html"><h3>Реклама</h3><p>Форматы и медиакит</p></a>
+        <a class="card" href="presskit.html"><h3>Пресс-кит</h3><p>Лого и описания</p></a>
+        <a class="card" href="contacts.html"><h3>Контакты</h3><p>Адреса и реквизиты</p></a>
+      </div>
+    </section>
+
+    <!-- STATUS + CHANGELOG -->
+    <section class="section container">
+      <h2>Статус и обновления</h2>
+      <div class="grid cols-3">
+        <div class="card">
+          <h3>Статус сервисов</h3>
+          <div class="pill"><span class="dot" id="st-dot"></span><span id="st-text">OK · все системы работают</span></div>
+          <p class="muted" style="margin-top:8px">Поиск, платежи, уведомления</p>
+          <p style="margin-top:8px"><a href="#" class="muted">Страница статуса (скоро)</a></p>
+        </div>
+        <div class="card">
+          <h3>Что нового</h3>
+          <ul class="clean" id="changelog">
+            <li><strong>SPOT-бронь</strong>: слоты времени и напоминания</li>
+            <li><strong>Возвраты на SPOT</strong>: упрощённый сценарий</li>
+            <li><strong>Подбор по фото</strong>: ранний доступ</li>
+          </ul>
+          <p class="muted" style="margin-top:8px">Смотри также <a href="faq.html">FAQ</a></p>
+        </div>
+        <div class="card">
+          <h3>Подписка на апдейты</h3>
+          <form onsubmit="event.preventDefault(); subOk();">
+            <input type="email" id="sub" placeholder="you@example.com" required
+                   style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#0f0f0f;color:var(--text)">
+            <div style="display:flex;gap:10px;margin-top:10px">
+              <button class="btn primary" type="submit">Подписаться</button>
+              <a class="btn" href="https://t.me/QDESK_news" target="_blank" rel="noreferrer">Telegram-канал</a>
+            </div>
+            <p class="muted" id="sub-note" style="display:none;margin-top:6px">Готово ✓ Проверьте почту.</p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- MINI MAP + METRICS -->
+    <section class="section container">
+      <h2>SPOT — карта и метрики</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <div class="mini-map">Предпросмотр карты SPOT (заглушка)</div>
+          <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
+            <a class="btn" href="spots.html">Открыть карту</a>
+            <span class="pill"><span class="dot"></span><span id="spot-count">SPOT: 0</span></span>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Пульс платформы</h3>
+          <div class="kpi">
+            <div><div class="n" id="kpi1">—</div><div class="t">активных SPOT</div></div>
+            <div><div class="n" id="kpi2">—</div><div class="t">городов</div></div>
+            <div><div class="n" id="kpi3">—</div><div class="t">среднее время передачи</div></div>
+            <div><div class="n" id="kpi4">—</div><div class="t">NPS (пилот)</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ROADMAP -->
+    <section class="section container">
+      <h2>Roadmap</h2>
+      <div class="grid cols-3">
+        <div class="card">
+          <h3>Now</h3>
+          <ul class="clean">
+            <li>SPOT-бронь и расписание</li>
+            <li>Возвраты в один тап</li>
+            <li>Улучшение диалогового поиска</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Next</h3>
+          <ul class="clean">
+            <li>Публичный дашборд партнёра</li>
+            <li>Интеграции: webhooks/API</li>
+            <li>Подбор по фото</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Later</h3>
+          <ul class="clean">
+            <li>Собственные SPOT-модули</li>
+            <li>Кобрендинг SPOT</li>
+            <li>Гео-расширение</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- USERS / PARTNERS / MEDIA -->
+    <section class="section container">
+      <h2>Для всех</h2>
+      <div class="grid cols-3">
+        <div class="card">
+          <h3>Пользователям</h3>
+          <p>Популярные категории, сохранённые запросы и новые совпадения.</p>
+          <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
+            <a class="btn" href="search.html">Искать</a>
+            <a class="btn" href="faq.html">FAQ</a>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Партнёрам</h3>
+          <p>Станьте SPOT-локацией, логистическим или финтех-партнёром. Rev-share и дашборд.</p>
+          <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
+            <a class="btn primary" href="partners.html#apply">Оставить заявку</a>
+            <a class="btn" href="partners.html">Подробнее</a>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Брендам и СМИ</h3>
+          <p>Нативные интеграции, брендирование SPOT и пресс-материалы.</p>
+          <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
+            <a class="btn" href="ads.html">Реклама</a>
+            <a class="btn" href="presskit.html">Пресс-кит</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMMUNITY -->
+    <section class="section container">
+      <h2>Комьюнити</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>Присоединяйтесь</h3>
+          <ul class="clean">
+            <li>Новости: <a href="https://t.me/QDESK_news" target="_blank" rel="noreferrer">@QDESK_news</a></li>
+            <li>Статусы: <span class="muted">@QDESK_status</span> (скоро)</li>
+            <li>Email-рассылка обновлений — форма выше</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Обратная связь</h3>
+          <p>Нашли баг или есть идея? Напишите нам — поможем и учтём в роадмапе.</p>
+          <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
+            <a class="btn" href="support.html#contact">Сообщить о проблеме</a>
+            <a class="btn ghost" href="mailto:hello@qdesk.app">hello@qdesk.app</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEGAL QUICK -->
+    <section class="section container">
+      <h2>Юридические ссылки</h2>
+      <div class="grid cols-3">
+        <a class="card" href="privacy.html"><h3>Политика конфиденциальности</h3><p>Данные и права</p></a>
+        <a class="card" href="terms.html"><h3>Пользовательское соглашение</h3><p>Условия сервиса</p></a>
+        <a class="card" href="cookies.html"><h3>Куки</h3><p>Настройки и согласие</p></a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container foot-grid">
+      <div>
+        <div class="brand" style="margin-bottom:8px">
+          <span class="logo">Q</span>
+          <span class="brand-name">QDESK</span>
+        </div>
+        <p class="muted">Альтернативная доска объявлений с диалоговым поиском и безопасными точками встреч (SPOT).</p>
+      </div>
+      <div>
+        <div class="foot-title">Навигация</div>
+        <div class="list">
+          <a href="hub.html">Hub</a>
+          <a href="about.html">О нас</a>
+          <a href="inside.html">Что внутри</a>
+          <a href="spots.html">SPOT</a>
+          <a href="partners.html">Партнёрам</a>
+          <a href="ads.html">Реклама</a>
+          <a href="faq.html">FAQ</a>
+          <a href="support.html">Поддержка</a>
+          <a href="contacts.html">Контакты</a>
+        </div>
+      </div>
+      <div>
+        <div class="foot-title">Доки</div>
+        <div class="list">
+          <a href="privacy.html">Политика конфиденциальности</a>
+          <a href="terms.html">Пользовательское соглашение</a>
+          <a href="cookies.html">Куки (Cookies)</a>
+        </div>
+      </div>
+      <div>
+        <div class="foot-title">Связь</div>
+        <div class="list">
+          <a href="mailto:hello@qdesk.app">hello@qdesk.app</a>
+          <span class="muted">VK · Telegram · YouTube</span>
+        </div>
+      </div>
+    </div>
+    <div class="container copy">© <span id="y"></span> QDESK. Все права защищены.</div>
+  </footer>
+
+  <script>
+    // Копирайт
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // Простейшие заглушки для KPI/статуса (можно подключить к реальным данным)
+    const demo = { spots: 12, cities: 4, avgTime: '8 мин', nps: '9.1/10' };
+    document.getElementById('kpi1').textContent = demo.spots;
+    document.getElementById('kpi2').textContent = demo.cities;
+    document.getElementById('kpi3').textContent = demo.avgTime;
+    document.getElementById('kpi4').textContent = demo.nps;
+    document.getElementById('spot-count').textContent = `SPOT: ${demo.spots}`;
+
+    // Имитация статуса (OK)
+    const ok = true;
+    const dot = document.getElementById('st-dot');
+    const st = document.getElementById('st-text');
+    if(!ok){ dot.classList.add('warn'); st.textContent = 'Деградация · есть инциденты'; }
+
+    // Подписка (демо)
+    function subOk(){
+      const el = document.getElementById('sub-note');
+      el.style.display = 'block';
+      setTimeout(()=> el.style.display='none', 1800);
+    }
+    window.subOk = subOk;
+  </script>
+</body>
+</html>
